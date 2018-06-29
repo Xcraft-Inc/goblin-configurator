@@ -21,6 +21,7 @@ const logicState = {
   available: [
     'lab-velocite',
     'mfb',
+    'VCBASE',
     'VCY',
     'VCN',
     'VCL',
@@ -40,6 +41,11 @@ const logicState = {
     'reset-lab-zeus',
     'reset-lab-ellen',
     'reset-localhost',
+    'RESETVCBASE',
+    'RESETVCY',
+    'RESETVCN',
+    'RESETVCL',
+    'RESETVCV',
   ],
   profiles: {
     'lab-test': {
@@ -154,12 +160,40 @@ const logicState = {
       reset: false,
       mandate: 'vcn',
     },
+    RESETVCN: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: true,
+      mandate: 'vcn',
+    },
     VCL: {
       applicationBusUrl: 'http://lab0.epsitec.ch',
       elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
       rethinkdbHost: 'lab0.epsitec.ch',
       reset: false,
       mandate: 'vcl',
+    },
+    RESETVCL: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: true,
+      mandate: 'vcl',
+    },
+    VCBASE: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: false,
+      mandate: 'vcbase',
+    },
+    RESETVCBASE: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: true,
+      mandate: 'vc',
     },
     VCY: {
       applicationBusUrl: 'http://lab0.epsitec.ch',
@@ -168,11 +202,25 @@ const logicState = {
       reset: false,
       mandate: 'vcy',
     },
+    RESETVCY: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: true,
+      mandate: 'vcy',
+    },
     VCV: {
       applicationBusUrl: 'http://lab0.epsitec.ch',
       elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
       rethinkdbHost: 'lab0.epsitec.ch',
       reset: false,
+      mandate: 'vcv',
+    },
+    RESETVCV: {
+      applicationBusUrl: 'http://lab0.epsitec.ch',
+      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
+      rethinkdbHost: 'lab0.epsitec.ch',
+      reset: true,
       mandate: 'vcv',
     },
     localhost: {
