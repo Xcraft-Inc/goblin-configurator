@@ -33,6 +33,7 @@ const logicState = {
     'lab-epsitec-local',
     'lab-zeus',
     'lab-ellen',
+    'server',
     'localhost',
     'reset-lab-test',
     'reset-lab-blupi',
@@ -46,8 +47,23 @@ const logicState = {
     'RESETVCN',
     'RESETVCL',
     'RESETVCV',
+    'reset-server',
   ],
   profiles: {
+    server: {
+      applicationBusUrl: 'vc.cresus.ch',
+      elasticsearchUrl: 'localhost:9200',
+      rethinkdbHost: 'localhost',
+      reset: false,
+      mandate: 'server',
+    },
+    'reset-server': {
+      applicationBusUrl: 'vc.cresus.ch',
+      elasticsearchUrl: 'localhost:9200',
+      rethinkdbHost: 'localhost',
+      reset: true,
+      mandate: 'server',
+    },
     'lab-test': {
       applicationBusUrl: 'http://lab0.epsitec.ch',
       elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
