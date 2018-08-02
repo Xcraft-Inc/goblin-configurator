@@ -1,259 +1,59 @@
 'use strict';
 
 const Goblin = require('xcraft-core-goblin');
+const fse = require('fs-extra');
+const path = require('path');
 const goblinName = 'configurator';
+const WESTEROS_APP = process.env.WESTEROS_APP;
+
+const errorMsg = `Unable to configure app:`;
+const openAppFileAndCheck4Profiles = app => {
+  const appFileDir = path.normalize(`../../../../app/${app}/`);
+  const appFilePath = path.join(__dirname, appFileDir, 'app.json');
+  let profiles = {};
+  try {
+    const appFile = JSON.parse(fse.readFileSync(appFilePath));
+    profiles = appFile.profiles;
+  } catch (e) {
+    throw new Error(`${errorMsg}
+    Unable to find app.json file in ${appFilePath}`);
+  }
+
+  if (!profiles) {
+    throw new Error(`${errorMsg}
+    "profiles" key not defined in ${appFilePath}`);
+  }
+
+  if (typeof profiles === 'string') {
+    return openAppFileAndCheck4Profiles(profiles);
+  }
+  return profiles;
+};
+
+const available = openAppFileAndCheck4Profiles(WESTEROS_APP);
+
+const availableProfiles = Object.keys(available);
+if (availableProfiles.length === 0) {
+  throw new Error(`${errorMsg}
+  No profiles available.`);
+}
+
+const selectedProfile = availableProfiles[0];
+const currentProfile = available[selectedProfile];
+const form = {
+  busy: false,
+  profile: selectedProfile,
+  username: require('os').userInfo().username,
+  locale: 'disabled',
+};
+
 // Define initial logic values
 const logicState = {
-  form: {
-    busy: false,
-    profile: 'lab-test',
-    username: require('os').userInfo().username,
-    locale: 'disabled',
-  },
-  current: {
-    applicationBusUrl: 'http://lab0.epsitec.ch',
-    elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-    rethinkdbHost: 'lab0.epsitec.ch',
-    reset: false,
-    mandate: 'test',
-  },
+  form,
+  current: currentProfile,
   locales: ['disabled', 'fr_CH', 'de_CH', 'en_US'],
-  available: [
-    'lab-velocite',
-    'mfb',
-    'VCBASE',
-    'VCY',
-    'VCN',
-    'VCL',
-    'VCV',
-    'lab-test',
-    'lab-blupi',
-    'lab-hello',
-    'lab-epsitec',
-    'lab-epsitec-local',
-    'lab-zeus',
-    'lab-ellen',
-    'server',
-    'localhost',
-    'reset-lab-test',
-    'reset-lab-blupi',
-    'reset-lab-hello',
-    'reset-lab-epsitec',
-    'reset-lab-zeus',
-    'reset-lab-ellen',
-    'reset-localhost',
-    'RESETVCBASE',
-    'RESETVCY',
-    'RESETVCN',
-    'RESETVCL',
-    'RESETVCV',
-    'reset-server',
-  ],
-  profiles: {
-    server: {
-      applicationBusUrl: 'vc.cresus.ch',
-      elasticsearchUrl: 'localhost:9200',
-      rethinkdbHost: 'localhost',
-      reset: false,
-      mandate: 'server',
-    },
-    'reset-server': {
-      applicationBusUrl: 'vc.cresus.ch',
-      elasticsearchUrl: 'localhost:9200',
-      rethinkdbHost: 'localhost',
-      reset: true,
-      mandate: 'server',
-    },
-    'lab-test': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'test',
-    },
-    'reset-lab-test': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'test',
-    },
-    'lab-blupi': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'blupi',
-    },
-    'reset-lab-blupi': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'blupi',
-    },
-    'lab-hello': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'hello',
-    },
-    'reset-lab-hello': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'hello',
-    },
-    'lab-zeus': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'zeus',
-    },
-    'reset-lab-zeus': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'zeus',
-    },
-    'lab-epsitec': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'epsitec',
-    },
-    'lab-epsitec-local': {
-      applicationBusUrl: 'http://localhost',
-      elasticsearchUrl: 'http://localhost:9200',
-      rethinkdbHost: 'localhost',
-      reset: false,
-      mandate: 'epsitec',
-    },
-    'reset-lab-epsitec': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'epsitec',
-    },
-    'lab-ellen': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'ellen',
-    },
-    'reset-lab-ellen': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'ellen',
-    },
-    'lab-velocite': {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'velocite',
-    },
-    mfb: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'mfb',
-    },
-    VCN: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'vcn',
-    },
-    RESETVCN: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'vcn',
-    },
-    VCL: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'vcl',
-    },
-    RESETVCL: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'vcl',
-    },
-    VCBASE: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'vcbase',
-    },
-    RESETVCBASE: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'vc',
-    },
-    VCY: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'vcy',
-    },
-    RESETVCY: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'vcy',
-    },
-    VCV: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: false,
-      mandate: 'vcv',
-    },
-    RESETVCV: {
-      applicationBusUrl: 'http://lab0.epsitec.ch',
-      elasticsearchUrl: 'http://lab0.epsitec.ch:9200',
-      rethinkdbHost: 'lab0.epsitec.ch',
-      reset: true,
-      mandate: 'vcv',
-    },
-    localhost: {
-      applicationBusUrl: 'http://localhost:7777',
-      elasticsearchUrl: 'http://localhost:9200',
-      rethinkdbHost: 'localhost',
-      reset: false,
-      mandate: 'alleycat',
-    },
-    'reset-localhost': {
-      applicationBusUrl: 'http://localhost:7777',
-      elasticsearchUrl: 'http://localhost:9200',
-      rethinkdbHost: 'localhost',
-      reset: true,
-      mandate: 'alleycat',
-    },
-  },
+  available: availableProfiles,
+  profiles: available,
 };
 
 // Define logic handlers according rc.json

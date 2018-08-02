@@ -35,7 +35,6 @@ class Configurator extends Form {
     const buildProfile = this.WithModel(Label, current => {
       return {
         text: `Configuration choisie: 
-        Application URL: ${current.get('applicationBusUrl')}
         Elasticsearch URL: ${current.get('elasticsearchUrl')}
         RethinkDB URL: ${current.get('rethinkdbHost')}
         Reset data: ${current.get('reset')}`,
