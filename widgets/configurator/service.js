@@ -1,41 +1,22 @@
 'use strict';
 
 const Goblin = require('xcraft-core-goblin');
-const fse = require('fs-extra');
-const path = require('path');
+const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
+
 const goblinName = 'configurator';
-const WESTEROS_APP = process.env.WESTEROS_APP;
 
 const errorMsg = `Unable to configure app:`;
-const openAppFileAndCheck4Profiles = app => {
-  const appFileDir = path.normalize(`../../../../app/${app}/`);
-  const appFilePath = path.join(__dirname, appFileDir, 'app.json');
-  let profiles = {};
-  try {
-    const appFile = JSON.parse(fse.readFileSync(appFilePath));
-    profiles = appFile.profiles;
-  } catch (e) {
-    throw new Error(`${errorMsg}
-    Unable to find app.json file in ${appFilePath}`);
-  }
 
-  if (!profiles) {
-    throw new Error(`${errorMsg}
-    "profiles" key not defined in ${appFilePath}`);
-  }
-
-  if (typeof profiles === 'string') {
-    return openAppFileAndCheck4Profiles(profiles);
-  }
-  return profiles;
-};
-
-const available = openAppFileAndCheck4Profiles(WESTEROS_APP);
+const available = confConfig.profiles;
+if (!available) {
+  throw new Error(
+    `${errorMsg} "profiles" key not defined in goblin-configurator settings`
+  );
+}
 
 const availableProfiles = Object.keys(available);
 if (availableProfiles.length === 0) {
-  throw new Error(`${errorMsg}
-  No profiles available.`);
+  throw new Error(`${errorMsg} No profiles available.`);
 }
 
 const selectedProfile = availableProfiles[0];
