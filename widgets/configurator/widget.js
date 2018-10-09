@@ -32,13 +32,13 @@ class Configurator extends Form {
     }
     const mapBusyContainer = this.getWidgetToFormMapper(Container, 'busy');
     const BusyContent = mapBusyContainer('.form.busy');
+    // prettier-ignore
     const buildProfile = this.WithModel(Label, current => {
-      return {
-        text: `Configuration choisie: 
-        Elasticsearch URL: ${current.get('elasticsearchUrl')}
-        RethinkDB URL: ${current.get('rethinkdbHost')}
-        Reset data: ${current.get('reset')}`,
-      };
+      const line1 = "* Elasticsearch URL = **`" + current.get('elasticsearchUrl') + "`**";
+      const line2 = '* RethinkDB URL = **`' + current.get('rethinkdbHost') + '`**';
+      const line3 = '* Reset data = **`' + current.get('reset') + '`**';
+      const text = '```' + `Configuration choisie\n${line1}\n${line2}\n${line3}` + '```';
+      return {text};
     });
 
     const ProfileInfo = buildProfile('.current');
@@ -58,7 +58,7 @@ class Configurator extends Form {
                 </Container>
                 <Separator kind="space" height="30px" />
                 <Container kind="row-pane">
-                  <Label glyph="solid/flask" spacing="overlap" />
+                  <Label glyph="solid/database" spacing="overlap" />
                   <TextFieldCombo
                     model=".form.profile"
                     readonly="false"

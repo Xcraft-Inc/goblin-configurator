@@ -45,10 +45,15 @@ const logicHandlers = {
   'change-form.profile': (state, action) => {
     const profileName = action.get('newValue');
     const profile = state.get(`profiles.${profileName}`, null);
+    state = state.set('form.profile', profileName);
     if (profile) {
       return state.set('current', profile.toJS());
     }
     return state;
+  },
+  'change-form.locale': (state, action) => {
+    const locale = action.get('newValue');
+    return state.set('form.locale', locale);
   },
   submit: (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
@@ -68,6 +73,7 @@ Goblin.registerQuest(goblinName, 'change-form.locale', function*(
   quest,
   newValue
 ) {
+  quest.do();
   const nabu = quest.getAPI('nabu');
   if (newValue === 'disabled') {
     nabu.disable();
