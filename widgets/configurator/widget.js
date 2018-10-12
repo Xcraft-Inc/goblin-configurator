@@ -37,7 +37,8 @@ class Configurator extends Form {
       const line1 = "* Elasticsearch URL = **`" + current.get('elasticsearchUrl') + "`**";
       const line2 = '* RethinkDB URL = **`' + current.get('rethinkdbHost') + '`**';
       const line3 = '* Reset data = **`' + current.get('reset') + '`**';
-      const text = '```' + `Configuration choisie\n${line1}\n${line2}\n${line3}` + '```';
+      const line4 = '* Mandate = **`' + current.get('mandate') + '`**';
+      const text = '```' + `Configuration choisie\n${line1}\n${line2}\n${line3}\n${line4}` + '```';
       return {text};
     });
 
