@@ -1,4 +1,6 @@
+//T:2019-02-27
 import React from 'react';
+import T from 't';
 import Form from 'laboratory/form';
 
 import Container from 'gadgets/container/widget';
@@ -32,13 +34,24 @@ class Configurator extends Form {
     }
     const mapBusyContainer = this.getWidgetToFormMapper(Container, 'busy');
     const BusyContent = mapBusyContainer('.form.busy');
-    // prettier-ignore
     const buildProfile = this.WithModel(Label, current => {
-      const line1 = "* Elasticsearch URL = **`" + current.get('elasticsearchUrl') + "`**";
-      const line2 = '* RethinkDB URL = **`' + current.get('rethinkdbHost') + '`**';
-      const line3 = '* Reset data = **`' + current.get('reset') + '`**';
-      const line4 = '* Mandate = **`' + current.get('mandate') + '`**';
-      const text = '```' + `Configuration choisie\n${line1}\n${line2}\n${line3}\n${line4}` + '```';
+      const text = T(
+        // prettier-ignore
+        '```' +
+        'Configuration choisie\n' +
+        '* Elasticsearch URL = **`{elasticsearchUrl}`**\n' +
+        '* Reset data = **`{rethinkdbHost}`**\n' +
+        '* Reset data = **`{reset}`**\n' +
+        '* Mandate = **`{mandate}`**' +
+        '```',
+        null,
+        {
+          elasticsearchUrl: current.get('elasticsearchUrl'),
+          rethinkdbHost: current.get('rethinkdbHost'),
+          reset: current.get('reset'),
+          mandate: current.get('mandate'),
+        }
+      );
       return {text};
     });
 
@@ -103,7 +116,7 @@ class Configurator extends Form {
                 <Container kind="row-pane">
                   <Button
                     onClick={this.onContinue}
-                    text="Continuer"
+                    text={T('Continuer')}
                     grow="1"
                     kind="action"
                     justify="center"
@@ -113,7 +126,7 @@ class Configurator extends Form {
               </BusyContent>
               <Container kind="floating-footer" height="100px">
                 <Separator width="300px" kind="floating-footer" />
-                <Label text="Crésus — EPSITEC SA" kind="floating-footer" />
+                <Label text={T('Crésus — EPSITEC SA')} kind="floating-footer" />
               </Container>
             </Form>
           </Container>
