@@ -75,22 +75,6 @@ class Configurator extends Form {
                 </Container>
                 <Separator kind="space" height="1px" />
                 <Container kind="row-pane">
-                  <Label glyph="solid/language" spacing="overlap" />
-                  <TextFieldCombo
-                    model=".form.locale"
-                    readonly="false"
-                    grow="1"
-                    list={this.getModelValue('.locales').toArray()}
-                    menuType="wrap"
-                    defaultValue={this.getModelValue('.form.locale')}
-                    comboTextTransform="none"
-                    onSetText={text => {
-                      this.setModelValue('.form.locale', text);
-                    }}
-                  />
-                </Container>
-                <Separator kind="space" height="1px" />
-                <Container kind="row-pane">
                   <LabelTextField
                     labelGlyph="solid/user"
                     model=".form.username"

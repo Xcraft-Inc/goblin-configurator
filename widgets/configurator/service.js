@@ -8,7 +8,6 @@ const goblinName = 'configurator';
 const logicState = {
   form: {},
   current: {},
-  locales: ['disabled', 'fr_CH', 'de_CH', 'en_US'],
   available: {},
   profiles: {},
 };
@@ -78,20 +77,6 @@ Goblin.registerQuest(goblinName, 'create', function(quest, id, labId) {
 
 Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
   quest.do();
-});
-
-Goblin.registerQuest(goblinName, 'change-form.locale', function*(
-  quest,
-  newValue
-) {
-  quest.do();
-  const nabu = quest.getAPI('nabu');
-  if (newValue === 'disabled') {
-    nabu.disable();
-    return;
-  }
-  yield nabu.enable();
-  yield nabu.changeLocale({locale: newValue});
 });
 
 Goblin.registerQuest(goblinName, 'submit', function(quest) {
