@@ -1,3 +1,4 @@
+//T:2019-02-27
 import React from 'react';
 import Form from 'laboratory/form';
 
@@ -32,13 +33,15 @@ class Configurator extends Form {
     }
     const mapBusyContainer = this.getWidgetToFormMapper(Container, 'busy');
     const BusyContent = mapBusyContainer('.form.busy');
-    // prettier-ignore
     const buildProfile = this.WithModel(Label, current => {
-      const line1 = "* Elasticsearch URL = **`" + current.get('elasticsearchUrl') + "`**";
-      const line2 = '* RethinkDB URL = **`' + current.get('rethinkdbHost') + '`**';
-      const line3 = '* Reset data = **`' + current.get('reset') + '`**';
-      const line4 = '* Mandate = **`' + current.get('mandate') + '`**';
-      const text = '```' + `Configuration choisie\n${line1}\n${line2}\n${line3}\n${line4}` + '```';
+      const text =
+        '```' +
+        'Configuration choisie\n' +
+        `* Elasticsearch URL = **\`${current.get('elasticsearchUrl')}\`**\n` +
+        `* Reset data = **\`${current.get('rethinkdbHost')}\`**\n` +
+        `* Reset data = **\`${current.get('reset')}\`**\n` +
+        `* Mandate = **\`${current.get('mandate')}\`**` +
+        '```';
       return {text};
     });
 
@@ -87,7 +90,7 @@ class Configurator extends Form {
                 <Container kind="row-pane">
                   <Button
                     onClick={this.onContinue}
-                    text="Continuer"
+                    text={'Continuer'}
                     grow="1"
                     kind="action"
                     justify="center"
@@ -97,7 +100,7 @@ class Configurator extends Form {
               </BusyContent>
               <Container kind="floating-footer" height="100px">
                 <Separator width="300px" kind="floating-footer" />
-                <Label text="Crésus — EPSITEC SA" kind="floating-footer" />
+                <Label text={'Crésus — EPSITEC SA'} kind="floating-footer" />
               </Container>
             </Form>
           </Container>
