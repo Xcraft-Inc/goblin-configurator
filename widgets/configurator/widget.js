@@ -106,7 +106,7 @@ class Configurator extends Form {
                 <Container kind="row-pane">
                   <Button
                     onClick={this.onContinue}
-                    text={T('Continuer')}
+                    text={'Continuer'}
                     grow="1"
                     kind="action"
                     justify="center"
