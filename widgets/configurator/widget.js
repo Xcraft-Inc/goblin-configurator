@@ -1,6 +1,5 @@
 //T:2019-02-27
 import React from 'react';
-import T from 't';
 import Form from 'laboratory/form';
 
 import Container from 'gadgets/container/widget';
@@ -35,23 +34,14 @@ class Configurator extends Form {
     const mapBusyContainer = this.getWidgetToFormMapper(Container, 'busy');
     const BusyContent = mapBusyContainer('.form.busy');
     const buildProfile = this.WithModel(Label, current => {
-      const text = T(
-        // prettier-ignore
+      const text =
         '```' +
         'Configuration choisie\n' +
-        '* Elasticsearch URL = **`{elasticsearchUrl}`**\n' +
-        '* Reset data = **`{rethinkdbHost}`**\n' +
-        '* Reset data = **`{reset}`**\n' +
-        '* Mandate = **`{mandate}`**' +
-        '```',
-        null,
-        {
-          elasticsearchUrl: current.get('elasticsearchUrl'),
-          rethinkdbHost: current.get('rethinkdbHost'),
-          reset: current.get('reset'),
-          mandate: current.get('mandate'),
-        }
-      );
+        `* Elasticsearch URL = **\`${current.get('elasticsearchUrl')}\`**\n` +
+        `* Reset data = **\`${current.get('rethinkdbHost')}\`**\n` +
+        `* Reset data = **\`${current.get('reset')}\`**\n` +
+        `* Mandate = **\`${current.get('mandate')}\`**` +
+        '```';
       return {text};
     });
 
@@ -126,7 +116,7 @@ class Configurator extends Form {
               </BusyContent>
               <Container kind="floating-footer" height="100px">
                 <Separator width="300px" kind="floating-footer" />
-                <Label text={T('Crésus — EPSITEC SA')} kind="floating-footer" />
+                <Label text={'Crésus — EPSITEC SA'} kind="floating-footer" />
               </Container>
             </Form>
           </Container>
