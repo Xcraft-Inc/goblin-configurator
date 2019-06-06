@@ -36,7 +36,7 @@ class Configurator extends Form {
     const buildProfile = this.WithModel(Label, current => {
       const text =
         '```' +
-        'Configuration choisie\n' +
+        'Settings\n' +
         `* Elasticsearch URL = **\`${current.get('elasticsearchUrl')}\`**\n` +
         `* Reset data = **\`${current.get('rethinkdbHost')}\`**\n` +
         `* Reset data = **\`${current.get('reset')}\`**\n` +
