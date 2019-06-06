@@ -13,6 +13,7 @@ class Configurator extends Form {
   constructor() {
     super(...arguments);
     this.onContinue = this.onContinue.bind(this);
+    this.getDisplayValue = this.getDisplayValue.bind(this);
   }
 
   static get wiring() {
@@ -23,6 +24,10 @@ class Configurator extends Form {
 
   onContinue() {
     this.submit();
+  }
+
+  getDisplayValue(value) {
+    return this.getModelValue(`.profiles.${value}.name`);
   }
 
   render() {
@@ -47,6 +52,13 @@ class Configurator extends Form {
 
     const ProfileInfo = buildProfile('.current');
 
+    const list = this.getModelValue('.profiles')
+      .map((profile, key) => ({
+        text: profile.get('name'),
+        value: key,
+      }))
+      .toArray();
+
     const Form = this.Form;
     return (
       <Container kind="root">
@@ -67,13 +79,14 @@ class Configurator extends Form {
                     model=".form.profile"
                     readonly="false"
                     grow="1"
-                    list={this.getModelValue('.available').toArray()}
+                    list={list}
                     menuType="wrap"
                     defaultValue={this.getModelValue('.form.profile')}
                     comboTextTransform="none"
                     onSetText={text => {
                       this.setModelValue('.form.profile', text);
                     }}
+                    getDisplayValue={this.getDisplayValue}
                   />
                 </Container>
                 <Separator kind="space" height="1px" />
