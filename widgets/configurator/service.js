@@ -15,7 +15,7 @@ const logicState = {
 
 // Define logic handlers according rc.json
 const logicHandlers = {
-  create: (state, action) => {
+  'create': (state, action) => {
     return state
       .set('id', action.get('id'))
       .set('form', action.get('form'))
@@ -36,7 +36,7 @@ const logicHandlers = {
     const locale = action.get('newValue');
     return state.set('form.locale', locale);
   },
-  submit: (state, action) => {
+  'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
   },
 };
