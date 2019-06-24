@@ -5,9 +5,10 @@ import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
-import TextFieldCombo from 'gadgets/text-field-combo/widget';
+import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Separator from 'gadgets/separator/widget';
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 class Configurator extends Form {
   constructor() {
@@ -77,20 +78,12 @@ class Configurator extends Form {
                 <Container kind="row-pane">
                   <Label glyph="solid/database" spacing="overlap" />
                   <TextFieldCombo
-                    model=".form.profile"
+                    selectedId={C('.form.profile')}
                     readonly="false"
                     grow="1"
                     list={list}
                     menuType="wrap"
-                    // Deprecated, should be removed !
-                    defaultValue={this.getModelValue('.form.profile')}
                     comboTextTransform="none"
-                    // Deprecated, should be removed !
-                    onSetText={text => {
-                      this.setModelValue('.form.profile', text);
-                    }}
-                    // Deprecated, should be removed !
-                    getDisplayValue={this.getDisplayValue}
                   />
                 </Container>
                 <Separator kind="space" height="1px" />
