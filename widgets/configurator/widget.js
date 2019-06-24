@@ -26,6 +26,7 @@ class Configurator extends Form {
     this.submit();
   }
 
+  // Deprecated, should be removed !
   getDisplayValue(value) {
     return this.getModelValue(`.profiles.${value}.name`);
   }
@@ -54,8 +55,8 @@ class Configurator extends Form {
 
     const list = this.getModelValue('.profiles')
       .map((profile, key) => ({
+        id: key,
         text: profile.get('name'),
-        value: key,
       }))
       .toArray();
 
@@ -81,11 +82,14 @@ class Configurator extends Form {
                     grow="1"
                     list={list}
                     menuType="wrap"
+                    // Deprecated, should be removed !
                     defaultValue={this.getModelValue('.form.profile')}
                     comboTextTransform="none"
+                    // Deprecated, should be removed !
                     onSetText={text => {
                       this.setModelValue('.form.profile', text);
                     }}
+                    // Deprecated, should be removed !
                     getDisplayValue={this.getDisplayValue}
                   />
                 </Container>
