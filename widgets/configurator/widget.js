@@ -76,7 +76,7 @@ class Configurator extends Form {
                 </Container>
                 <Separator kind="space" height="30px" />
                 <Container kind="row-pane">
-                  <Label glyph="solid/database" spacing="overlap" />
+                  <Label glyph="solid/database" horizontalSpacing="overlap" />
                   <TextFieldCombo
                     selectedId={C('.form.profile')}
                     readonly="false"
