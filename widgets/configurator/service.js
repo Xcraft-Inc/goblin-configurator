@@ -36,6 +36,10 @@ const logicHandlers = {
     const locale = action.get('newValue');
     return state.set('form.locale', locale);
   },
+  'change-form.username': (state, action) => {
+    const usr = action.get('newValue');
+    return state.set('form.username', usr);
+  },
   'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
   },
@@ -77,6 +81,10 @@ Goblin.registerQuest(goblinName, 'create', function(quest, id, labId) {
 });
 
 Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
   quest.do();
 });
 
