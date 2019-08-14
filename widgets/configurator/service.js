@@ -20,6 +20,7 @@ const logicHandlers = {
       .set('id', action.get('id'))
       .set('form', action.get('form'))
       .set('current', action.get('current'))
+      .set('feeds', action.get('feeds'))
       .set('available', action.get('available'))
       .set('profiles', action.get('profiles'));
   },
@@ -45,10 +46,11 @@ const logicHandlers = {
   },
 };
 
-Goblin.registerQuest(goblinName, 'create', function(quest, id, labId) {
+Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
   const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
   const errorMsg = `Unable to configure app:`;
-
+  const warehouse = quest.getAPI('warehouse');
+  const feeds = yield warehouse.listFeeds();
   const available = confConfig.profiles;
   if (!available) {
     throw new Error(
@@ -73,6 +75,7 @@ Goblin.registerQuest(goblinName, 'create', function(quest, id, labId) {
   quest.do({
     id: quest.goblin.id,
     form,
+    feeds,
     current: currentProfile,
     available: availableProfiles,
     profiles: available,
