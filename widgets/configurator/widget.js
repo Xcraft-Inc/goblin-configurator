@@ -61,6 +61,13 @@ class Configurator extends Form {
       }))
       .toArray();
 
+    const feedList = this.getModelValue('.feeds')
+      .map(feed => ({
+        id: feed,
+        text: feed,
+      }))
+      .toArray();
+
     const Form = this.Form;
     return (
       <Container kind="root">
@@ -76,10 +83,19 @@ class Configurator extends Form {
                 </Container>
                 <Separator kind="space" height="30px" />
                 <Container kind="row-pane">
+                  <Label glyph="solid/user" horizontalSpacing="overlap" />
+                  <TextFieldCombo
+                    grow="1"
+                    selectedId={C('.form.session')}
+                    list={feedList}
+                    menuType="wrap"
+                    comboTextTransform="none"
+                  />
+                </Container>
+                <Container kind="row-pane">
                   <Label glyph="solid/database" horizontalSpacing="overlap" />
                   <TextFieldCombo
                     selectedId={C('.form.profile')}
-                    readonly="false"
                     grow="1"
                     list={list}
                     menuType="wrap"
