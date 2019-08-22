@@ -74,10 +74,18 @@ class Configurator extends Form {
         <Container kind="right">
           <Container kind="content">
             <Form {...this.formConfig}>
-              <Container kind="floating-header" floatingHeight="350px">
+              <Container
+                width="400px"
+                height="350px"
+                kind="configurator-header"
+              >
                 <Label glyph="solid/sign-in-alt" kind="floating-header" />
               </Container>
-              <BusyContent kind="floating" width="400px" height="350px">
+              <BusyContent
+                kind="configurator-content"
+                width="400px"
+                height="350px"
+              >
                 <Container kind="row-pane">
                   <Label text="dev-mode" grow="1" kind="big-center" />
                 </Container>
@@ -124,7 +132,11 @@ class Configurator extends Form {
                   />
                 </Container>
               </BusyContent>
-              <Container kind="floating-footer" height="100px">
+              <Container
+                kind="configurator-footer"
+                height="100px"
+                width="400px"
+              >
                 <Separator width="300px" kind="floating-footer" />
                 <Label text={'Crésus — EPSITEC SA'} kind="floating-footer" />
               </Container>
