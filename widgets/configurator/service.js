@@ -99,6 +99,20 @@ Goblin.registerQuest(goblinName, 'submit', function(quest) {
   quest.evt(`configured`, {username, configuration});
 });
 
+Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
+  const state = quest.goblin.getState();
+  if (selection.startsWith('feed-desktop@')) {
+    const parts = selection.split('@');
+    const mandate = parts[1];
+    const username = parts[2];
+    quest.evt(`configured`, {username, configuration: {mandate}});
+  } else {
+    const profile = state.get(`profiles.${selection}`, null);
+    const username = state.get('form.username');
+    quest.evt(`configured`, {username, configuration: profile.toJS()});
+  }
+});
+
 Goblin.registerQuest(goblinName, 'delete', function(quest) {});
 
 // Create a Goblin with initial state and handlers
