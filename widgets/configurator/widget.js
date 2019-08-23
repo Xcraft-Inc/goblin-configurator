@@ -9,12 +9,14 @@ import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Separator from 'gadgets/separator/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
+import GradientBg from '../gradient-bg/widget';
+import IconNavigator from '../icon-navigator/widget';
 
 class Configurator extends Form {
   constructor() {
     super(...arguments);
     this.onContinue = this.onContinue.bind(this);
-    this.getDisplayValue = this.getDisplayValue.bind(this);
+    this.openSession = this.openSession.bind(this);
   }
 
   static get wiring() {
@@ -27,9 +29,8 @@ class Configurator extends Form {
     this.submit();
   }
 
-  // Deprecated, should be removed !
-  getDisplayValue(value) {
-    return this.getModelValue(`.profiles.${value}.name`);
+  openSession(selection) {
+    this.do('open-session', {selection});
   }
 
   render() {
@@ -38,8 +39,7 @@ class Configurator extends Form {
     if (!id) {
       return null;
     }
-    const mapBusyContainer = this.getWidgetToFormMapper(Container, 'busy');
-    const BusyContent = mapBusyContainer('.form.busy');
+
     const buildProfile = this.WithModel(Label, current => {
       const text =
         '```' +
@@ -52,23 +52,46 @@ class Configurator extends Form {
       return {text};
     });
 
-    const ProfileInfo = buildProfile('.current');
-
-    const list = this.getModelValue('.profiles')
-      .map((profile, key) => ({
-        id: key,
-        text: profile.get('name'),
-      }))
-      .toArray();
-
-    const feedList = this.getModelValue('.feeds')
+    const sessionList = this.getModelValue('.feeds')
+      .filter(f => f.startsWith('feed-desktop@'))
       .map(feed => ({
         id: feed,
         text: feed,
+        mandate: feed.split('@')[1],
       }))
       .toArray();
 
-    const Form = this.Form;
+    const byMandate = this.getModelValue('.profiles').reduce((list, p, id) => {
+      const t = p.get('topology', null);
+      let m = p.get('mandate');
+      if (t) {
+        m = `${m}@${t}`;
+      }
+      if (!list[m]) {
+        list[m] = {};
+      }
+      list[m][p.get('name')] = id;
+      return list;
+    }, {});
+
+    sessionList.forEach(s => {
+      if (byMandate[s.mandate]) {
+        const session = s.id.split('@')[2];
+        byMandate[s.mandate][session] = s.id;
+      }
+    });
+
+    return (
+      <GradientBg>
+        <IconNavigator
+          widgetId={`${id}$icon-navigator`}
+          text={'POLYPHEME-DEV'}
+          data={byMandate}
+          onLeafSelect={this.openSession}
+        ></IconNavigator>
+      </GradientBg>
+    );
+    /*const Form = this.Form;
     return (
       <Container kind="root">
         <Container kind="right">
@@ -144,7 +167,7 @@ class Configurator extends Form {
           </Container>
         </Container>
       </Container>
-    );
+    );*/
   }
 }
 
