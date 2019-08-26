@@ -17,6 +17,9 @@ class IconNavigator extends Widget {
       type: 'SELECT',
       selected: ico,
     });
+    if (this.props.onLeafSelect) {
+      this.props.onLeafSelect(this.props.data);
+    }
   }
 
   open(e) {
@@ -27,6 +30,9 @@ class IconNavigator extends Widget {
         type: 'SCOPE',
         target: this.widgetId.replace('$icon-navigator', ''),
       });
+      if (this.props.onScope) {
+        this.props.onScope(this.props.data);
+      }
     } else {
       this.dispatchTo(this.widgetId, {
         type: 'OPEN',
@@ -57,6 +63,7 @@ class IconNavigator extends Widget {
       level,
       parentFlow,
       onLeafSelect,
+      onScope,
     } = this.props;
     let lvl = level;
     if (!lvl) {
@@ -76,8 +83,7 @@ class IconNavigator extends Widget {
         if (typeof data === 'object') {
           return <AppIcon text={text} onClick={this.open} />;
         } else {
-          const select = () => onLeafSelect(data);
-          return <AppIcon text={text} onClick={select} />;
+          return <AppIcon text={text} onClick={this.select} />;
         }
       case 'scoped':
       case 'opened': {
@@ -98,6 +104,7 @@ class IconNavigator extends Widget {
                       parentFlow={flow}
                       level={lvl + 1}
                       onLeafSelect={onLeafSelect}
+                      onScope={onScope}
                     />
                   );
                 })}

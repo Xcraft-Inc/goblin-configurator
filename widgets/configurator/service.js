@@ -22,7 +22,8 @@ const logicHandlers = {
       .set('current', action.get('current'))
       .set('feeds', action.get('feeds'))
       .set('available', action.get('available'))
-      .set('profiles', action.get('profiles'));
+      .set('profiles', action.get('profiles'))
+      .set('mainGoblin', action.get('mainGoblin'));
   },
   'change-form.profile': (state, action) => {
     const profileName = action.get('newValue');
@@ -47,6 +48,8 @@ const logicHandlers = {
 };
 
 Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
+  const clientConfig = require('xcraft-core-etc')().load('goblin-client');
+  const mainGoblin = clientConfig.mainGoblin;
   const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
   const errorMsg = `Unable to configure app:`;
   const warehouse = quest.getAPI('warehouse');
@@ -79,6 +82,7 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
     current: currentProfile,
     available: availableProfiles,
     profiles: available,
+    mainGoblin,
   });
   return quest.goblin.id;
 });
@@ -89,14 +93,6 @@ Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
 
 Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
   quest.do();
-});
-
-Goblin.registerQuest(goblinName, 'submit', function(quest) {
-  quest.do();
-  const state = quest.goblin.getState();
-  const configuration = state.get('current').toJS();
-  const username = state.get('form.username');
-  quest.evt(`configured`, {username, configuration});
 });
 
 Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {

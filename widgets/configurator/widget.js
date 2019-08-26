@@ -11,12 +11,14 @@ import Separator from 'gadgets/separator/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import GradientBg from '../gradient-bg/widget';
 import IconNavigator from '../icon-navigator/widget';
+import ProfileInfo from '../profile-info/widget';
 
 class Configurator extends Form {
   constructor() {
     super(...arguments);
     this.onContinue = this.onContinue.bind(this);
     this.openSession = this.openSession.bind(this);
+    this.scopeInfo = this.scopeInfo.bind(this);
   }
 
   static get wiring() {
@@ -30,7 +32,13 @@ class Configurator extends Form {
   }
 
   openSession(selection) {
+    console.log('OPEN SESSION', selection);
     this.do('open-session', {selection});
+  }
+
+  scopeInfo(selection) {
+    console.log('SCOPE INFO', selection);
+    this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
   }
 
   render() {
@@ -39,18 +47,6 @@ class Configurator extends Form {
     if (!id) {
       return null;
     }
-
-    const buildProfile = this.WithModel(Label, current => {
-      const text =
-        '```' +
-        'Settings\n' +
-        `* Elasticsearch URL = **\`${current.get('elasticsearchUrl')}\`**\n` +
-        `* Reset data = **\`${current.get('rethinkdbHost')}\`**\n` +
-        `* Reset data = **\`${current.get('reset')}\`**\n` +
-        `* Mandate = **\`${current.get('mandate')}\`**` +
-        '```';
-      return {text};
-    });
 
     const sessionList = this.getModelValue('.feeds')
       .filter(f => f.startsWith('feed-desktop@'))
@@ -83,12 +79,20 @@ class Configurator extends Form {
 
     return (
       <GradientBg>
-        <IconNavigator
-          widgetId={`${id}$icon-navigator`}
-          text={'POLYPHEME-DEV'}
-          data={byMandate}
-          onLeafSelect={this.openSession}
-        ></IconNavigator>
+        <div className={this.styles.classNames.main}>
+          <div className={this.styles.classNames.left}>
+            <IconNavigator
+              widgetId={`${id}$icon-navigator`}
+              text={this.getModelValue('.mainGoblin')}
+              data={byMandate}
+              onLeafSelect={this.openSession}
+              onScope={this.scopeInfo}
+            ></IconNavigator>
+          </div>
+          <div className={this.styles.classNames.right}>
+            <ProfileInfo id={id} />
+          </div>
+        </div>
       </GradientBg>
     );
     /*const Form = this.Form;
