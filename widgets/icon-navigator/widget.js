@@ -18,7 +18,7 @@ class IconNavigator extends Widget {
       selected: ico,
     });
     if (this.props.onLeafSelect) {
-      this.props.onLeafSelect(this.props.data);
+      this.props.onLeafSelect(this.props.data.value);
     }
   }
 
@@ -72,25 +72,29 @@ class IconNavigator extends Widget {
     if (parentFlow && parentFlow === 'scoped' && lvl > 0 && !scoped) {
       return null;
     }
+    const glyph = lvl === 0 ? 'solid/cube' : 'solid/database';
     switch (flow) {
       default:
-      case 'closed':
+      case 'closed': {
         if (scoped) {
           this.dispatchTo(this.widgetId, {
             type: 'OPEN',
           });
         }
-        if (typeof data === 'object') {
-          return <AppIcon text={text} onClick={this.open} />;
+        if (!data.leaf) {
+          return <AppIcon text={text} glyph={glyph} onClick={this.open} />;
         } else {
-          return <AppIcon text={text} onClick={this.select} />;
+          return (
+            <AppIcon text={text} glyph={data.glyph} onClick={this.select} />
+          );
         }
+      }
       case 'scoped':
       case 'opened': {
-        if (typeof data === 'object') {
+        if (!data.leaf) {
           return (
             <React.Fragment>
-              <AppIcon text={text} onClick={this.close} />
+              <AppIcon text={text} glyph={glyph} onClick={this.close} />
               <div className={this.styles.classNames.content}>
                 {Object.entries(this.props.data).map(([id, data], i) => {
                   return (
@@ -112,7 +116,7 @@ class IconNavigator extends Widget {
             </React.Fragment>
           );
         } else {
-          return <AppIcon text={data} />;
+          return <AppIcon text={data} glyph={data.glyph} />;
         }
       }
     }

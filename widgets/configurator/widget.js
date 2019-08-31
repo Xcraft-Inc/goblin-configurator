@@ -9,9 +9,8 @@ import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Separator from 'gadgets/separator/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
-import GradientBg from '../gradient-bg/widget';
+import MainLayout from '../main-layout/widget';
 import IconNavigator from '../icon-navigator/widget';
-import ProfileInfo from '../profile-info/widget';
 
 class Configurator extends Form {
   constructor() {
@@ -24,6 +23,7 @@ class Configurator extends Form {
   static get wiring() {
     return {
       id: 'id',
+      advanced: 'advanced',
     };
   }
 
@@ -42,7 +42,7 @@ class Configurator extends Form {
   }
 
   render() {
-    const {id} = this.props;
+    const {id, advanced} = this.props;
 
     if (!id) {
       return null;
@@ -60,25 +60,33 @@ class Configurator extends Form {
     const byMandate = this.getModelValue('.profiles').reduce((list, p, id) => {
       const t = p.get('topology', null);
       let m = p.get('mandate');
+      const isReset = p.get('reset');
+      if (!advanced && isReset) {
+        return list;
+      }
       if (t) {
         m = `${m}@${t}`;
       }
       if (!list[m]) {
         list[m] = {};
       }
-      list[m][p.get('name')] = id;
+      list[m][p.get('name')] = {leaf: true, value: id, glyph: 'solid/plus'};
       return list;
     }, {});
 
     sessionList.forEach(s => {
       if (byMandate[s.mandate]) {
         const session = s.id.split('@')[2];
-        byMandate[s.mandate][session] = s.id;
+        byMandate[s.mandate][session] = {
+          leaf: true,
+          value: s.id,
+          glyph: 'solid/tv',
+        };
       }
     });
 
     return (
-      <GradientBg>
+      <MainLayout id={id}>
         <div className={this.styles.classNames.main}>
           <div className={this.styles.classNames.left}>
             <IconNavigator
@@ -89,11 +97,8 @@ class Configurator extends Form {
               onScope={this.scopeInfo}
             ></IconNavigator>
           </div>
-          <div className={this.styles.classNames.right}>
-            <ProfileInfo id={id} />
-          </div>
         </div>
-      </GradientBg>
+      </MainLayout>
     );
     /*const Form = this.Form;
     return (

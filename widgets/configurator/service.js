@@ -68,10 +68,14 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
 
   const selectedProfile = availableProfiles[0];
   const currentProfile = available[selectedProfile];
+  //INFO:
+  //username is a "session name"
+  const os = require('os');
+  const sessionName = `${os.userInfo().username}`;
   const form = {
     busy: false,
     profile: selectedProfile,
-    username: require('os').userInfo().username,
+    username: sessionName,
     locale: 'disabled',
   };
 
