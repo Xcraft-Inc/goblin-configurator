@@ -25,6 +25,9 @@ const logicHandlers = {
       .set('profiles', action.get('profiles'))
       .set('mainGoblin', action.get('mainGoblin'));
   },
+  'update-feeds': (state, action) => {
+    return state.set('feeds', action.get('feeds'));
+  },
   'change-form.profile': (state, action) => {
     const profileName = action.get('newValue');
     const profile = state.get(`profiles.${profileName}`, null);
@@ -66,6 +69,17 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
     throw new Error(`${errorMsg} No profiles available.`);
   }
 
+  quest.goblin.defer(
+    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function*(
+      err,
+      {msg, resp}
+    ) {
+      yield resp.cmd(`${goblinName}.update-feeds`, {
+        id: quest.goblin.id,
+      });
+    })
+  );
+
   const selectedProfile = availableProfiles[0];
   const currentProfile = available[selectedProfile];
   //INFO:
@@ -89,6 +103,12 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
     mainGoblin,
   });
   return quest.goblin.id;
+});
+
+Goblin.registerQuest(goblinName, 'update-feeds', function*(quest) {
+  const warehouse = quest.getAPI('warehouse');
+  const feeds = yield warehouse.listFeeds();
+  quest.do({feeds});
 });
 
 Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {

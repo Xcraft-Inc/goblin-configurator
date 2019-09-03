@@ -1,19 +1,65 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
+import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
 import ProfileInfo from '../profile-info/widget';
 import Clock from '../clock/widget';
+
 /******************************************************************************/
 
 class MainLayout extends Widget {
+  constructor() {
+    super(...arguments);
+    this.onSessionOne = this.onSessionOne.bind(this);
+    this.onSessionTwo = this.onSessionTwo.bind(this);
+  }
+
+  onSessionOne() {
+    this.doAs('configurator', 'change-form.username', {
+      newValue: this.props.session.replace('-2', ''),
+    });
+  }
+
+  onSessionTwo() {
+    this.doAs('configurator', 'change-form.username', {
+      newValue: this.props.session + '-2',
+    });
+  }
+
   render() {
     const {session, showProfileInfo} = this.props;
 
     return (
       <div className={this.styles.classNames.background}>
         <div className={this.styles.classNames.titleBar}>
-          <Label kind="big-center" text={`💻${session}`} />
+          <Container kind="row-pane">
+            <Container kind="column-full">
+              <Label
+                kind="big-center"
+                text={session}
+                glyph="solid/tv"
+                glyphPosition="center"
+                glyphSize="200%"
+              />
+            </Container>
+            <Container kind="column-full">
+              <Button
+                text="💻1"
+                width="200px"
+                kind="button-notification"
+                onClick={this.onSessionOne}
+                disabled={!session.endsWith('-2')}
+              />
+              <Button
+                text="💻2"
+                width="200px"
+                kind="button-notification"
+                onClick={this.onSessionTwo}
+                disabled={session.endsWith('-2')}
+              />
+            </Container>
+          </Container>
         </div>
         {this.props.children}
         <div className={this.styles.classNames.statusBar}>

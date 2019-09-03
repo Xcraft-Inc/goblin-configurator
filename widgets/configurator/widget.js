@@ -23,6 +23,7 @@ class Configurator extends Form {
   static get wiring() {
     return {
       id: 'id',
+      feeds: 'feeds',
       advanced: 'advanced',
     };
   }
@@ -42,13 +43,13 @@ class Configurator extends Form {
   }
 
   render() {
-    const {id, advanced} = this.props;
+    const {id, feeds, advanced} = this.props;
 
     if (!id) {
       return null;
     }
 
-    const sessionList = this.getModelValue('.feeds')
+    const sessionList = feeds
       .filter(f => f.startsWith('feed-desktop@'))
       .map(feed => ({
         id: feed,
