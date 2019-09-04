@@ -40,7 +40,7 @@ class MainLayout extends Widget {
                 text={session}
                 glyph="solid/tv"
                 glyphPosition="center"
-                glyphSize="200%"
+                glyphSize="100%"
               />
             </Container>
             <Container kind="column-full">
