@@ -1,14 +1,7 @@
 //T:2019-02-27
 import React from 'react';
 import Form from 'laboratory/form';
-
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import Label from 'gadgets/label/widget';
-import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
-import LabelTextField from 'gadgets/label-text-field/widget';
-import Separator from 'gadgets/separator/widget';
-import C from 'goblin-laboratory/widgets/connect-helpers/c';
+import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import IconNavigator from '../icon-navigator/widget';
 
@@ -16,6 +9,7 @@ class Configurator extends Form {
   constructor() {
     super(...arguments);
     this.onContinue = this.onContinue.bind(this);
+    this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
     this.scopeInfo = this.scopeInfo.bind(this);
   }
@@ -32,6 +26,10 @@ class Configurator extends Form {
     this.submit();
   }
 
+  onToggleAdvanced() {
+    this.do('toggle-advanced');
+  }
+
   openSession(selection) {
     console.log('OPEN SESSION', selection);
     this.do('open-session', {selection});
@@ -40,6 +38,10 @@ class Configurator extends Form {
   scopeInfo(selection) {
     console.log('SCOPE INFO', selection);
     this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
+  }
+
+  componentDidMount() {
+    MouseTrap.bind('ctrl+p', this.onToggleAdvanced);
   }
 
   render() {

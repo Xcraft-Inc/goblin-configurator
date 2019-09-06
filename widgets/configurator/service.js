@@ -11,6 +11,7 @@ const logicState = {
   current: {},
   available: {},
   profiles: {},
+  advanced: false,
 };
 
 // Define logic handlers according rc.json
@@ -47,6 +48,9 @@ const logicHandlers = {
   },
   'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
+  },
+  'toggle-advanced': state => {
+    return state.set('advanced', !state.get('advanced'));
   },
 };
 
@@ -116,6 +120,10 @@ Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
 });
 
 Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
   quest.do();
 });
 
