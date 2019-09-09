@@ -12,6 +12,7 @@ class Configurator extends Form {
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
     this.scopeInfo = this.scopeInfo.bind(this);
+    this.closeSession = this.closeSession.bind(this);
   }
 
   static get wiring() {
@@ -35,13 +36,18 @@ class Configurator extends Form {
     this.do('open-session', {selection});
   }
 
+  closeSession(selection) {
+    console.log('CLOSE SESSION', selection);
+    this.do('close-session', {selection});
+  }
+
   scopeInfo(selection) {
     console.log('SCOPE INFO', selection);
     this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
   }
 
   componentDidMount() {
-    MouseTrap.bind('ctrl+p', this.onToggleAdvanced);
+    MouseTrap.bind('ctrl+k', this.onToggleAdvanced);
   }
 
   render() {
@@ -84,6 +90,8 @@ class Configurator extends Form {
           leaf: true,
           value: s.id,
           glyph: 'solid/tv',
+          closable: true,
+          onClose: this.closeSession,
         };
       }
     });

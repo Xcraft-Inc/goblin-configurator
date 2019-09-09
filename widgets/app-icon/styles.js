@@ -23,7 +23,13 @@ export default function styles(theme) {
     textAlign: 'center',
   };
 
-  return {icon, text};
+  const closeBox = {
+    position: 'absolute',
+    top: '32px',
+    right: '10px',
+  };
+
+  return {icon, text, closeBox};
 }
 
 /******************************************************************************/

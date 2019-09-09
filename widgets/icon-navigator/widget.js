@@ -84,8 +84,21 @@ class IconNavigator extends Widget {
         if (!data.leaf) {
           return <AppIcon text={text} glyph={glyph} onClick={this.open} />;
         } else {
+          let closeProps = null;
+          if (data.closable) {
+            const onClose = e => {
+              e.stopPropagation();
+              data.onClose(data.value);
+            };
+            closeProps = {onClose: onClose, closable: true};
+          }
           return (
-            <AppIcon text={text} glyph={data.glyph} onClick={this.select} />
+            <AppIcon
+              text={text}
+              glyph={data.glyph}
+              onClick={this.select}
+              {...closeProps}
+            />
           );
         }
       }
