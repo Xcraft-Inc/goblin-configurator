@@ -46,6 +46,10 @@ const logicHandlers = {
     const usr = action.get('newValue');
     return state.set('form.username', usr);
   },
+  'change-form.session': (state, action) => {
+    const s = action.get('newValue');
+    return state.set('form.session', s);
+  },
   'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
   },
@@ -54,7 +58,7 @@ const logicHandlers = {
   },
 };
 
-Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
+Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
   const mainGoblin = clientConfig.mainGoblin;
   const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
@@ -86,14 +90,12 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, id, labId) {
 
   const selectedProfile = availableProfiles[0];
   const currentProfile = available[selectedProfile];
-  //INFO:
-  //username is a "session name"
-  const os = require('os');
-  const sessionName = `${os.userInfo().username}`;
+
   const form = {
     busy: false,
     profile: selectedProfile,
-    username: sessionName,
+    username: username,
+    session: userId,
     locale: 'disabled',
   };
 
@@ -123,21 +125,26 @@ Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
   quest.do();
 });
 
+Goblin.registerQuest(goblinName, 'change-form.session', function(quest) {
+  quest.do();
+});
+
 Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
   quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
   const state = quest.goblin.getState();
+  const username = state.get('form.username');
   if (selection.startsWith('feed-desktop@')) {
     const parts = selection.split('@');
     const mandate = parts[1];
-    const username = parts[2];
-    quest.evt(`configured`, {username, configuration: {mandate}});
+    const session = parts[2];
+    quest.evt(`configured`, {username, session, configuration: {mandate}});
   } else {
     const profile = state.get(`profiles.${selection}`, null);
-    const username = state.get('form.username');
-    quest.evt(`configured`, {username, configuration: profile.toJS()});
+    const session = state.get('form.session');
+    quest.evt(`configured`, {username, session, configuration: profile.toJS()});
   }
 });
 

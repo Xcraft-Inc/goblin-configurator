@@ -16,19 +16,19 @@ class MainLayout extends Widget {
   }
 
   onSessionOne() {
-    this.doAs('configurator', 'change-form.username', {
+    this.doAs('configurator', 'change-form.session', {
       newValue: this.props.session.replace('-2', ''),
     });
   }
 
   onSessionTwo() {
-    this.doAs('configurator', 'change-form.username', {
+    this.doAs('configurator', 'change-form.session', {
       newValue: this.props.session + '-2',
     });
   }
 
   render() {
-    const {session, showProfileInfo} = this.props;
+    const {session, username, showProfileInfo} = this.props;
 
     return (
       <div className={this.styles.classNames.background}>
@@ -83,6 +83,7 @@ class MainLayout extends Widget {
 }
 
 export default Widget.connectBackend(state => {
-  const session = state.get('form.username');
-  return {session};
+  const session = state.get('form.session');
+  const username = state.get('form.username');
+  return {session, username};
 })(MainLayout);
