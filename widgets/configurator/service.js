@@ -96,7 +96,7 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
     profile: selectedProfile,
     username: username,
     session: userId,
-    locale: 'disabled',
+    locale: 'fr-CH',
   };
 
   quest.do({
@@ -135,16 +135,27 @@ Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
 
 Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
   const state = quest.goblin.getState();
+  const profile = state.get(`profiles.${selection}`, null);
   const username = state.get('form.username');
+  const locale = profile.get('defaultLocale', 'fr-CH');
   if (selection.startsWith('feed-desktop@')) {
     const parts = selection.split('@');
     const mandate = parts[1];
     const session = parts[2];
-    quest.evt(`configured`, {username, session, configuration: {mandate}});
+    quest.evt(`configured`, {
+      username,
+      session,
+      locale,
+      configuration: {mandate},
+    });
   } else {
-    const profile = state.get(`profiles.${selection}`, null);
     const session = state.get('form.session');
-    quest.evt(`configured`, {username, session, configuration: profile.toJS()});
+    quest.evt(`configured`, {
+      username,
+      session,
+      locale,
+      configuration: profile.toJS(),
+    });
   }
 });
 
