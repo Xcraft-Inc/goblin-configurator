@@ -10,4 +10,10 @@ module.exports = [
     message: 'list of available profiles',
     default: [],
   },
+  {
+    type: 'input',
+    name: 'buildInfo',
+    message: 'build info displayed in configurator',
+    default: '',
+  },
 ];

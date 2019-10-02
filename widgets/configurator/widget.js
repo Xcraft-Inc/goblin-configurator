@@ -97,7 +97,7 @@ class Configurator extends Form {
     });
 
     return (
-      <MainLayout id={id}>
+      <MainLayout id={id} info={this.getModelValue('.buildInfo')}>
         <div className={this.styles.classNames.main}>
           <div className={this.styles.classNames.left}>
             <IconNavigator

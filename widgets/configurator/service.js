@@ -24,7 +24,8 @@ const logicHandlers = {
       .set('feeds', action.get('feeds'))
       .set('available', action.get('available'))
       .set('profiles', action.get('profiles'))
-      .set('mainGoblin', action.get('mainGoblin'));
+      .set('mainGoblin', action.get('mainGoblin'))
+      .set('buildInfo', action.get('buildInfo'));
   },
   'update-feeds': (state, action) => {
     return state.set('feeds', action.get('feeds'));
@@ -65,6 +66,7 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
   const errorMsg = `Unable to configure app:`;
   const warehouse = quest.getAPI('warehouse');
   const feeds = yield warehouse.listFeeds();
+  const buildInfo = confConfig.buildInfo;
   const available = confConfig.profiles;
   if (!available) {
     throw new Error(
@@ -107,6 +109,7 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
     available: availableProfiles,
     profiles: available,
     mainGoblin,
+    buildInfo,
   });
   return quest.goblin.id;
 });

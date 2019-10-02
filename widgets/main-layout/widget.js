@@ -28,7 +28,7 @@ class MainLayout extends Widget {
   }
 
   render() {
-    const {session, username, showProfileInfo} = this.props;
+    const {session, info, username, showProfileInfo} = this.props;
 
     return (
       <div className={this.styles.classNames.background}>
@@ -70,7 +70,9 @@ class MainLayout extends Widget {
                 text={new Date().toLocaleString('fr-CH').split(' ')[0]}
               />
             </Container>
-            <Container kind="column-full"></Container>
+            <Container kind="column-full">
+              <small>{info}</small>
+            </Container>
             <Container kind="column-full">
               <Clock widgetId={this.props.id + '$clock'} />
             </Container>
