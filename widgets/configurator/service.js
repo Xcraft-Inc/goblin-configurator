@@ -137,7 +137,6 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
   const state = quest.goblin.getState();
   const profile = state.get(`profiles.${selection}`, null);
   const username = state.get('form.username');
-  const locale = profile.get('defaultLocale', 'fr-CH');
   if (selection.startsWith('feed-desktop@')) {
     const parts = selection.split('@');
     const mandate = parts[1];
@@ -145,10 +144,11 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
     quest.evt(`configured`, {
       username,
       session,
-      locale,
+      locale: null,
       configuration: {mandate},
     });
   } else {
+    const locale = profile.get('defaultLocale', 'fr-CH');
     const session = state.get('form.session');
     quest.evt(`configured`, {
       username,
