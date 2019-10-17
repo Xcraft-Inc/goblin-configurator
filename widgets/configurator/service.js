@@ -163,16 +163,9 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
 });
 
 Goblin.registerQuest(goblinName, 'close-session', function*(quest, selection) {
-  const session = selection.replace('feed-', '');
-  const sessionAPI = quest.getAPI(session);
-  yield sessionAPI.close();
-  yield quest.sub.wait(`*::*.${session}.closed`);
-  yield quest.warehouse.feedSubscriptionDel({
-    feed: session,
-    branch: session,
-    parents: session,
-  });
-  yield quest.warehouse.unsubscribe({feed: session});
+  const desktop = selection.replace('feed-', '');
+  const deskAPI = quest.getAPI(desktop);
+  yield deskAPI.close({closeIn: 10});
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {});
