@@ -1,6 +1,5 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
 import ProfileInfo from '../profile-info/widget';
@@ -27,62 +26,74 @@ class MainLayout extends Widget {
     });
   }
 
+  /******************************************************************************/
+
+  renderHeader(session) {
+    return (
+      <div className={this.styles.classNames.header}>
+        <Label
+          width="200px"
+          text={session}
+          glyph="solid/tv"
+          glyphPosition="center"
+          glyphSize="100%"
+        />
+        <Button
+          width="120px"
+          kind="action"
+          place="1/2"
+          justify="center"
+          text="1"
+          glyph={!session.endsWith('-2') ? 'solid/check' : null}
+          onClick={this.onSessionOne}
+          horizontalSpacing="tiny"
+        />
+        <Button
+          width="120px"
+          kind="action"
+          place="2/2"
+          justify="center"
+          text="2"
+          glyph={session.endsWith('-2') ? 'solid/check' : null}
+          onClick={this.onSessionTwo}
+        />
+      </div>
+    );
+  }
+
+  renderContent() {
+    return (
+      <div className={this.styles.classNames.content}>
+        {this.props.children}
+      </div>
+    );
+  }
+
+  renderFooter(info, showProfileInfo) {
+    return (
+      <div className={this.styles.classNames.footer}>
+        <Label text={new Date().toLocaleString('fr-CH').split(' ')[0]} />
+        <Clock widgetId={this.props.id + '$clock'} />
+        <Label text={info} />
+        {showProfileInfo ? <ProfileInfo id={this.props.id} /> : null}
+      </div>
+    );
+  }
+
   render() {
-    const {session, info, username, showProfileInfo} = this.props;
+    const {session, info, showProfileInfo} = this.props;
 
     return (
-      <div className={this.styles.classNames.background}>
-        <div className={this.styles.classNames.titleBar}>
-          <Container kind="row-pane">
-            <Container kind="column-full">
-              <Label
-                kind="big-center"
-                text={session}
-                glyph="solid/tv"
-                glyphPosition="center"
-                glyphSize="100%"
-              />
-            </Container>
-            <Container kind="column-full">
-              <Button
-                text="💻1"
-                width="200px"
-                kind="button-notification"
-                onClick={this.onSessionOne}
-                disabled={!session.endsWith('-2')}
-              />
-              <Button
-                text="💻2"
-                width="200px"
-                kind="button-notification"
-                onClick={this.onSessionTwo}
-                disabled={session.endsWith('-2')}
-              />
-            </Container>
-          </Container>
-        </div>
-        {this.props.children}
-        <div className={this.styles.classNames.statusBar}>
-          <Container kind="row-pane">
-            <Container kind="column-full">
-              <Label
-                kind="big-center"
-                text={new Date().toLocaleString('fr-CH').split(' ')[0]}
-              />
-            </Container>
-            <Container kind="column-full">
-              <small>{info}</small>
-            </Container>
-            <Container kind="column-full">
-              <Clock widgetId={this.props.id + '$clock'} />
-            </Container>
-          </Container>
-          {showProfileInfo ? <ProfileInfo id={this.props.id} /> : null}
-        </div>
+      <div className={this.styles.classNames.mainLayout}>
+        {this.renderHeader(session)}
+        {this.renderContent()}
+        {this.renderFooter(info, showProfileInfo)}
       </div>
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.connectBackend(state => {
   const session = state.get('form.session');

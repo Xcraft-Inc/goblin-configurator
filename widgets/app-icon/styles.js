@@ -1,25 +1,30 @@
+import {ColorManipulator} from 'electrum-theme';
+
 /******************************************************************************/
 
 export default function styles(theme) {
-  const icon = {
+  const appIcon = {
+    'position': 'relative',
     'display': 'flex',
+    'justifyContent': 'center',
     'alignItems': 'center',
-    'width': '256px',
-    'height': '256px',
+    'width': '350px',
+    'height': '100px',
     'margin': '20px',
-    'boxShadow':
-      '0 2px 5px rgba(0, 0, 0, 0.3), 0 2px 0px rgba(255,255,255,0.4) inset, 0 -2px 0px rgba(0,0,0,0.5) inset',
-    'borderRadius': '20px',
-    'transformStyle': 'preserve-3d',
-    'backfaceVisibility': 'hidden',
+    'borderRadius': '5px',
     'backgroundColor': theme.palette.notificationBackground,
+    'userSelect': 'none',
+    'cursor': 'pointer',
     'transition': theme.transitions.easeOut(),
-    ':hover': {},
+    ':hover': {
+      backgroundColor: ColorManipulator.lighten(
+        theme.palette.notificationBackground,
+        0.1
+      ),
+    },
   };
 
   const text = {
-    display: 'block',
-    zIndex: 1,
     textAlign: 'center',
   };
 
@@ -29,7 +34,7 @@ export default function styles(theme) {
     right: '10px',
   };
 
-  return {icon, text, closeBox};
+  return {appIcon, text, closeBox};
 }
 
 /******************************************************************************/

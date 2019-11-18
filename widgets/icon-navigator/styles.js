@@ -1,16 +1,26 @@
 /******************************************************************************/
 
 export default function styles() {
-  const content = {
-    height: '500px',
+  const iconNavigator = {
+    //? flexGrow: 1,
     display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '700px',
-    margin: '0 auto',
+    flexDirection: 'column',
+    margin: '20px',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: '20px',
   };
 
-  return {content};
+  const header = {
+    padding: '10px',
+    backgroundColor: 'white',
+    borderRadius: '20px 20px 0px 0px',
+  };
+
+  const content = {
+    display: 'flex',
+  };
+
+  return {iconNavigator, header, content};
 }
 
 /******************************************************************************/

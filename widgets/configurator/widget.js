@@ -5,9 +5,12 @@ import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import IconNavigator from '../icon-navigator/widget';
 
-class Configurator extends Form {
+/******************************************************************************/
+
+export default class Configurator extends Form {
   constructor() {
     super(...arguments);
+
     this.onContinue = this.onContinue.bind(this);
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
@@ -21,6 +24,10 @@ class Configurator extends Form {
       feeds: 'feeds',
       advanced: 'advanced',
     };
+  }
+
+  componentDidMount() {
+    MouseTrap.bind('ctrl+k', this.onToggleAdvanced);
   }
 
   onContinue() {
@@ -46,9 +53,7 @@ class Configurator extends Form {
     this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
   }
 
-  componentDidMount() {
-    MouseTrap.bind('ctrl+k', this.onToggleAdvanced);
-  }
+  /******************************************************************************/
 
   render() {
     const {id, feeds, advanced} = this.props;
@@ -98,97 +103,16 @@ class Configurator extends Form {
 
     return (
       <MainLayout id={id} info={this.getModelValue('.buildInfo')}>
-        <div className={this.styles.classNames.main}>
-          <div className={this.styles.classNames.left}>
-            <IconNavigator
-              widgetId={`${id}$icon-navigator`}
-              text={this.getModelValue('.mainGoblin')}
-              data={byMandate}
-              onLeafSelect={this.openSession}
-              onScope={this.scopeInfo}
-            ></IconNavigator>
-          </div>
+        <div className={this.styles.classNames.configurator}>
+          <IconNavigator
+            widgetId={`${id}$icon-navigator`}
+            text={this.getModelValue('.mainGoblin')}
+            data={byMandate}
+            onLeafSelect={this.openSession}
+            onScope={this.scopeInfo}
+          ></IconNavigator>
         </div>
       </MainLayout>
     );
-    /*const Form = this.Form;
-    return (
-      <Container kind="root">
-        <Container kind="right">
-          <Container kind="content">
-            <Form {...this.formConfig}>
-              <Container
-                width="400px"
-                height="350px"
-                kind="configurator-header"
-              >
-                <Label glyph="solid/sign-in-alt" kind="floating-header" />
-              </Container>
-              <BusyContent
-                kind="configurator-content"
-                width="400px"
-                height="350px"
-              >
-                <Container kind="row-pane">
-                  <Label text="dev-mode" grow="1" kind="big-center" />
-                </Container>
-                <Separator kind="space" height="30px" />
-                <Container kind="row-pane">
-                  <Label glyph="solid/user" horizontalSpacing="overlap" />
-                  <TextFieldCombo
-                    grow="1"
-                    selectedId={C('.form.session')}
-                    list={feedList}
-                    menuType="wrap"
-                    comboTextTransform="none"
-                  />
-                </Container>
-                <Container kind="row-pane">
-                  <Label glyph="solid/database" horizontalSpacing="overlap" />
-                  <TextFieldCombo
-                    selectedId={C('.form.profile')}
-                    grow="1"
-                    list={list}
-                    menuType="wrap"
-                    comboTextTransform="none"
-                  />
-                </Container>
-                <Separator kind="space" height="1px" />
-                <Container kind="row-pane">
-                  <LabelTextField
-                    labelGlyph="solid/user"
-                    model=".form.username"
-                    grow="1"
-                  />
-                </Container>
-                <Separator kind="space" height="30px" />
-                <ProfileInfo />
-                <Separator kind="space" height="50px" />
-                <Container kind="row-pane">
-                  <Button
-                    onClick={this.onContinue}
-                    text={'Continuer'}
-                    grow="1"
-                    kind="action"
-                    justify="center"
-                    place="single"
-                  />
-                </Container>
-              </BusyContent>
-              <Container
-                kind="configurator-footer"
-                height="100px"
-                width="400px"
-              >
-                <Separator width="300px" kind="floating-footer" />
-                <Label text={'Crésus — EPSITEC SA'} kind="floating-footer" />
-              </Container>
-            </Form>
-          </Container>
-        </Container>
-      </Container>
-    );*/
   }
 }
-
-export default Configurator;

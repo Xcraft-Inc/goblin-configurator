@@ -1,9 +1,10 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import AppIcon from '../app-icon/widget';
-import C from 'goblin-laboratory/widgets/connect-helpers/c';
-import {unfold} from 'linq';
+import Label from 'gadgets/label/widget';
+
 /******************************************************************************/
+
 class IconNavigator extends Widget {
   constructor() {
     super(...arguments);
@@ -53,88 +54,145 @@ class IconNavigator extends Widget {
     }
   }
 
-  render() {
-    const {
-      text,
-      flow,
-      data,
-      target,
-      scoped,
-      level,
-      parentFlow,
-      onLeafSelect,
-      onScope,
-    } = this.props;
-    let lvl = level;
-    if (!lvl) {
-      lvl = 0;
+  /******************************************************************************/
+
+  renderHeader(title) {
+    const {level = 0} = this.props;
+
+    return (
+      <div className={this.styles.classNames.header}>
+        <Label text={`${title} level=${level}`} />
+      </div>
+    );
+  }
+
+  renderClosedNode() {
+    const {text, level = 0} = this.props;
+
+    const glyph = level === 0 ? 'solid/cube' : 'solid/database';
+
+    return (
+      <div className={this.styles.classNames.iconNavigator}>
+        {this.renderHeader('Closed-node')}
+        <AppIcon text={text} glyph={glyph} onClick={this.open} />
+      </div>
+    );
+  }
+
+  renderClosedLeaf() {
+    const {text, data} = this.props;
+
+    let closeProps = null;
+    if (data.closable) {
+      const onClose = e => {
+        e.stopPropagation();
+        data.onClose(data.value);
+      };
+      closeProps = {onClose: onClose, closable: true};
     }
-    if (parentFlow && parentFlow === 'scoped' && lvl > 0 && !scoped) {
+
+    return (
+      <div className={this.styles.classNames.iconNavigator}>
+        {this.renderHeader('Closed-leaf')}
+        <AppIcon
+          text={text}
+          glyph={data.glyph}
+          onClick={this.select}
+          {...closeProps}
+        />
+      </div>
+    );
+  }
+
+  renderClosed() {
+    const {data, scoped} = this.props;
+
+    if (scoped) {
+      this.dispatchTo(this.widgetId, {
+        type: 'OPEN',
+      });
+    }
+
+    if (data.leaf) {
+      return this.renderClosedLeaf();
+    } else {
+      return this.renderClosedNode();
+    }
+  }
+
+  renderOpenedLeaf() {
+    const {data} = this.props;
+
+    return (
+      <div className={this.styles.classNames.iconNavigator}>
+        {this.renderHeader('Opened-leaf')}
+        <AppIcon text={data} glyph={data.glyph} />
+      </div>
+    );
+  }
+
+  renderOpenedNode() {
+    const {text, flow, target, level = 0, onLeafSelect, onScope} = this.props;
+
+    //? const glyph = level === 0 ? 'solid/cube' : 'solid/database';
+    const glyph = 'solid/chevron-up';
+
+    return (
+      <div className={this.styles.classNames.iconNavigator}>
+        {this.renderHeader('Opened-node')}
+        <AppIcon text={text} glyph={glyph} onClick={this.close} />
+        <div className={this.styles.classNames.content}>
+          {Object.entries(this.props.data).map(([id, data], i) => {
+            return (
+              <CIconNavigator
+                key={i}
+                widgetId={`${id}$icon-navigator`}
+                text={id}
+                data={data}
+                parent={this.widgetId}
+                scoped={target === id}
+                parentFlow={flow}
+                level={level + 1}
+                onLeafSelect={onLeafSelect}
+                onScope={onScope}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  renderOpened() {
+    const {data} = this.props;
+
+    if (data.leaf) {
+      return this.renderOpenedLeaf();
+    } else {
+      return this.renderOpenedNode();
+    }
+  }
+
+  render() {
+    const {flow, scoped, level = 0, parentFlow} = this.props;
+
+    if (parentFlow && parentFlow === 'scoped' && level > 0 && !scoped) {
       return null;
     }
-    const glyph = lvl === 0 ? 'solid/cube' : 'solid/database';
+
     switch (flow) {
       default:
-      case 'closed': {
-        if (scoped) {
-          this.dispatchTo(this.widgetId, {
-            type: 'OPEN',
-          });
-        }
-        if (!data.leaf) {
-          return <AppIcon text={text} glyph={glyph} onClick={this.open} />;
-        } else {
-          let closeProps = null;
-          if (data.closable) {
-            const onClose = e => {
-              e.stopPropagation();
-              data.onClose(data.value);
-            };
-            closeProps = {onClose: onClose, closable: true};
-          }
-          return (
-            <AppIcon
-              text={text}
-              glyph={data.glyph}
-              onClick={this.select}
-              {...closeProps}
-            />
-          );
-        }
-      }
+      case 'closed':
+        return this.renderClosed();
       case 'scoped':
-      case 'opened': {
-        if (!data.leaf) {
-          return (
-            <React.Fragment>
-              <AppIcon text={text} glyph={glyph} onClick={this.close} />
-              <div className={this.styles.classNames.content}>
-                {Object.entries(this.props.data).map(([id, data], i) => {
-                  return (
-                    <CIconNavigator
-                      key={i}
-                      widgetId={`${id}$icon-navigator`}
-                      text={id}
-                      data={data}
-                      parent={this.widgetId}
-                      scoped={target === id}
-                      parentFlow={flow}
-                      level={lvl + 1}
-                      onLeafSelect={onLeafSelect}
-                      onScope={onScope}
-                    />
-                  );
-                })}
-              </div>
-            </React.Fragment>
-          );
-        } else {
-          return <AppIcon text={data} glyph={data.glyph} />;
-        }
-      }
+      case 'opened':
+        return this.renderOpened();
     }
   }
 }
+
+/******************************************************************************/
+
 const CIconNavigator = Widget.connectWidget(state => {
   return {
     flow: state ? state.get('flow') : 'loading',

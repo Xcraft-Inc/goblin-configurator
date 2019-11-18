@@ -1,30 +1,18 @@
 /******************************************************************************/
 
 export default function styles() {
-  const layout = {
+  const configurator = {
+    flexGrow: 1,
+    margin: '8vh 5vw',
+    padding: '0px',
+    borderRadius: '20px',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    boxShadow: '0px 10px 100px black',
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
-  };
-  const left = {
-    paddingTop: '20vh',
-    height: '500px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    margin: '0 auto',
+    justifyContent: 'flex-start',
   };
 
-  const right = {
-    height: '200px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    margin: '0 auto',
-  };
-
-  return {left, right, layout};
+  return {configurator};
 }
 
 /******************************************************************************/

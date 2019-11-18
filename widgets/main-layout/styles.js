@@ -1,35 +1,41 @@
-import {ColorHelpers} from 'electrum-theme';
 /******************************************************************************/
 
 export default function styles(theme) {
-  const background = {
+  const mainLayout = {
     position: 'relative',
+    overflow: 'hidden',
     height: '100vh',
     width: '100vw',
-    background: theme.palette.rootBackground, //'linear-gradient(159deg, rgba(5,4,5,1) 0%, rgba(95,82,99,1) 70%, rgba(154,132,164,1) 100%)',
+    background: theme.palette.rootBackground,
+    fontSize: '20px',
+    display: 'flex',
+    flexDirection: 'column',
   };
 
-  const statusBar = {
-    overflow: 'hidden',
-    position: 'fixed',
-    bottom: '0',
-    paddingTop: '25px',
-    paddingBottom: '25px',
+  const header = {
     width: '100%',
+    padding: '25px',
     background: theme.palette.footerBackground,
+    display: 'flex',
+    flexDirection: 'row',
   };
 
-  const titleBar = {
-    overflow: 'hidden',
-    position: 'fixed',
-    top: '0',
+  const content = {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  const footer = {
     width: '100%',
-    paddingTop: '25px',
-    paddingBottom: '25px',
+    padding: '25px',
     background: theme.palette.footerBackground,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   };
 
-  return {background, statusBar, titleBar};
+  return {mainLayout, header, content, footer};
 }
 
 /******************************************************************************/

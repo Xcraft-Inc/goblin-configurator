@@ -1,7 +1,9 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
+
 /******************************************************************************/
+
 class Clock extends Widget {
   constructor() {
     super(...arguments);
@@ -14,19 +16,25 @@ class Clock extends Widget {
     });
   }
 
+  /******************************************************************************/
+
   render() {
     const {time} = this.props;
     setTimeout(this.onTick, 1000);
     if (!time) {
-      return <Label kind="big-center" text="..." />;
+      return <Label text="..." />;
     }
+
     const pretty = v => `0${v}`.slice(-2);
-    const HH = pretty(time.getHours());
-    const MM = pretty(time.getMinutes());
-    const SS = pretty(time.getSeconds());
-    return <Label kind="big-center" text={`${HH}:${MM}:${SS}`} />;
+    const hh = pretty(time.getHours());
+    const mm = pretty(time.getMinutes());
+    const ss = pretty(time.getSeconds());
+
+    return <Label text={`${hh}:${mm}:${ss}`} />;
   }
 }
+
+/******************************************************************************/
 
 export default Widget.connectWidget(state => {
   if (!state) {
