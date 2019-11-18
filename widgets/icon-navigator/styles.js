@@ -2,12 +2,8 @@
 
 export default function styles() {
   const iconNavigator = {
-    //? flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    margin: '20px',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: '20px',
   };
 
   const header = {
@@ -16,11 +12,23 @@ export default function styles() {
     borderRadius: '20px 20px 0px 0px',
   };
 
-  const content = {
+  const back = {
     display: 'flex',
+    flexDirection: 'row',
+    padding: '20px 0px',
+    fontSize: '150%',
+    textTransform: 'uppercase',
+    color: '#ddd',
+    alignItems: 'center',
   };
 
-  return {iconNavigator, header, content};
+  const content = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  };
+
+  return {iconNavigator, header, back, content};
 }
 
 /******************************************************************************/

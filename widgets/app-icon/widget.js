@@ -32,6 +32,8 @@ export default class AppIcon extends Widget {
         {this.renderClose()}
         <div className={this.styles.classNames.text}>
           <Label
+            justify="start"
+            textTransform="uppercase"
             text={this.props.text}
             glyph={this.props.glyph}
             glyphPosition="center"

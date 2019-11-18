@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import AppIcon from '../app-icon/widget';
 import Label from 'gadgets/label/widget';
+import Button from 'gadgets/button/widget';
 
 /******************************************************************************/
 
@@ -57,13 +58,14 @@ class IconNavigator extends Widget {
   /******************************************************************************/
 
   renderHeader(title) {
-    const {level = 0} = this.props;
-
-    return (
-      <div className={this.styles.classNames.header}>
-        <Label text={`${title} level=${level}`} />
-      </div>
-    );
+    return null;
+    //- const {level = 0} = this.props;
+    //-
+    //- return (
+    //-   <div className={this.styles.classNames.header}>
+    //-     <Label text={`${title} level=${level}`} />
+    //-   </div>
+    //- );
   }
 
   renderClosedNode() {
@@ -131,6 +133,18 @@ class IconNavigator extends Widget {
     );
   }
 
+  renderBack() {
+    const {text} = this.props;
+
+    return (
+      <div className={this.styles.classNames.back}>
+        <Button border="none" glyph="solid/chevron-up" onClick={this.close} />
+        <Label width="40px" />
+        <Label text={text} />
+      </div>
+    );
+  }
+
   renderOpenedNode() {
     const {text, flow, target, level = 0, onLeafSelect, onScope} = this.props;
 
@@ -140,7 +154,7 @@ class IconNavigator extends Widget {
     return (
       <div className={this.styles.classNames.iconNavigator}>
         {this.renderHeader('Opened-node')}
-        <AppIcon text={text} glyph={glyph} onClick={this.close} />
+        {this.renderBack()}
         <div className={this.styles.classNames.content}>
           {Object.entries(this.props.data).map(([id, data], i) => {
             return (

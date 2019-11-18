@@ -84,7 +84,11 @@ export default class Configurator extends Form {
       if (!list[m]) {
         list[m] = {};
       }
-      list[m][p.get('name')] = {leaf: true, value: id, glyph: 'solid/plus'};
+      list[m][p.get('name')] = {
+        leaf: true,
+        value: id,
+        glyph: isReset ? 'solid/trash' : 'solid/eye',
+      };
       return list;
     }, {});
 
