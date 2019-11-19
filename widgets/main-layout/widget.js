@@ -1,7 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
-import ProfileInfo from '../profile-info/widget';
+import Button from 'gadgets/button/widget';
 import Clock from '../clock/widget';
 
 /******************************************************************************/
@@ -13,15 +13,26 @@ class MainLayout extends Widget {
 
   /******************************************************************************/
 
-  renderHeader(username) {
+  renderHeader() {
     return (
       <div className={this.styles.classNames.header}>
         <Label
           width="200px"
-          text={username}
+          text={this.props.username}
           glyph="solid/user"
           glyphPosition="center"
           glyphSize="150%"
+        />
+        <Label grow="1" />
+        <Label text={this.props.info} />
+        <Button
+          width="50px"
+          height="50px"
+          border="none"
+          active={this.props.advanced}
+          glyph="solid/bug"
+          glyphSize="150%"
+          onClick={this.props.onToggleAdvanced}
         />
       </div>
     );
@@ -35,35 +46,29 @@ class MainLayout extends Widget {
     );
   }
 
-  renderFooter_WITHOUTCLOCK(info, showProfileInfo) {
+  renderFooter_WITHOUTCLOCK() {
     return (
       <div className={this.styles.classNames.footer}>
         <Label text={new Date().toLocaleString('fr-CH').split(' ')[0]} />
-        <Label text={info} />
-        {showProfileInfo ? <ProfileInfo id={this.props.id} /> : null}
       </div>
     );
   }
 
-  renderFooter(info, showProfileInfo) {
+  renderFooter() {
     return (
       <div className={this.styles.classNames.footer}>
         <Label text={new Date().toLocaleString('fr-CH').split(' ')[0]} />
         <Clock widgetId={this.props.id + '$clock'} />
-        <Label text={info} />
-        {showProfileInfo ? <ProfileInfo id={this.props.id} /> : null}
       </div>
     );
   }
 
   render() {
-    const {username, info, showProfileInfo} = this.props;
-
     return (
       <div className={this.styles.classNames.mainLayout}>
-        {this.renderHeader(username)}
+        {this.renderHeader()}
         {this.renderContent()}
-        {this.renderFooter(info, showProfileInfo)}
+        {this.renderFooter()}
       </div>
     );
   }

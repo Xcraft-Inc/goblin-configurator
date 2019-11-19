@@ -3,7 +3,6 @@ import React from 'react';
 import Form from 'laboratory/form';
 import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
-import IconNavigator from '../icon-navigator/widget';
 import ConfiguratorNavigator from '../configurator-navigator/widget';
 
 /******************************************************************************/
@@ -12,10 +11,8 @@ export default class Configurator extends Form {
   constructor() {
     super(...arguments);
 
-    this.onContinue = this.onContinue.bind(this);
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
-    this.scopeInfo = this.scopeInfo.bind(this);
     this.closeSession = this.closeSession.bind(this);
   }
 
@@ -29,10 +26,6 @@ export default class Configurator extends Form {
 
   componentDidMount() {
     MouseTrap.bind('ctrl+k', this.onToggleAdvanced);
-  }
-
-  onContinue() {
-    this.submit();
   }
 
   onToggleAdvanced() {
@@ -49,16 +42,9 @@ export default class Configurator extends Form {
     this.do('close-session', {name});
   }
 
-  scopeInfo(selection) {
-    console.log('SCOPE INFO', selection);
-    this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
-  }
-
   // Return a tree with 2 levels: mandats and sessions.
   getTree() {
-    const {id, feeds, advanced} = this.props;
-
-    if (!id) {
+    if (!this.props.id) {
       return null;
     }
 
@@ -70,7 +56,7 @@ export default class Configurator extends Form {
         let mandate = profile.get('mandate');
         const isReset = profile.get('reset');
 
-        if (!advanced && isReset) {
+        if (!this.props.advanced && isReset) {
           return list;
         }
         if (topology) {
@@ -105,7 +91,7 @@ export default class Configurator extends Form {
     );
 
     // Complete with opened sessions.
-    const sessionList = feeds
+    const sessionList = this.props.feeds
       .filter(f => f.startsWith('feed-desktop@'))
       .map(feed => ({
         id: feed,
@@ -138,7 +124,12 @@ export default class Configurator extends Form {
     const tree = this.getTree();
 
     return (
-      <MainLayout id={this.props.id} info={this.getModelValue('.buildInfo')}>
+      <MainLayout
+        id={this.props.id}
+        info={this.getModelValue('.buildInfo')}
+        advanced={this.props.advanced}
+        onToggleAdvanced={this.onToggleAdvanced}
+      >
         <div className={this.styles.classNames.configurator}>
           <ConfiguratorNavigator
             configuratorId={this.props.id}
@@ -146,73 +137,6 @@ export default class Configurator extends Form {
             application={this.getModelValue('.mainGoblin')}
             tree={tree}
           ></ConfiguratorNavigator>
-        </div>
-      </MainLayout>
-    );
-  }
-
-  render_OLD() {
-    const {id, feeds, advanced} = this.props;
-
-    if (!id) {
-      return null;
-    }
-
-    const sessionList = feeds
-      .filter(f => f.startsWith('feed-desktop@'))
-      .map(feed => ({
-        id: feed,
-        text: feed,
-        mandate: feed.split('@')[1],
-      }))
-      .toArray();
-
-    const byMandate = this.getModelValue('.profiles').reduce((list, p, id) => {
-      const t = p.get('topology', null);
-      let m = p.get('mandate');
-      const isReset = p.get('reset');
-      if (!advanced && isReset) {
-        return list;
-      }
-      if (t) {
-        m = `${m}@${t}`;
-      }
-      if (!list[m]) {
-        list[m] = {};
-      }
-      list[m][p.get('name')] = {
-        leaf: true,
-        value: id,
-        glyph: isReset ? 'solid/trash' : 'solid/eye',
-      };
-      return list;
-    }, {});
-
-    sessionList.forEach(s => {
-      if (byMandate[s.mandate]) {
-        const session = s.id.split('@')[2];
-        byMandate[s.mandate][session] = {
-          leaf: true,
-          value: s.id,
-          glyph: 'solid/tv',
-          closable: true,
-          onClose: this.closeSession,
-        };
-      }
-    });
-
-    return (
-      <MainLayout id={id} info={this.getModelValue('.buildInfo')}>
-        <div className={this.styles.classNames.configurator}>
-          <IconNavigator
-            configuratorId={id}
-            widgetId={`${id}$icon-navigator`}
-            text={this.getModelValue('.mainGoblin')}
-            data={byMandate}
-            level={0}
-            onLeafSelect={this.openSession}
-            onScope={this.scopeInfo}
-          ></IconNavigator>
         </div>
       </MainLayout>
     );
