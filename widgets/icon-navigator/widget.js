@@ -1,8 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import AppIcon from '../app-icon/widget';
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 /******************************************************************************/
 
@@ -57,17 +56,6 @@ class IconNavigator extends Widget {
 
   /******************************************************************************/
 
-  renderHeader(title) {
-    return null;
-    //- const {level = 0} = this.props;
-    //-
-    //- return (
-    //-   <div className={this.styles.classNames.header}>
-    //-     <Label text={`${title} level=${level}`} />
-    //-   </div>
-    //- );
-  }
-
   renderClosedNode() {
     const {text, level = 0} = this.props;
 
@@ -75,7 +63,6 @@ class IconNavigator extends Widget {
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        {this.renderHeader('Closed-node')}
         <AppIcon text={text} glyph={glyph} onClick={this.open} />
       </div>
     );
@@ -95,7 +82,6 @@ class IconNavigator extends Widget {
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        {this.renderHeader('Closed-leaf')}
         <AppIcon
           text={text}
           glyph={data.glyph}
@@ -127,7 +113,6 @@ class IconNavigator extends Widget {
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        {this.renderHeader('Opened-leaf')}
         <AppIcon text={data} glyph={data.glyph} />
       </div>
     );
@@ -138,22 +123,19 @@ class IconNavigator extends Widget {
 
     return (
       <div className={this.styles.classNames.back}>
-        <Button border="none" glyph="solid/chevron-up" onClick={this.close} />
-        <Label width="40px" />
-        <Label text={text} />
+        <div className={this.styles.classNames.backButton} onClick={this.close}>
+          <FontAwesomeIcon icon={[`fas`, 'chevron-up']} />
+        </div>
+        <div className={this.styles.classNames.backText}>{text}</div>
       </div>
     );
   }
 
   renderOpenedNode() {
-    const {text, flow, target, level = 0, onLeafSelect, onScope} = this.props;
-
-    //? const glyph = level === 0 ? 'solid/cube' : 'solid/database';
-    const glyph = 'solid/chevron-up';
+    const {flow, target, level = 0, onLeafSelect, onScope} = this.props;
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        {this.renderHeader('Opened-node')}
         {this.renderBack()}
         <div className={this.styles.classNames.content}>
           {Object.entries(this.props.data).map(([id, data], i) => {

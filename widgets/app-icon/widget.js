@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 /******************************************************************************/
 
@@ -12,13 +13,11 @@ export default class AppIcon extends Widget {
     }
 
     return (
-      <div className={this.styles.classNames.closeBox}>
-        <Button
-          glyph="solid/times"
-          kind="notification-close"
-          vpos="top"
-          onClick={this.props.onClose}
-        />
+      <div
+        className={this.styles.classNames.closeBox}
+        onClick={this.props.onClose}
+      >
+        <FontAwesomeIcon icon={[`fas`, 'times']} />
       </div>
     );
   }
@@ -30,16 +29,10 @@ export default class AppIcon extends Widget {
         onClick={this.props.onClick}
       >
         {this.renderClose()}
-        <div className={this.styles.classNames.text}>
-          <Label
-            justify="start"
-            textTransform="uppercase"
-            text={this.props.text}
-            glyph={this.props.glyph}
-            glyphPosition="center"
-            glyphSize="150%"
-          />
+        <div className={this.styles.classNames.glyph}>
+          <FontAwesomeIcon icon={[`fas`, this.props.glyph.split('/')[1]]} />
         </div>
+        <div className={this.styles.classNames.text}>{this.props.text}</div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 /******************************************************************************/
 
-export default function styles() {
+export default function styles(theme) {
   const iconNavigator = {
     display: 'flex',
     flexDirection: 'column',
@@ -22,13 +22,35 @@ export default function styles() {
     alignItems: 'center',
   };
 
+  const backButton = {
+    'width': '60px',
+    'height': '60px',
+    'display': 'flex',
+    'flexDirection': 'row',
+    'justifyContent': 'center',
+    'alignItems': 'center',
+    'fontSize': '150%',
+    'borderRadius': '5px',
+    'cursor': 'pointer',
+    'transition': '0.2s ease-out',
+    ':hover': {
+      color: '#fff',
+      backgroundColor: 'rgba(255,255,255,0.2)',
+    },
+  };
+
+  const backText = {
+    marginLeft: '20px',
+    fontSize: '120%',
+  };
+
   const content = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
   };
 
-  return {iconNavigator, header, back, content};
+  return {iconNavigator, header, back, backButton, backText, content};
 }
 
 /******************************************************************************/
