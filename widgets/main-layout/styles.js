@@ -13,7 +13,6 @@ export default function styles(theme) {
   };
 
   const header = {
-    width: '100%',
     padding: '25px',
     background: theme.palette.footerBackground,
     display: 'flex',
@@ -28,11 +27,11 @@ export default function styles(theme) {
   };
 
   const footer = {
-    width: '100%',
     padding: '25px',
     background: theme.palette.footerBackground,
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     fontSize: '150%',
   };

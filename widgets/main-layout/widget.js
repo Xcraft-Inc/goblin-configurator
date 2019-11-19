@@ -19,9 +19,9 @@ class MainLayout extends Widget {
         <Label
           width="200px"
           text={username}
-          glyph="solid/tv"
+          glyph="solid/user"
           glyphPosition="center"
-          glyphSize="100%"
+          glyphSize="150%"
         />
       </div>
     );
