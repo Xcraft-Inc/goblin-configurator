@@ -15,7 +15,7 @@ export default function styles(theme) {
   const back = {
     display: 'flex',
     flexDirection: 'row',
-    padding: '20px 0px',
+    padding: '0px 0px 10px 0px',
     fontSize: '150%',
     textTransform: 'uppercase',
     color: '#ddd',
@@ -40,7 +40,7 @@ export default function styles(theme) {
   };
 
   const backText = {
-    marginLeft: '20px',
+    marginLeft: '10px',
     fontSize: '120%',
   };
 

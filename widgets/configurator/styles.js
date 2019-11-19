@@ -3,7 +3,7 @@
 export default function styles() {
   const configurator = {
     flexGrow: 1,
-    margin: '8vh 5vw',
+    margin: '8vh 10vw',
     padding: '50px 100px',
     borderRadius: '20px',
     backgroundColor: 'rgba(255,255,255,0.2)',

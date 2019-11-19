@@ -8,10 +8,10 @@ export default function styles(theme) {
     'display': 'flex',
     'justifyContent': 'flex-start',
     'alignItems': 'center',
-    'width': '350px',
-    'height': '150px',
+    'width': '280px',
+    'height': '100px',
     'margin': '10px 10px 0px 0px',
-    'paddingLeft': '50px',
+    'paddingLeft': '30px',
     'borderRadius': '10px',
     'color': '#ddd',
     'backgroundColor': theme.palette.notificationBackground,
@@ -28,7 +28,7 @@ export default function styles(theme) {
   };
 
   const glyph = {
-    fontSize: '150%',
+    fontSize: '200%',
   };
 
   const text = {
@@ -39,10 +39,10 @@ export default function styles(theme) {
 
   const closeBox = {
     'position': 'absolute',
-    'top': '10px',
-    'right': '10px',
-    'width': '50px',
-    'height': '50px',
+    'top': '5px',
+    'right': '5px',
+    'width': '40px',
+    'height': '40px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',

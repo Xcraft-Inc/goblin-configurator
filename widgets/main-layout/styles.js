@@ -7,7 +7,7 @@ export default function styles(theme) {
     height: '100vh',
     width: '100vw',
     background: theme.palette.rootBackground,
-    fontSize: '20px',
+    fontSize: '12px',
     display: 'flex',
     flexDirection: 'column',
   };
