@@ -34,6 +34,14 @@ export default class ConfiguratorNavigator extends Widget {
 
   /******************************************************************************/
 
+  renderHeader() {
+    return (
+      <div className={this.styles.classNames.header}>
+        {this.props.application}
+      </div>
+    );
+  }
+
   renderBoxTitle(title) {
     return <div className={this.styles.classNames.boxTitle}>{title}</div>;
   }
@@ -132,8 +140,11 @@ export default class ConfiguratorNavigator extends Widget {
   render() {
     return (
       <div className={this.styles.classNames.configuratorNavigator}>
-        {this.renderMandatsBox()}
-        {this.renderSessionsBox()}
+        {this.renderHeader()}
+        <div className={this.styles.classNames.content}>
+          {this.renderMandatsBox()}
+          {this.renderSessionsBox()}
+        </div>
       </div>
     );
   }

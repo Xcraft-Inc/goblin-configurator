@@ -7,6 +7,27 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  const header = {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '0px 0px 50px 0px',
+    padding: '20px',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: '20px 20px 0px 0px',
+    boxShadow: '0px 10px 50px rgba(0,0,0,0.3)',
+    color: '#eee',
+    fontSize: '400%',
+    textTransform: 'uppercase',
+    justifyContent: 'center',
+    textAlign: 'center',
+  };
+
+  const content = {
+    padding: '50px 100px',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   const box = {
     display: 'flex',
     flexDirection: 'column',
@@ -71,6 +92,8 @@ export default function styles(theme) {
 
   return {
     configuratorNavigator,
+    header,
+    content,
     box,
     boxTitle,
     boxContent,
