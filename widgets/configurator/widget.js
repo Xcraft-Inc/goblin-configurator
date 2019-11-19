@@ -4,6 +4,7 @@ import Form from 'laboratory/form';
 import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import IconNavigator from '../icon-navigator/widget';
+import ConfiguratorNavigator from '../configurator-navigator/widget';
 
 /******************************************************************************/
 
@@ -38,14 +39,14 @@ export default class Configurator extends Form {
     this.do('toggle-advanced');
   }
 
-  openSession(selection) {
-    console.log('OPEN SESSION', selection);
-    this.do('open-session', {selection});
+  openSession(name, number) {
+    console.log('OPEN SESSION', name, number);
+    this.do('open-session', {name, number});
   }
 
-  closeSession(selection) {
-    console.log('CLOSE SESSION', selection);
-    this.do('close-session', {selection});
+  closeSession(name) {
+    console.log('CLOSE SESSION', name);
+    this.do('close-session', {name});
   }
 
   scopeInfo(selection) {
@@ -53,9 +54,104 @@ export default class Configurator extends Form {
     this.do('change-form.profile', {newValue: Object.entries(selection)[0][1]});
   }
 
+  // Return a tree with 2 levels: mandats and sessions.
+  getTree() {
+    const {id, feeds, advanced} = this.props;
+
+    if (!id) {
+      return null;
+    }
+
+    // Add all profiles.
+    const tree = this.getModelValue('.profiles').reduce(
+      (list, profile, profileKey) => {
+        const name = profile.get('name');
+        const topology = profile.get('topology', null);
+        let mandate = profile.get('mandate');
+        const isReset = profile.get('reset');
+
+        if (!advanced && isReset) {
+          return list;
+        }
+        if (topology) {
+          mandate = `${mandate}@${topology}`;
+        }
+        if (!list[mandate]) {
+          list[mandate] = {};
+        }
+        if (isReset) {
+          list[mandate][profileKey] = {
+            leaf: true,
+            name: name,
+            value: profileKey,
+            glyph: 'solid/trash',
+            onOpen: () => this.openSession(profileKey),
+          };
+        } else {
+          for (let sessionNumber = 1; sessionNumber <= 3; sessionNumber++) {
+            const key = `${profileKey}-${sessionNumber}`;
+            list[mandate][key] = {
+              leaf: true,
+              value: profileKey,
+              name: key,
+              glyph: 'solid/plus',
+              onOpen: () => this.openSession(profileKey, sessionNumber),
+            };
+          }
+        }
+        return list;
+      },
+      {}
+    );
+
+    // Complete with opened sessions.
+    const sessionList = feeds
+      .filter(f => f.startsWith('feed-desktop@'))
+      .map(feed => ({
+        id: feed,
+        text: feed,
+        mandate: feed.split('@')[1],
+      }))
+      .toArray();
+
+    sessionList.forEach(s => {
+      if (tree[s.mandate]) {
+        const session = s.id.split('@')[2];
+        tree[s.mandate][session] = {
+          leaf: true,
+          name: session,
+          value: s.id,
+          glyph: 'solid/tv',
+          closable: true,
+          onOpen: () => this.openSession(s.id),
+          onClose: () => this.closeSession(s.id),
+        };
+      }
+    });
+
+    return tree;
+  }
+
   /******************************************************************************/
 
   render() {
+    const tree = this.getTree();
+
+    return (
+      <MainLayout id={this.props.id} info={this.getModelValue('.buildInfo')}>
+        <div className={this.styles.classNames.configurator}>
+          <ConfiguratorNavigator
+            configuratorId={this.props.id}
+            widgetId={`${this.props.id}$icon-navigator`}
+            application={this.getModelValue('.mainGoblin')}
+            tree={tree}
+          ></ConfiguratorNavigator>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  render_OLD() {
     const {id, feeds, advanced} = this.props;
 
     if (!id) {

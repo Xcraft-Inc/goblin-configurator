@@ -60,7 +60,7 @@ class IconNavigator extends Widget {
     }
 
     const title = 'Applications';
-    return <div className={this.styles.classNames.header}>{title}</div>;
+    return <div className={this.styles.classNames.headerFirst}>{title}</div>;
   }
 
   renderHeader() {
@@ -140,6 +140,10 @@ class IconNavigator extends Widget {
   }
 
   renderBack() {
+    if (this.props.scoped === false) {
+      return null;
+    }
+
     let title;
     switch (this.props.level) {
       case 0:
@@ -155,6 +159,7 @@ class IconNavigator extends Widget {
 
     title += ' — ';
     title += this.props.text;
+    title += ` flow=${this.props.flow} scoped=${this.props.scoped}`;
 
     return (
       <div className={this.styles.classNames.back}>
@@ -167,11 +172,16 @@ class IconNavigator extends Widget {
   }
 
   renderOpenedNode() {
+    const style =
+      this.props.flow === 'opened'
+        ? this.styles.classNames.contentOpened
+        : this.styles.classNames.content;
+
     return (
       <div className={this.styles.classNames.iconNavigator}>
         {this.renderBack()}
         {this.renderHeader()}
-        <div className={this.styles.classNames.content}>
+        <div className={style}>
           {Object.entries(this.props.data).map(([id, data], i) => {
             return (
               <CIconNavigator

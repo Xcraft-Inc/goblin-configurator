@@ -47,10 +47,6 @@ const logicHandlers = {
     const usr = action.get('newValue');
     return state.set('form.username', usr);
   },
-  'change-form.session': (state, action) => {
-    const s = action.get('newValue');
-    return state.set('form.session', s);
-  },
   'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
   },
@@ -97,7 +93,6 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
     busy: false,
     profile: selectedProfile,
     username: username,
-    session: userId,
     locale: 'fr-CH',
   };
 
@@ -128,20 +123,16 @@ Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'change-form.session', function(quest) {
-  quest.do();
-});
-
 Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
+Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
   const state = quest.goblin.getState();
-  const profile = state.get(`profiles.${selection}`, null);
+  const profile = state.get(`profiles.${name}`, null);
   const username = state.get('form.username');
-  if (selection.startsWith('feed-desktop@')) {
-    const parts = selection.split('@');
+  if (name.startsWith('feed-desktop@')) {
+    const parts = name.split('@');
     const mandate = parts[1];
     const session = parts[2];
     quest.evt(`configured`, {
@@ -152,7 +143,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
     });
   } else {
     const locale = profile.get('defaultLocale', 'fr-CH');
-    const session = state.get('form.session');
+    const session = `${state.get('form.username')}-${number}`;
     quest.evt(`configured`, {
       username,
       session,
@@ -162,8 +153,8 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, selection) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'close-session', function*(quest, selection) {
-  const desktop = selection.replace('feed-', '');
+Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
+  const desktop = name.replace('feed-', '');
   const deskAPI = quest.getAPI(desktop);
   yield deskAPI.close({closeIn: 10});
 });
