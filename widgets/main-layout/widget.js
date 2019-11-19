@@ -69,6 +69,16 @@ class MainLayout extends Widget {
     );
   }
 
+  renderFooter_WITHOUTCLOCK(info, showProfileInfo) {
+    return (
+      <div className={this.styles.classNames.footer}>
+        <Label text={new Date().toLocaleString('fr-CH').split(' ')[0]} />
+        <Label text={info} />
+        {showProfileInfo ? <ProfileInfo id={this.props.id} /> : null}
+      </div>
+    );
+  }
+
   renderFooter(info, showProfileInfo) {
     return (
       <div className={this.styles.classNames.footer}>

@@ -109,6 +109,7 @@ export default class Configurator extends Form {
       <MainLayout id={id} info={this.getModelValue('.buildInfo')}>
         <div className={this.styles.classNames.configurator}>
           <IconNavigator
+            configuratorId={id}
             widgetId={`${id}$icon-navigator`}
             text={this.getModelValue('.mainGoblin')}
             data={byMandate}

@@ -29,7 +29,7 @@ class IconNavigator extends Widget {
     if (parent) {
       this.dispatchTo(parent, {
         type: 'SCOPE',
-        target: this.widgetId.replace('$icon-navigator', ''),
+        target: this.props.dataId,
       });
       if (this.props.onScope) {
         this.props.onScope(this.props.data);
@@ -132,17 +132,27 @@ class IconNavigator extends Widget {
   }
 
   renderOpenedNode() {
-    const {flow, target, level = 0, onLeafSelect, onScope} = this.props;
+    const {
+      flow,
+      target,
+      level = 0,
+      onLeafSelect,
+      onScope,
+      configuratorId,
+    } = this.props;
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
+        {this.renderHeader(`renderOpenedNode ${this.props.level}`)}
         {this.renderBack()}
         <div className={this.styles.classNames.content}>
           {Object.entries(this.props.data).map(([id, data], i) => {
             return (
               <CIconNavigator
                 key={i}
-                widgetId={`${id}$icon-navigator`}
+                dataId={id}
+                configuratorId={configuratorId}
+                widgetId={`${configuratorId}$icon-navigator@${id}`}
                 text={id}
                 data={data}
                 parent={this.widgetId}
