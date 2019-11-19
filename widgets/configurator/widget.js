@@ -113,6 +113,7 @@ export default class Configurator extends Form {
             widgetId={`${id}$icon-navigator`}
             text={this.getModelValue('.mainGoblin')}
             data={byMandate}
+            level={0}
             onLeafSelect={this.openSession}
             onScope={this.scopeInfo}
           ></IconNavigator>

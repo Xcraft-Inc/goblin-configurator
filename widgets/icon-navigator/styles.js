@@ -7,9 +7,13 @@ export default function styles(theme) {
   };
 
   const header = {
+    margin: '40px 0px 0px 0px',
     padding: '10px',
-    backgroundColor: 'white',
-    borderRadius: '20px 20px 0px 0px',
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderRadius: '50px',
+    color: '#444',
+    fontSize: '150%',
+    textAlign: 'center',
   };
 
   const back = {
@@ -23,8 +27,8 @@ export default function styles(theme) {
   };
 
   const backButton = {
-    'width': '60px',
-    'height': '60px',
+    'width': '50px',
+    'height': '50px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',

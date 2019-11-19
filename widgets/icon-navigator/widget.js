@@ -25,9 +25,8 @@ class IconNavigator extends Widget {
 
   open(e) {
     e.stopPropagation();
-    const {parent} = this.props;
-    if (parent) {
-      this.dispatchTo(parent, {
+    if (this.props.parent) {
+      this.dispatchTo(this.props.parent, {
         type: 'SCOPE',
         target: this.props.dataId,
       });
@@ -43,12 +42,11 @@ class IconNavigator extends Widget {
 
   close(e) {
     e.stopPropagation();
-    const {parent} = this.props;
     this.dispatchTo(this.widgetId, {
       type: 'CLOSE',
     });
-    if (parent) {
-      this.dispatchTo(parent, {
+    if (this.props.parent) {
+      this.dispatchTo(this.props.parent, {
         type: 'OPEN',
       });
     }
@@ -56,26 +54,53 @@ class IconNavigator extends Widget {
 
   /******************************************************************************/
 
-  renderClosedNode() {
-    const {text, level = 0} = this.props;
+  renderFirstHeader() {
+    if (this.props.level !== 0) {
+      return null;
+    }
 
-    const glyph = level === 0 ? 'solid/cube' : 'solid/database';
+    const title = 'Applications';
+    return <div className={this.styles.classNames.header}>{title}</div>;
+  }
+
+  renderHeader() {
+    if (this.props.flow !== 'opened') {
+      return null;
+    }
+
+    let title;
+    switch (this.props.level) {
+      case -1:
+        title = 'Applications';
+        break;
+      case 0:
+        title = 'Mandats';
+        break;
+      case 1:
+        title = 'Sessions';
+        break;
+    }
+
+    return <div className={this.styles.classNames.header}>{title}</div>;
+  }
+
+  renderClosedNode() {
+    const glyph = this.props.level === 0 ? 'solid/cube' : 'solid/database';
 
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        <AppIcon text={text} glyph={glyph} onClick={this.open} />
+        {this.renderFirstHeader()}
+        <AppIcon text={this.props.text} glyph={glyph} onClick={this.open} />
       </div>
     );
   }
 
   renderClosedLeaf() {
-    const {text, data} = this.props;
-
     let closeProps = null;
-    if (data.closable) {
+    if (this.props.data.closable) {
       const onClose = e => {
         e.stopPropagation();
-        data.onClose(data.value);
+        this.props.data.onClose(this.props.data.value);
       };
       closeProps = {onClose: onClose, closable: true};
     }
@@ -83,8 +108,8 @@ class IconNavigator extends Widget {
     return (
       <div className={this.styles.classNames.iconNavigator}>
         <AppIcon
-          text={text}
-          glyph={data.glyph}
+          text={this.props.text}
+          glyph={this.props.data.glyph}
           onClick={this.select}
           {...closeProps}
         />
@@ -93,15 +118,13 @@ class IconNavigator extends Widget {
   }
 
   renderClosed() {
-    const {data, scoped} = this.props;
-
-    if (scoped) {
+    if (this.props.scoped) {
       this.dispatchTo(this.widgetId, {
         type: 'OPEN',
       });
     }
 
-    if (data.leaf) {
+    if (this.props.data.leaf) {
       return this.renderClosedLeaf();
     } else {
       return this.renderClosedNode();
@@ -109,58 +132,61 @@ class IconNavigator extends Widget {
   }
 
   renderOpenedLeaf() {
-    const {data} = this.props;
-
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        <AppIcon text={data} glyph={data.glyph} />
+        <AppIcon text={this.props.data} glyph={this.props.data.glyph} />
       </div>
     );
   }
 
   renderBack() {
-    const {text} = this.props;
+    let title;
+    switch (this.props.level) {
+      case 0:
+        title = 'Application';
+        break;
+      case 1:
+        title = 'Mandat';
+        break;
+      case 2:
+        title = 'Session';
+        break;
+    }
+
+    title += ' — ';
+    title += this.props.text;
 
     return (
       <div className={this.styles.classNames.back}>
         <div className={this.styles.classNames.backButton} onClick={this.close}>
           <FontAwesomeIcon icon={[`fas`, 'chevron-up']} />
         </div>
-        <div className={this.styles.classNames.backText}>{text}</div>
+        <div className={this.styles.classNames.backText}>{title}</div>
       </div>
     );
   }
 
   renderOpenedNode() {
-    const {
-      flow,
-      target,
-      level = 0,
-      onLeafSelect,
-      onScope,
-      configuratorId,
-    } = this.props;
-
     return (
       <div className={this.styles.classNames.iconNavigator}>
-        {this.renderHeader(`renderOpenedNode ${this.props.level}`)}
         {this.renderBack()}
+        {this.renderHeader()}
         <div className={this.styles.classNames.content}>
           {Object.entries(this.props.data).map(([id, data], i) => {
             return (
               <CIconNavigator
                 key={i}
                 dataId={id}
-                configuratorId={configuratorId}
-                widgetId={`${configuratorId}$icon-navigator@${id}`}
+                configuratorId={this.props.configuratorId}
+                widgetId={`${this.props.configuratorId}$icon-navigator@${id}`}
                 text={id}
                 data={data}
                 parent={this.widgetId}
-                scoped={target === id}
-                parentFlow={flow}
-                level={level + 1}
-                onLeafSelect={onLeafSelect}
-                onScope={onScope}
+                scoped={this.props.target === id}
+                parentFlow={this.props.flow}
+                level={this.props.level + 1}
+                onLeafSelect={this.props.onLeafSelect}
+                onScope={this.props.onScope}
               />
             );
           })}
@@ -170,9 +196,7 @@ class IconNavigator extends Widget {
   }
 
   renderOpened() {
-    const {data} = this.props;
-
-    if (data.leaf) {
+    if (this.props.data.leaf) {
       return this.renderOpenedLeaf();
     } else {
       return this.renderOpenedNode();
@@ -180,13 +204,16 @@ class IconNavigator extends Widget {
   }
 
   render() {
-    const {flow, scoped, level = 0, parentFlow} = this.props;
-
-    if (parentFlow && parentFlow === 'scoped' && level > 0 && !scoped) {
+    if (
+      this.props.parentFlow &&
+      this.props.parentFlow === 'scoped' &&
+      this.props.level > 0 &&
+      !this.props.scoped
+    ) {
       return null;
     }
 
-    switch (flow) {
+    switch (this.props.flow) {
       default:
       case 'closed':
         return this.renderClosed();

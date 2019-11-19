@@ -18,6 +18,7 @@ export default function styles(theme) {
     background: theme.palette.footerBackground,
     display: 'flex',
     flexDirection: 'row',
+    fontSize: '150%',
   };
 
   const content = {
@@ -33,6 +34,7 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    fontSize: '150%',
   };
 
   return {mainLayout, header, content, footer};
