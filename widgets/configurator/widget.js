@@ -59,6 +59,10 @@ export default class Configurator extends Form {
     this.do('open-session', {name, number});
   }
 
+  replayActionStore(name) {
+    this.do('replay-action-store', {name});
+  }
+
   closeSession(name) {
     console.log('CLOSE SESSION', name);
     this.do('close-session', {name});
@@ -118,8 +122,8 @@ export default class Configurator extends Form {
       const name = profile.get('name');
       const topology = profile.get('topology', null);
       let mandate = profile.get('mandate');
-      const isReset = profile.get('reset');
       const isRestore = profile.get('restore');
+      const isReplay = profile.get('replay');
 
       if (!this.props.advanced && (isReset || isRestore)) {
         continue;
@@ -133,12 +137,15 @@ export default class Configurator extends Form {
         tree[mandate] = {};
       }
 
-      if (isReset || isRestore) {
+      if (isRestore || isReplay) {
         tree[mandate][profileKey] = {
           leaf: true,
           name: name,
-          glyph: isRestore ? 'solid/undo' : 'solid/trash',
-          onOpen: () => this.openSession(profileKey),
+          glyph: isRestore ? 'solid/trash' : 'solid/rocket',
+          onOpen: () =>
+            isReset
+              ? this.openSession(profileKey)
+              : this.replayActionStore(profileKey),
         };
       } else {
         const sessionNumber = (maxSessionNumbers[mandate] || 0) + 1;
@@ -170,6 +177,7 @@ export default class Configurator extends Form {
         const topology = profile.get('topology', null);
         let mandate = profile.get('mandate');
         const isReset = profile.get('reset');
+        const isReplay = profile.get('replay');
 
         if (!this.props.advanced && isReset) {
           return list;
@@ -180,12 +188,14 @@ export default class Configurator extends Form {
         if (!list[mandate]) {
           list[mandate] = {};
         }
-        if (isReset) {
+        if (isReset || isReplay) {
           list[mandate][profileKey] = {
             leaf: true,
             name: name,
-            glyph: 'solid/trash',
-            onOpen: () => this.openSession(profileKey),
+            glyph: isReset ? 'solid/trash' : 'solid/rollback',
+            onOpen: isReset
+              ? () => this.openSession(profileKey)
+              : () => this.replayActionStore(profileKey),
           };
         } else {
           for (let sessionNumber = 1; sessionNumber <= 3; sessionNumber++) {
