@@ -143,7 +143,10 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
     });
   } else {
     const locale = profile.get('defaultLocale', 'fr-CH');
-    const session = `${state.get('form.username')}-${number}`;
+    const session =
+      number === undefined
+        ? state.get('form.username')
+        : `${state.get('form.username')}-${number}`;
     quest.evt(`configured`, {
       username,
       session,
