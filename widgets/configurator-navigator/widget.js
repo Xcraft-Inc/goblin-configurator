@@ -37,8 +37,12 @@ export default class ConfiguratorNavigator extends Widget {
   }
 
   renderArrowDown() {
+    const style = this.selectedMandat
+      ? this.styles.classNames.arrowDown
+      : this.styles.classNames.arrowDownHidden;
+
     return (
-      <div className={this.styles.classNames.arrowDown}>
+      <div className={style}>
         <div className={this.styles.classNames.triangle} />
       </div>
     );
@@ -92,27 +96,26 @@ export default class ConfiguratorNavigator extends Widget {
   renderSessions(sessions) {
     return (
       <div className={this.styles.classNames.boxContent}>
-        {Object.entries(sessions).map(([sessionKey, session], index) =>
-          this.renderSession(sessionKey, session, index)
-        )}
+        {sessions
+          ? Object.entries(sessions).map(([sessionKey, session], index) =>
+              this.renderSession(sessionKey, session, index)
+            )
+          : null}
       </div>
     );
   }
 
   renderSessionsBox() {
     const sessions = this.props.tree[this.selectedMandat];
-    if (!sessions) {
-      return null;
-    }
+    const style = sessions
+      ? this.styles.classNames.box
+      : this.styles.classNames.boxHidden;
 
     return (
-      <React.Fragment>
-        {this.renderArrowDown()}
-        <div className={this.styles.classNames.box}>
-          {this.renderBoxTitle('Sessions', true)}
-          {this.renderSessions(sessions)}
-        </div>
-      </React.Fragment>
+      <div className={style}>
+        {this.renderBoxTitle('Sessions', true)}
+        {this.renderSessions(sessions)}
+      </div>
     );
   }
 
@@ -148,10 +151,13 @@ export default class ConfiguratorNavigator extends Widget {
 
   renderMandatsBox() {
     return (
-      <div className={this.styles.classNames.box}>
-        {this.renderBoxTitle('Mandats', false)}
-        {this.renderMandats()}
-      </div>
+      <React.Fragment>
+        <div className={this.styles.classNames.box}>
+          {this.renderBoxTitle('Mandats', false)}
+          {this.renderMandats()}
+        </div>
+        {this.renderArrowDown()}
+      </React.Fragment>
     );
   }
 

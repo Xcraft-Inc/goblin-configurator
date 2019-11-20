@@ -41,6 +41,15 @@ export default function styles(theme) {
     color: '#444',
     fontSize: '80%',
     textAlign: 'center',
+    opacity: 1,
+    transform: 'scale(1)',
+    transition: '0.3s ease-out',
+  };
+
+  const boxHidden = {
+    ...box,
+    opacity: 0,
+    transform: 'scale(0.8)',
   };
 
   const boxTitle = {
@@ -62,6 +71,7 @@ export default function styles(theme) {
   };
 
   const boxContent = {
+    minHeight: '80px',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -89,31 +99,23 @@ export default function styles(theme) {
       backgroundColor: 'rgba(255,255,255,0.7)',
     },
   };
-  const backButton_OLD = {
-    'position': 'absolute',
-    'top': '5px',
-    'right': '5px',
-    'width': '40px',
-    'height': '40px',
-    'display': 'flex',
-    'flexDirection': 'row',
-    'justifyContent': 'center',
-    'alignItems': 'center',
-    'fontSize': '120%',
-    'borderRadius': '12px',
-    'color': '#333',
-    'cursor': 'pointer',
-    'transition': '0.2s ease-out',
-    ':hover': {
-      color: 'black',
-      backgroundColor: 'rgba(255,255,255,0.7)',
-    },
-  };
 
   const arrowDown = {
+    zIndex: 1,
+    height: '30px',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+    overflow: 'hidden',
+    marginBottom: '30px',
+    transform: 'scale(1)',
+    transformOrigin: 'top',
+    transition: '0.3s ease-out',
+  };
+
+  const arrowDownHidden = {
+    ...arrowDown,
+    transform: 'scale(0)',
   };
 
   const triangle = {
@@ -130,10 +132,12 @@ export default function styles(theme) {
     header,
     content,
     box,
+    boxHidden,
     boxTitle,
     boxContent,
     backButton,
     arrowDown,
+    arrowDownHidden,
     triangle,
   };
 }
