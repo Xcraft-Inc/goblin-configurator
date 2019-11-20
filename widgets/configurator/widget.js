@@ -69,7 +69,6 @@ export default class Configurator extends Form {
           list[mandate][profileKey] = {
             leaf: true,
             name: name,
-            value: profileKey,
             glyph: 'solid/trash',
             onOpen: () => this.openSession(profileKey),
           };
@@ -78,7 +77,6 @@ export default class Configurator extends Form {
             const key = `${profileKey}-${sessionNumber}`;
             list[mandate][key] = {
               leaf: true,
-              value: profileKey,
               name: key,
               glyph: 'solid/plus',
               onOpen: () => this.openSession(profileKey, sessionNumber),
@@ -106,7 +104,6 @@ export default class Configurator extends Form {
         tree[s.mandate][session] = {
           leaf: true,
           name: session,
-          value: s.id,
           glyph: 'solid/tv',
           closable: true,
           onOpen: () => this.openSession(s.id),
