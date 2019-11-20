@@ -17,11 +17,11 @@ export default function styles(theme, props) {
     'justifyContent': 'flex-start',
     'alignItems': 'center',
     'flexGrow': '1',
-    'minWidth': '150px',
-    'maxWidth': '500px',
-    'height': '100px',
+    'minWidth': '100px',
+    'maxWidth': '300px',
+    'height': '70px',
     'margin': '10px 10px 0px 0px',
-    'padding': '0px 10px 0px 30px',
+    'padding': '0px 10px 0px 20px',
     'borderRadius': '10px',
     'color': '#ddd',
     'backgroundColor': color,
@@ -39,22 +39,22 @@ export default function styles(theme, props) {
   };
 
   const text = {
-    marginLeft: '30px',
+    marginLeft: '20px',
     fontSize: '120%',
     textTransform: 'uppercase',
   };
 
   const closeBox = {
     'position': 'absolute',
-    'top': '5px',
-    'right': '5px',
-    'width': '40px',
-    'height': '40px',
+    'top': '4px',
+    'right': '4px',
+    'width': '30px',
+    'height': '30px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',
     'alignItems': 'center',
-    'fontSize': '150%',
+    'fontSize': '100%',
     'borderRadius': '5px',
     'transition': '0.2s ease-out',
     ':hover': {

@@ -10,20 +10,20 @@ export default function styles(theme) {
   const header = {
     display: 'flex',
     flexDirection: 'row',
-    margin: '0px 0px 50px 0px',
-    padding: '20px',
+    margin: '0px 0px 30px 0px',
+    padding: '15px',
     backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: '20px 20px 0px 0px',
+    borderRadius: '15px 15px 0px 0px',
     boxShadow: '0px 10px 50px rgba(0,0,0,0.3)',
     color: '#eee',
-    fontSize: '400%',
+    fontSize: '300%',
     textTransform: 'uppercase',
     justifyContent: 'center',
     textAlign: 'center',
   };
 
   const content = {
-    padding: '50px 100px',
+    padding: '30px 70px',
     display: 'flex',
     flexDirection: 'column',
   };
@@ -32,24 +32,24 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: '20px',
+    borderRadius: '15px',
     color: '#444',
-    fontSize: '120%',
+    fontSize: '80%',
     textAlign: 'center',
   };
 
   const boxTitle = {
     position: 'relative',
-    height: '70px',
+    height: '50px',
     display: 'flex',
     flexDirection: 'column',
     margin: '0px 0px 0px 0px',
     //- backgroundColor: 'rgba(255,255,255,0.8)',
     borderBottom: '1px solid #888',
     boxShadow: '0px 4px 50px rgba(0,0,0,0.2)',
-    borderRadius: '20px 20px 0px 0px',
+    borderRadius: '15px 15px 0px 0px',
     color: '#444',
-    fontSize: '150%',
+    fontSize: '200%',
     justifyContent: 'center',
     alignItems: 'center',
   };
@@ -58,21 +58,21 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: '20px 20px 30px 30px',
+    padding: '10px 10px 20px 20px',
   };
 
   const backButton = {
     'position': 'absolute',
     'top': '5px',
     'left': '5px',
-    'width': '60px',
-    'height': '60px',
+    'width': '40px',
+    'height': '40px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',
     'alignItems': 'center',
-    'fontSize': '150%',
-    'borderRadius': '16px',
+    'fontSize': '100%',
+    'borderRadius': '12px',
     'color': '#333',
     'cursor': 'pointer',
     'transition': '0.2s ease-out',
@@ -91,10 +91,10 @@ export default function styles(theme) {
   const triangle = {
     width: '0px',
     height: '0px',
-    borderTop: '50px solid rgba(255,255,255,0.5)',
-    borderLeft: '50px solid transparent',
-    borderRight: '50px solid transparent',
-    borderBottom: '50px solid transparent',
+    borderTop: '30px solid rgba(255,255,255,0.5)',
+    borderLeft: '30px solid transparent',
+    borderRight: '30px solid transparent',
+    borderBottom: '30px solid transparent',
   };
 
   return {
