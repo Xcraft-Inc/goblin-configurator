@@ -11,7 +11,7 @@ export default function styles(theme) {
     'width': '280px',
     'height': '100px',
     'margin': '10px 10px 0px 0px',
-    'paddingLeft': '30px',
+    'padding': '0px 10px 0px 30px',
     'borderRadius': '10px',
     'color': '#ddd',
     'backgroundColor': theme.palette.notificationBackground,

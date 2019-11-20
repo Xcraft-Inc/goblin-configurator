@@ -129,7 +129,6 @@ Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
 
 Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
   const state = quest.goblin.getState();
-  const profile = state.get(`profiles.${name}`, null);
   const username = state.get('form.username');
   if (name.startsWith('feed-desktop@')) {
     const parts = name.split('@');
@@ -142,6 +141,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
       configuration: {mandate},
     });
   } else {
+    const profile = state.get(`profiles.${name}`, null);
     const locale = profile.get('defaultLocale', 'fr-CH');
     const session =
       number === undefined

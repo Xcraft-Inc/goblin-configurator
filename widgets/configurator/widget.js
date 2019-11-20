@@ -7,6 +7,18 @@ import ConfiguratorNavigator from '../configurator-navigator/widget';
 
 /******************************************************************************/
 
+// If session = "roux-2", return "2".
+function getSessionNumber(session) {
+  const parts = session.split('-');
+  if (parts.length > 1) {
+    return parts[parts.length - 1];
+  } else {
+    return null;
+  }
+}
+
+/******************************************************************************/
+
 export default class Configurator extends Form {
   constructor() {
     super(...arguments);
@@ -48,6 +60,8 @@ export default class Configurator extends Form {
       return null;
     }
 
+    const dico = {};
+
     // Add all profiles.
     const tree = this.getModelValue('.profiles').reduce(
       (list, profile, profileKey) => {
@@ -82,6 +96,7 @@ export default class Configurator extends Form {
               onOpen: () => this.openSession(profileKey, sessionNumber),
             };
           }
+          dico[mandate] = profileKey;
         }
         return list;
       },
@@ -101,14 +116,25 @@ export default class Configurator extends Form {
     sessionList.forEach(s => {
       if (tree[s.mandate]) {
         const session = s.id.split('@')[2];
-        tree[s.mandate][session] = {
-          leaf: true,
-          name: session,
-          glyph: 'solid/tv',
-          closable: true,
-          onOpen: () => this.openSession(s.id),
-          onClose: () => this.closeSession(s.id),
-        };
+        const sessionNumber = getSessionNumber(session);
+        const profileKey = dico[s.mandate];
+        const toReplace = tree[s.mandate][`${profileKey}-${sessionNumber}`];
+        if (toReplace) {
+          toReplace.name = session;
+          toReplace.glyph = 'solid/tv';
+          toReplace.closable = true;
+          toReplace.onOpen = () => this.openSession(s.id);
+          toReplace.onClose = () => this.closeSession(s.id);
+        } else {
+          tree[s.mandate][session] = {
+            leaf: true,
+            name: session,
+            glyph: 'solid/tv',
+            closable: true,
+            onOpen: () => this.openSession(s.id),
+            onClose: () => this.closeSession(s.id),
+          };
+        }
       }
     });
 
