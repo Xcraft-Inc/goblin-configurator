@@ -119,8 +119,9 @@ export default class Configurator extends Form {
       const topology = profile.get('topology', null);
       let mandate = profile.get('mandate');
       const isReset = profile.get('reset');
+      const isRestore = profile.get('restore');
 
-      if (!this.props.advanced && isReset) {
+      if (!this.props.advanced && (isReset || isRestore)) {
         continue;
       }
 
@@ -132,11 +133,11 @@ export default class Configurator extends Form {
         tree[mandate] = {};
       }
 
-      if (isReset) {
+      if (isReset || isRestore) {
         tree[mandate][profileKey] = {
           leaf: true,
           name: name,
-          glyph: 'solid/trash',
+          glyph: isRestore ? 'solid/undo' : 'solid/trash',
           onOpen: () => this.openSession(profileKey),
         };
       } else {
