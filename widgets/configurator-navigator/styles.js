@@ -31,8 +31,7 @@ export default function styles(theme) {
   const box = {
     display: 'flex',
     flexDirection: 'column',
-    margin: '0px 0px 0px 0px',
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.5)',
     borderRadius: '20px',
     color: '#444',
     fontSize: '120%',
@@ -40,54 +39,62 @@ export default function styles(theme) {
   };
 
   const boxTitle = {
+    position: 'relative',
+    height: '70px',
     display: 'flex',
     flexDirection: 'column',
     margin: '0px 0px 0px 0px',
-    padding: '10px',
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    //- backgroundColor: 'rgba(255,255,255,0.8)',
+    borderBottom: '1px solid #888',
+    boxShadow: '0px 4px 50px rgba(0,0,0,0.2)',
     borderRadius: '20px 20px 0px 0px',
     color: '#444',
     fontSize: '150%',
-    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
   const boxContent = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: '0px 0px 10px 10px',
-  };
-
-  const back = {
-    display: 'flex',
-    flexDirection: 'row',
-    padding: '0px 0px 20px 0px',
-    fontSize: '150%',
-    textTransform: 'uppercase',
-    color: '#ddd',
-    alignItems: 'center',
+    padding: '20px 20px 30px 30px',
   };
 
   const backButton = {
-    'width': '50px',
-    'height': '50px',
+    'position': 'absolute',
+    'top': '5px',
+    'left': '5px',
+    'width': '60px',
+    'height': '60px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',
     'alignItems': 'center',
     'fontSize': '150%',
-    'borderRadius': '5px',
+    'borderRadius': '16px',
+    'color': '#333',
     'cursor': 'pointer',
-    //- 'transition': '0.2s ease-out',
+    'transition': '0.2s ease-out',
     ':hover': {
-      color: '#fff',
-      backgroundColor: 'rgba(255,255,255,0.2)',
+      color: 'black',
+      backgroundColor: 'rgba(255,255,255,0.7)',
     },
   };
 
-  const backText = {
-    marginLeft: '10px',
-    fontSize: '120%',
+  const arrowDown = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  };
+
+  const triangle = {
+    width: '0px',
+    height: '0px',
+    borderTop: '50px solid rgba(255,255,255,0.5)',
+    borderLeft: '50px solid transparent',
+    borderRight: '50px solid transparent',
+    borderBottom: '50px solid transparent',
   };
 
   return {
@@ -97,9 +104,9 @@ export default function styles(theme) {
     box,
     boxTitle,
     boxContent,
-    back,
     backButton,
-    backText,
+    arrowDown,
+    triangle,
   };
 }
 

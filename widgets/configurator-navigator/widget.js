@@ -12,8 +12,6 @@ export default class ConfiguratorNavigator extends Widget {
     this.state = {
       selectedMandat: null,
     };
-
-    this.selectMandat = this.selectMandat.bind(this);
   }
 
   //#region get/set
@@ -28,10 +26,6 @@ export default class ConfiguratorNavigator extends Widget {
   }
   //#endregion
 
-  selectMandat(mandateKey) {
-    this.selectMandat = mandateKey;
-  }
-
   /******************************************************************************/
 
   renderHeader() {
@@ -42,8 +36,36 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  renderBoxTitle(title) {
-    return <div className={this.styles.classNames.boxTitle}>{title}</div>;
+  renderArrowDown() {
+    return (
+      <div className={this.styles.classNames.arrowDown}>
+        <div className={this.styles.classNames.triangle} />
+      </div>
+    );
+  }
+
+  renderBackButton(hasBackButton) {
+    if (!hasBackButton) {
+      return null;
+    }
+
+    return (
+      <div
+        className={this.styles.classNames.backButton}
+        onClick={() => (this.selectedMandat = null)}
+      >
+        <FontAwesomeIcon icon={[`fas`, 'chevron-up']} />
+      </div>
+    );
+  }
+
+  renderBoxTitle(title, hasBackButton) {
+    return (
+      <div className={this.styles.classNames.boxTitle}>
+        {this.renderBackButton(hasBackButton)}
+        {title}
+      </div>
+    );
   }
 
   renderSession(sessionKey, session, index) {
@@ -84,19 +106,25 @@ export default class ConfiguratorNavigator extends Widget {
     }
 
     return (
-      <div className={this.styles.classNames.box}>
-        {this.renderBoxTitle('Sessions')}
-        {this.renderSessions(sessions)}
-      </div>
+      <React.Fragment>
+        {this.renderArrowDown()}
+        <div className={this.styles.classNames.box}>
+          {this.renderBoxTitle('Sessions', true)}
+          {this.renderSessions(sessions)}
+        </div>
+      </React.Fragment>
     );
   }
 
   renderMandat(mandateKey, mandat, index) {
+    const active = mandateKey === this.selectedMandat;
+
     return (
       <AppIcon
         key={index}
         text={mandateKey}
         glyph="solid/database"
+        active={active}
         onClick={() => (this.selectedMandat = mandateKey)}
       />
     );
@@ -113,28 +141,12 @@ export default class ConfiguratorNavigator extends Widget {
   }
 
   renderMandatsBox() {
-    if (this.selectedMandat) {
-      const title = `Mandat — ${this.selectedMandat}`;
-
-      return (
-        <div className={this.styles.classNames.back}>
-          <div
-            className={this.styles.classNames.backButton}
-            onClick={() => (this.selectedMandat = null)}
-          >
-            <FontAwesomeIcon icon={[`fas`, 'chevron-up']} />
-          </div>
-          <div className={this.styles.classNames.backText}>{title}</div>
-        </div>
-      );
-    } else {
-      return (
-        <div className={this.styles.classNames.box}>
-          {this.renderBoxTitle('Mandats')}
-          {this.renderMandats()}
-        </div>
-      );
-    }
+    return (
+      <div className={this.styles.classNames.box}>
+        {this.renderBoxTitle('Mandats', false)}
+        {this.renderMandats()}
+      </div>
+    );
   }
 
   render() {

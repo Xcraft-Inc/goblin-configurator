@@ -2,7 +2,15 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export default function styles(theme) {
+export const propNames = ['active'];
+
+export default function styles(theme, props) {
+  const {active} = props;
+
+  const color = active
+    ? theme.palette.configuratorActiveBackground
+    : theme.palette.configuratorBackground;
+
   const appIcon = {
     'position': 'relative',
     'display': 'flex',
@@ -16,16 +24,13 @@ export default function styles(theme) {
     'padding': '0px 10px 0px 30px',
     'borderRadius': '10px',
     'color': '#ddd',
-    'backgroundColor': theme.palette.notificationBackground,
+    'backgroundColor': color,
     'userSelect': 'none',
     'cursor': 'pointer',
     'transition': '0.2s ease-out',
     ':hover': {
       color: 'white',
-      backgroundColor: ColorManipulator.darken(
-        theme.palette.notificationBackground,
-        0.2
-      ),
+      backgroundColor: ColorManipulator.lighten(color, 0.2),
     },
   };
 
