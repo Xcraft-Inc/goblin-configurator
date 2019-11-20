@@ -2,6 +2,8 @@
 //T:2019-02-27
 
 const Goblin = require('xcraft-core-goblin');
+const fs = require('fs');
+const path = require('path');
 
 const goblinName = 'configurator';
 
@@ -137,9 +139,45 @@ Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
   quest.do();
 });
 
+Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest, name) {
+  const state = quest.goblin.getState();
+  let profile = state.get(`profiles.${name}`).toJS();
+  const workshop = quest.getAPI('workshop');
+  const xHost = require('xcraft-core-host');
+  const mainGoblin = state.get('mainGoblin');
+  const {appConfigPath, projectPath} = xHost;
+  const srcPath = path.join(
+    projectPath,
+    'lib',
+    `goblin-${mainGoblin}`,
+    'action-stores',
+    `${profile.mandate}.db`
+  );
+  const dstPath = path.join(appConfigPath, 'var/cryo', `copy.db`);
+
+  if (!fs.existsSync(srcPath)) {
+    return;
+  }
+
+  fs.copyFileSync(srcPath, dstPath);
+
+  yield workshop.ripleyFor({
+    dbSrc: 'copy',
+    dbDst: profile.mandate,
+    timestamp: 9999,
+    rethinkdbHost: profile.rethinkdbHost,
+    elasticsearchUrl: profile.elasticsearchUrl,
+    appId: mainGoblin,
+  });
+  yield quest.me.openSession({name});
+});
+
 Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
   const state = quest.goblin.getState();
   const username = state.get('form.username');
+  let profile = state.get(`profiles.${name}`, null);
+
+  const locale = profile.get('defaultLocale', 'fr-CH');
   if (name.startsWith('feed-desktop@')) {
     const parts = name.split('@');
     const mandate = parts[1];
@@ -151,8 +189,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
       configuration: {mandate},
     });
   } else {
-    const profile = state.get(`profiles.${name}`, null);
-    const locale = profile.get('defaultLocale', 'fr-CH');
+    profile = profile ? profile.toJS() : {};
     const session =
       number === undefined
         ? state.get('form.username')
@@ -161,7 +198,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
       username,
       session,
       locale,
-      configuration: profile.toJS(),
+      configuration: profile,
     });
   }
 });
