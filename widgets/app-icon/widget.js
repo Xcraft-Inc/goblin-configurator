@@ -17,7 +17,7 @@ export default class AppIcon extends Widget {
         className={this.styles.classNames.closeBox}
         onClick={this.props.onClose}
       >
-        <FontAwesomeIcon icon={[`fas`, 'times']} />
+        <FontAwesomeIcon icon={[`fal`, 'times']} />
       </div>
     );
   }

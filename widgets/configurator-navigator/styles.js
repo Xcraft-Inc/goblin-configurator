@@ -1,3 +1,5 @@
+import {ColorManipulator} from 'electrum-theme';
+
 /******************************************************************************/
 
 export default function styles(theme) {
@@ -6,6 +8,8 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
   };
+
+  const boxColor = ColorManipulator.lighten(theme.palette.rootBackground, 0.5);
 
   const header = {
     display: 'flex',
@@ -31,7 +35,8 @@ export default function styles(theme) {
   const box = {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    backgroundColor: boxColor,
+    boxShadow: '0px 10px 40px rgba(0,0,0,0.5)',
     borderRadius: '15px',
     color: '#444',
     fontSize: '80%',
@@ -44,11 +49,13 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
     margin: '0px 0px 0px 0px',
-    //- backgroundColor: 'rgba(255,255,255,0.8)',
-    borderBottom: '1px solid #888',
+    borderBottom: `1px solid ${ColorManipulator.lighten(
+      theme.palette.rootBackground,
+      0.2
+    )}`,
     boxShadow: '0px 4px 50px rgba(0,0,0,0.2)',
     borderRadius: '15px 15px 0px 0px',
-    color: '#444',
+    color: '#111',
     fontSize: '200%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -63,15 +70,36 @@ export default function styles(theme) {
 
   const backButton = {
     'position': 'absolute',
+    'top': '0px',
+    'right': '0px',
+    'width': '50px',
+    'height': '50px',
+    'display': 'flex',
+    'flexDirection': 'row',
+    'justifyContent': 'center',
+    'alignItems': 'center',
+    'fontSize': '120%',
+    'borderRadius': '0px 15px 0px 0px',
+    'color': '#333',
+    'backgroundColor': 'rgba(255,255,255,0.2)',
+    'cursor': 'pointer',
+    'transition': '0.2s ease-out',
+    ':hover': {
+      color: 'black',
+      backgroundColor: 'rgba(255,255,255,0.7)',
+    },
+  };
+  const backButton_OLD = {
+    'position': 'absolute',
     'top': '5px',
-    'left': '5px',
+    'right': '5px',
     'width': '40px',
     'height': '40px',
     'display': 'flex',
     'flexDirection': 'row',
     'justifyContent': 'center',
     'alignItems': 'center',
-    'fontSize': '100%',
+    'fontSize': '120%',
     'borderRadius': '12px',
     'color': '#333',
     'cursor': 'pointer',
@@ -91,7 +119,7 @@ export default function styles(theme) {
   const triangle = {
     width: '0px',
     height: '0px',
-    borderTop: '30px solid rgba(255,255,255,0.5)',
+    borderTop: `30px solid ${boxColor}`,
     borderLeft: '30px solid transparent',
     borderRight: '30px solid transparent',
     borderBottom: '30px solid transparent',

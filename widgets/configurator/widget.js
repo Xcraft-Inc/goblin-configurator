@@ -17,6 +17,16 @@ function getSessionNumber(session) {
   }
 }
 
+function compareStrings(s1, s2) {
+  if (s1 < s2) {
+    return -1;
+  }
+  if (s1 > s2) {
+    return 1;
+  }
+  return 0;
+}
+
 /******************************************************************************/
 
 export default class Configurator extends Form {
@@ -56,6 +66,96 @@ export default class Configurator extends Form {
 
   // Return a tree with 2 levels: mandats and sessions.
   getTree() {
+    if (!this.props.id) {
+      return null;
+    }
+
+    const tree = {};
+    const maxSessionNumbers = {};
+
+    // Add all opened sessions.
+    const sessionList = this.props.feeds
+      .filter(f => f.startsWith('feed-desktop@'))
+      .sort((f1, f2) => compareStrings(f1, f2))
+      .map(feed => ({
+        id: feed,
+        text: feed,
+        mandate: feed.split('@')[1],
+      }))
+      .toArray();
+
+    sessionList.forEach(s => {
+      const mandate = s.mandate;
+
+      if (!tree[mandate]) {
+        tree[mandate] = {};
+      }
+      if (!maxSessionNumbers[mandate]) {
+        maxSessionNumbers[mandate] = 0;
+      }
+
+      const session = s.id.split('@')[2];
+
+      const n = getSessionNumber(session);
+      maxSessionNumbers[mandate] = Math.max(maxSessionNumbers[mandate], n);
+
+      tree[mandate][session] = {
+        leaf: true,
+        name: session,
+        glyph: 'solid/tv',
+        closable: true,
+        onOpen: () => this.openSession(s.id),
+        onClose: () => this.closeSession(s.id),
+      };
+    });
+
+    // Add all profiles.
+    const profiles = this.getModelValue('.profiles');
+    for (const p of profiles) {
+      const profileKey = p[0];
+      const profile = p[1];
+
+      const name = profile.get('name');
+      const topology = profile.get('topology', null);
+      let mandate = profile.get('mandate');
+      const isReset = profile.get('reset');
+
+      if (!this.props.advanced && isReset) {
+        continue;
+      }
+
+      if (topology) {
+        mandate = `${mandate}@${topology}`;
+      }
+
+      if (!tree[mandate]) {
+        tree[mandate] = {};
+      }
+
+      if (isReset) {
+        tree[mandate][profileKey] = {
+          leaf: true,
+          name: name,
+          glyph: 'solid/trash',
+          onOpen: () => this.openSession(profileKey),
+        };
+      } else {
+        const sessionNumber = (maxSessionNumbers[mandate] || 0) + 1;
+        const key = `${profileKey}-${sessionNumber}`;
+        tree[mandate][key] = {
+          leaf: true,
+          name: key,
+          glyph: 'solid/plus',
+          onOpen: () => this.openSession(profileKey, sessionNumber),
+        };
+      }
+    }
+
+    return tree;
+  }
+
+  // Return a tree with 2 levels: mandats and sessions.
+  getTree_OLD() {
     if (!this.props.id) {
       return null;
     }
