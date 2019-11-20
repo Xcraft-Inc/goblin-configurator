@@ -36,6 +36,7 @@ export default class Configurator extends Form {
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
+    this.replayActionStore = this.replayActionStore.bind(this);
   }
 
   static get wiring() {
@@ -122,10 +123,9 @@ export default class Configurator extends Form {
       const name = profile.get('name');
       const topology = profile.get('topology', null);
       let mandate = profile.get('mandate');
-      const isRestore = profile.get('restore');
-      const isReplay = profile.get('replay');
+      const action = profile.get('action');
 
-      if (!this.props.advanced && (isReset || isRestore)) {
+      if (!this.props.advanced && action) {
         continue;
       }
 
@@ -137,13 +137,13 @@ export default class Configurator extends Form {
         tree[mandate] = {};
       }
 
-      if (isRestore || isReplay) {
+      if (action) {
         tree[mandate][profileKey] = {
           leaf: true,
           name: name,
-          glyph: isRestore ? 'solid/trash' : 'solid/rocket',
+          glyph: action === 'reset' ? 'solid/trash' : 'solid/undo',
           onOpen: () =>
-            isReset
+            action === 'reset'
               ? this.openSession(profileKey)
               : this.replayActionStore(profileKey),
         };
@@ -158,96 +158,6 @@ export default class Configurator extends Form {
         };
       }
     }
-
-    return tree;
-  }
-
-  // Return a tree with 2 levels: mandats and sessions.
-  getTree_OLD() {
-    if (!this.props.id) {
-      return null;
-    }
-
-    const dico = {};
-
-    // Add all profiles.
-    const tree = this.getModelValue('.profiles').reduce(
-      (list, profile, profileKey) => {
-        const name = profile.get('name');
-        const topology = profile.get('topology', null);
-        let mandate = profile.get('mandate');
-        const isReset = profile.get('reset');
-        const isReplay = profile.get('replay');
-
-        if (!this.props.advanced && isReset) {
-          return list;
-        }
-        if (topology) {
-          mandate = `${mandate}@${topology}`;
-        }
-        if (!list[mandate]) {
-          list[mandate] = {};
-        }
-        if (isReset || isReplay) {
-          list[mandate][profileKey] = {
-            leaf: true,
-            name: name,
-            glyph: isReset ? 'solid/trash' : 'solid/rollback',
-            onOpen: isReset
-              ? () => this.openSession(profileKey)
-              : () => this.replayActionStore(profileKey),
-          };
-        } else {
-          for (let sessionNumber = 1; sessionNumber <= 3; sessionNumber++) {
-            const key = `${profileKey}-${sessionNumber}`;
-            list[mandate][key] = {
-              leaf: true,
-              name: key,
-              glyph: 'solid/plus',
-              onOpen: () => this.openSession(profileKey, sessionNumber),
-            };
-          }
-          dico[mandate] = profileKey;
-        }
-        return list;
-      },
-      {}
-    );
-
-    // Complete with opened sessions.
-    const sessionList = this.props.feeds
-      .filter(f => f.startsWith('feed-desktop@'))
-      .map(feed => ({
-        id: feed,
-        text: feed,
-        mandate: feed.split('@')[1],
-      }))
-      .toArray();
-
-    sessionList.forEach(s => {
-      if (tree[s.mandate]) {
-        const session = s.id.split('@')[2];
-        const sessionNumber = getSessionNumber(session);
-        const profileKey = dico[s.mandate];
-        const toReplace = tree[s.mandate][`${profileKey}-${sessionNumber}`];
-        if (toReplace) {
-          toReplace.name = session;
-          toReplace.glyph = 'solid/tv';
-          toReplace.closable = true;
-          toReplace.onOpen = () => this.openSession(s.id);
-          toReplace.onClose = () => this.closeSession(s.id);
-        } else {
-          tree[s.mandate][session] = {
-            leaf: true,
-            name: session,
-            glyph: 'solid/tv',
-            closable: true,
-            onOpen: () => this.openSession(s.id),
-            onClose: () => this.closeSession(s.id),
-          };
-        }
-      }
-    });
 
     return tree;
   }
