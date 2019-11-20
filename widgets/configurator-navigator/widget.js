@@ -125,7 +125,13 @@ export default class ConfiguratorNavigator extends Widget {
         text={mandateKey}
         glyph="solid/database"
         active={active}
-        onClick={() => (this.selectedMandat = mandateKey)}
+        onClick={() => {
+          if (this.selectedMandat === mandateKey) {
+            this.selectedMandat = null;
+          } else {
+            this.selectedMandat = mandateKey;
+          }
+        }}
       />
     );
   }
