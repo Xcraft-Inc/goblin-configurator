@@ -14,6 +14,8 @@ const logicState = {
   advanced: false,
 };
 
+/******************************************************************************/
+
 // Define logic handlers according rc.json
 const logicHandlers = {
   'create': (state, action) => {
@@ -27,9 +29,11 @@ const logicHandlers = {
       .set('mainGoblin', action.get('mainGoblin'))
       .set('buildInfo', action.get('buildInfo'));
   },
+
   'update-feeds': (state, action) => {
     return state.set('feeds', action.get('feeds'));
   },
+
   'change-form.profile': (state, action) => {
     const profileName = action.get('newValue');
     const profile = state.get(`profiles.${profileName}`, null);
@@ -39,21 +43,27 @@ const logicHandlers = {
     }
     return state;
   },
+
   'change-form.locale': (state, action) => {
     const locale = action.get('newValue');
     return state.set('form.locale', locale);
   },
+
   'change-form.username': (state, action) => {
     const usr = action.get('newValue');
     return state.set('form.username', usr);
   },
+
   'submit': (state, action) => {
     return state.applyForm(action.get('value')).set('form.busy', true);
   },
+
   'toggle-advanced': state => {
     return state.set('advanced', !state.get('advanced'));
   },
 };
+
+/******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
@@ -163,6 +173,8 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {});
+
+/******************************************************************************/
 
 // Create a Goblin with initial state and handlers
 module.exports = Goblin.configure(goblinName, logicState, logicHandlers);

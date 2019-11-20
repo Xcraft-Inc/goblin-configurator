@@ -1,7 +1,5 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 /******************************************************************************/
