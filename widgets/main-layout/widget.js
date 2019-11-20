@@ -11,6 +11,12 @@ class MainLayout extends Widget {
     super(...arguments);
   }
 
+  // Use this line in app.json:
+  // "buildInfo": "Warning: developer release, press ctrl+k for advanced mode",
+  get isDeveloper() {
+    return this.props.info ? this.props.info.includes('ctrl+k') : false;
+  }
+
   /******************************************************************************/
 
   renderHeader() {
@@ -25,15 +31,17 @@ class MainLayout extends Widget {
         />
         <Label grow="1" />
         <Label text={this.props.info} />
-        <Button
-          width="50px"
-          height="50px"
-          border="none"
-          active={this.props.advanced}
-          glyph="solid/bug"
-          glyphSize="150%"
-          onClick={this.props.onToggleAdvanced}
-        />
+        {this.isDeveloper ? (
+          <Button
+            width="50px"
+            height="50px"
+            border="none"
+            active={this.props.advanced}
+            glyph="solid/bug"
+            glyphSize="150%"
+            onClick={this.props.onToggleAdvanced}
+          />
+        ) : null}
       </div>
     );
   }
