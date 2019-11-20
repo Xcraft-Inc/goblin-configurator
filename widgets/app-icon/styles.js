@@ -35,7 +35,7 @@ export default function styles(theme, props) {
   };
 
   const glyph = {
-    fontSize: '200%',
+    fontSize: '350%',
   };
 
   const text = {
