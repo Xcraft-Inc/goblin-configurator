@@ -32,6 +32,8 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  /******************************************************************************/
+
   const box = {
     display: 'flex',
     flexDirection: 'column',
@@ -43,13 +45,16 @@ export default function styles(theme) {
     textAlign: 'center',
     opacity: 1,
     transform: 'scale(1)',
+    transformOrigin: 'top',
+    marginTop: '0px',
     transition: '0.3s ease-out',
   };
 
   const boxHidden = {
     ...box,
     opacity: 0,
-    transform: 'scale(0.8)',
+    transform: 'scale(0.9)',
+    marginTop: '-60px',
   };
 
   const boxTitle = {
@@ -100,6 +105,8 @@ export default function styles(theme) {
     },
   };
 
+  /******************************************************************************/
+
   const arrowDown = {
     zIndex: 1,
     height: '30px',
@@ -127,15 +134,19 @@ export default function styles(theme) {
     borderBottom: '30px solid transparent',
   };
 
+  /******************************************************************************/
+
   return {
     configuratorNavigator,
     header,
     content,
+
     box,
     boxHidden,
     boxTitle,
     boxContent,
     backButton,
+
     arrowDown,
     arrowDownHidden,
     triangle,
