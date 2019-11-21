@@ -4,6 +4,7 @@ import Form from 'laboratory/form';
 import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import ConfiguratorNavigator from '../configurator-navigator/widget';
+import ConfiguratorConfirmPopup from '../configurator-confirm-popup/widget';
 
 /******************************************************************************/
 
@@ -64,11 +65,31 @@ export default class Configurator extends Form {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      showConformPopup: false,
+    };
+
+    this.confirmPopupAction = null;
+    this.confirmPopupProps = null;
+    this.confirmPopupParam = null;
+
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
     this.replayActionStore = this.replayActionStore.bind(this);
   }
+
+  //#region get/set
+  get showConformPopup() {
+    return this.state.showConformPopup;
+  }
+
+  set showConformPopup(value) {
+    this.setState({
+      showConformPopup: value,
+    });
+  }
+  //#endregion
 
   static get wiring() {
     return {
@@ -98,6 +119,23 @@ export default class Configurator extends Form {
   closeSession(name) {
     console.log('CLOSE SESSION', name);
     this.do('close-session', {name});
+  }
+
+  defineConfirmAction(glyph, name, action, profileKey) {
+    this.showConformPopup = true;
+
+    this.confirmPopupProps = {
+      topGlyph: glyph,
+      topTitle: name,
+      question:
+        action === 'reset'
+          ? 'Voulez-vous effacer complètement le mandat ?'
+          : 'Voulez-vous restaurer le mandant selon le point de sauvegarde ?',
+    };
+
+    this.confirmPopupAction =
+      action === 'reset' ? this.openSession : this.replayActionStore;
+    this.confirmPopupParam = profileKey;
   }
 
   // Return a tree with 2 levels: mandats and sessions.
@@ -179,15 +217,14 @@ export default class Configurator extends Form {
       };
 
       if (action) {
+        const glyph = action === 'reset' ? 'solid/trash' : 'solid/undo';
         tree[mandate][profileKey] = {
           leaf: true,
           name: name,
           config: config,
-          glyph: action === 'reset' ? 'solid/trash' : 'solid/undo',
+          glyph: glyph,
           onOpen: () =>
-            action === 'reset'
-              ? this.openSession(profileKey)
-              : this.replayActionStore(profileKey),
+            this.defineConfirmAction(glyph, name, action, profileKey),
         };
       } else {
         const sessionNumber = (maxSessionNumbers[mandate] || 0) + 1;
@@ -207,25 +244,42 @@ export default class Configurator extends Form {
 
   /******************************************************************************/
 
+  renderConfirmPopup() {
+    return (
+      <ConfiguratorConfirmPopup
+        showed={this.showConformPopup}
+        {...this.confirmPopupProps}
+        onAccept={() => {
+          this.showConformPopup = false;
+          this.confirmPopupAction(this.confirmPopupParam);
+        }}
+        onCancel={() => (this.showConformPopup = false)}
+      />
+    );
+  }
+
   render() {
     const tree = this.getTree();
 
     return (
-      <MainLayout
-        id={this.props.id}
-        info={this.getModelValue('.buildInfo')}
-        advanced={this.props.advanced}
-        onToggleAdvanced={this.onToggleAdvanced}
-      >
-        <div className={this.styles.classNames.configurator}>
-          <ConfiguratorNavigator
-            configuratorId={this.props.id}
-            widgetId={`${this.props.id}$icon-navigator`}
-            application={this.getModelValue('.mainGoblin')}
-            tree={tree}
-          ></ConfiguratorNavigator>
-        </div>
-      </MainLayout>
+      <React.Fragment>
+        <MainLayout
+          id={this.props.id}
+          info={this.getModelValue('.buildInfo')}
+          advanced={this.props.advanced}
+          onToggleAdvanced={this.onToggleAdvanced}
+        >
+          <div className={this.styles.classNames.configurator}>
+            <ConfiguratorNavigator
+              configuratorId={this.props.id}
+              widgetId={`${this.props.id}$icon-navigator`}
+              application={this.getModelValue('.mainGoblin')}
+              tree={tree}
+            ></ConfiguratorNavigator>
+          </div>
+        </MainLayout>
+        {this.renderConfirmPopup()}
+      </React.Fragment>
     );
   }
 }

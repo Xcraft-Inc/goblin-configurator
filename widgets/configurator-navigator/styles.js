@@ -83,6 +83,8 @@ export default function styles(theme) {
     padding: '10px 10px 20px 20px',
   };
 
+  /******************************************************************************/
+
   const backButton = {
     'position': 'absolute',
     'top': '0px',
@@ -164,6 +166,7 @@ export default function styles(theme) {
     boxHidden,
     boxTitle,
     boxContent,
+
     backButton,
     detailButton,
     detailButtonActive,

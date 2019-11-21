@@ -2,10 +2,10 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export const propNames = ['active', 'showDetail'];
+export const propNames = ['active'];
 
 export default function styles(theme, props) {
-  const {active, showDetail} = props;
+  const {active} = props;
 
   const color = active
     ? theme.palette.configuratorActiveBackground
