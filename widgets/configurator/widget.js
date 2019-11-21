@@ -137,10 +137,19 @@ export default class Configurator extends Form {
         tree[mandate] = {};
       }
 
+      const config = {
+        elasticsearchUrl: profile.get('elasticsearchUrl'),
+        rethinkdbHost: profile.get('rethinkdbHost'),
+        topology: topology,
+        action: action,
+        mandate: profile.get('mandate'),
+      };
+
       if (action) {
         tree[mandate][profileKey] = {
           leaf: true,
           name: name,
+          config: config,
           glyph: action === 'reset' ? 'solid/trash' : 'solid/undo',
           onOpen: () =>
             action === 'reset'
@@ -153,6 +162,7 @@ export default class Configurator extends Form {
         tree[mandate][key] = {
           leaf: true,
           name: key,
+          config: config,
           glyph: 'solid/plus',
           onOpen: () => this.openSession(profileKey, sessionNumber),
         };

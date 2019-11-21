@@ -2,10 +2,10 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export const propNames = ['active'];
+export const propNames = ['active', 'showDetail'];
 
 export default function styles(theme, props) {
-  const {active} = props;
+  const {active, showDetail} = props;
 
   const color = active
     ? theme.palette.configuratorActiveBackground
@@ -14,12 +14,12 @@ export default function styles(theme, props) {
   const appIcon = {
     'position': 'relative',
     'display': 'flex',
+    'flexDirection': 'column',
     'justifyContent': 'flex-start',
-    'alignItems': 'center',
     'flexGrow': '1',
     'minWidth': '100px',
     'maxWidth': '300px',
-    'height': '70px',
+    'height': showDetail ? '170px' : '70px',
     'margin': '10px 10px 0px 0px',
     'padding': '0px 10px 0px 20px',
     'borderRadius': '5px',
@@ -27,11 +27,19 @@ export default function styles(theme, props) {
     'backgroundColor': color,
     'userSelect': 'none',
     'cursor': 'pointer',
-    'transition': '0.2s ease-out',
+    'transition': 'color 0.2s ease-out, background-color 0.2s ease-out',
     ':hover': {
       color: 'white',
       backgroundColor: ColorManipulator.lighten(color, 0.2),
     },
+  };
+
+  const main = {
+    height: '70px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   };
 
   const glyph = {
@@ -42,6 +50,31 @@ export default function styles(theme, props) {
     marginLeft: '20px',
     fontSize: '120%',
     textTransform: 'uppercase',
+  };
+
+  const detail = {
+    marginTop: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  const detailRow = {
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
+  const detailRowLabel = {
+    width: '100px',
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: '120%',
+    color: '#888',
+  };
+
+  const detailRowValue = {
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: '120%',
   };
 
   const closeBox = {
@@ -63,7 +96,17 @@ export default function styles(theme, props) {
     },
   };
 
-  return {appIcon, glyph, text, closeBox};
+  return {
+    appIcon,
+    main,
+    glyph,
+    text,
+    detail,
+    detailRow,
+    detailRowLabel,
+    detailRowValue,
+    closeBox,
+  };
 }
 
 /******************************************************************************/

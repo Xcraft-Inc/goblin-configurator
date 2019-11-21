@@ -11,6 +11,7 @@ export default class ConfiguratorNavigator extends Widget {
 
     this.state = {
       selectedMandat: null,
+      showDetail: false,
     };
   }
 
@@ -22,6 +23,16 @@ export default class ConfiguratorNavigator extends Widget {
   set selectedMandat(value) {
     this.setState({
       selectedMandat: value,
+    });
+  }
+
+  get showDetail() {
+    return this.state.showDetail;
+  }
+
+  set showDetail(value) {
+    this.setState({
+      showDetail: value,
     });
   }
   //#endregion
@@ -63,10 +74,30 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  renderBoxTitle(title, hasBackButton) {
+  renderDetailButton(hasDetailButton) {
+    if (!hasDetailButton) {
+      return null;
+    }
+
+    const style = this.showDetail
+      ? this.styles.classNames.detailButtonActive
+      : this.styles.classNames.detailButton;
+
+    return (
+      <div
+        className={style}
+        onClick={() => (this.showDetail = !this.showDetail)}
+      >
+        <FontAwesomeIcon icon={[`fas`, 'eye']} />
+      </div>
+    );
+  }
+
+  renderBoxTitle(title, isSessions) {
     return (
       <div className={this.styles.classNames.boxTitle}>
-        {this.renderBackButton(hasBackButton)}
+        {this.renderBackButton(isSessions)}
+        {this.renderDetailButton(isSessions)}
         {title}
       </div>
     );
@@ -87,6 +118,8 @@ export default class ConfiguratorNavigator extends Widget {
         key={index}
         text={session.name}
         glyph={session.glyph}
+        showDetail={this.showDetail}
+        config={session.config}
         onClick={session.onOpen}
         {...closeProps}
       />

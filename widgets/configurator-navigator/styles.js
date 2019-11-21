@@ -105,6 +105,18 @@ export default function styles(theme) {
     },
   };
 
+  const detailButton = {
+    ...backButton,
+    right: '51px',
+    borderRadius: '0px',
+  };
+
+  const detailButtonActive = {
+    ...detailButton,
+    color: '#eee',
+    backgroundColor: theme.palette.configuratorActiveBackground,
+  };
+
   /******************************************************************************/
 
   const arrowDown = {
@@ -146,6 +158,8 @@ export default function styles(theme) {
     boxTitle,
     boxContent,
     backButton,
+    detailButton,
+    detailButtonActive,
 
     arrowDown,
     arrowDownHidden,
