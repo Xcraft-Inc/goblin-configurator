@@ -17,6 +17,37 @@ function getSessionNumber(session) {
   }
 }
 
+function compareProfiles(p1, p2) {
+  const m1 = p1.get('mandate');
+  const m2 = p2.get('mandate');
+  if (m1 < m2) {
+    return -1;
+  }
+  if (m1 > m2) {
+    return 1;
+  }
+
+  const a1 = p1.get('action') || 'aaa';
+  const a2 = p2.get('action') || 'aaa';
+  if (a1 < a2) {
+    return -1;
+  }
+  if (a1 > a2) {
+    return 1;
+  }
+
+  const n1 = p1.get('name');
+  const n2 = p2.get('name');
+  if (n1 < n2) {
+    return -1;
+  }
+  if (n1 > n2) {
+    return 1;
+  }
+
+  return 0;
+}
+
 function compareStrings(s1, s2) {
   if (s1 < s2) {
     return -1;
@@ -115,7 +146,9 @@ export default class Configurator extends Form {
     });
 
     // Add all profiles.
-    const profiles = this.getModelValue('.profiles');
+    const profiles = this.getModelValue('.profiles').sort((p1, p2) =>
+      compareProfiles(p1, p2)
+    );
     for (const p of profiles) {
       const profileKey = p[0];
       const profile = p[1];
