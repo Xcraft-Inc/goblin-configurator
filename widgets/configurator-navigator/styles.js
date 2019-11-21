@@ -113,8 +113,15 @@ export default function styles(theme) {
 
   const detailButtonActive = {
     ...detailButton,
-    color: '#eee',
-    backgroundColor: theme.palette.configuratorActiveBackground,
+    'color': '#eee',
+    'backgroundColor': theme.palette.configuratorActiveBackground,
+    ':hover': {
+      color: 'white',
+      backgroundColor: ColorManipulator.lighten(
+        theme.palette.configuratorActiveBackground,
+        0.2
+      ),
+    },
   };
 
   /******************************************************************************/
