@@ -138,11 +138,11 @@ export default class Configurator extends Form {
       }
 
       const config = {
+        mandate: profile.get('mandate'),
+        action: action,
         elasticsearchUrl: profile.get('elasticsearchUrl'),
         rethinkdbHost: profile.get('rethinkdbHost'),
         topology: topology,
-        action: action,
-        mandate: profile.get('mandate'),
       };
 
       if (action) {

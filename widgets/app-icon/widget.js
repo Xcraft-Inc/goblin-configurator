@@ -20,9 +20,9 @@ export default class AppIcon extends Widget {
     );
   }
 
-  renderDetailRow(label, value) {
+  renderDetailRow(index, label, value) {
     return (
-      <div className={this.styles.classNames.detailRow}>
+      <div key={index} className={this.styles.classNames.detailRow}>
         <div className={this.styles.classNames.detailRowLabel}>{label}</div>
         <div className={this.styles.classNames.detailRowValue}>{value}</div>
       </div>
@@ -36,14 +36,9 @@ export default class AppIcon extends Widget {
 
     return (
       <div className={this.styles.classNames.detail}>
-        {this.renderDetailRow(
-          'elasticsearchUrl',
-          this.props.config.elasticsearchUrl
+        {Object.entries(this.props.config).map(([label, value], index) =>
+          this.renderDetailRow(index, label, value)
         )}
-        {this.renderDetailRow('rethinkdbHost', this.props.config.rethinkdbHost)}
-        {this.renderDetailRow('topology', this.props.config.topology)}
-        {this.renderDetailRow('action', this.props.config.action)}
-        {this.renderDetailRow('mandate', this.props.config.mandate)}
       </div>
     );
   }
