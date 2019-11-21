@@ -116,6 +116,7 @@ export default class ConfiguratorNavigator extends Widget {
     return (
       <AppIcon
         key={index}
+        type="session"
         text={session.name}
         glyph={session.glyph}
         showDetail={this.showDetail}
@@ -152,12 +153,13 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  renderMandat(mandateKey, mandat, index) {
+  renderMandate(mandateKey, mandate, index) {
     const active = mandateKey === this.selectedMandat;
 
     return (
       <AppIcon
         key={index}
+        type="mandate"
         text={mandateKey}
         glyph="solid/database"
         active={active}
@@ -172,11 +174,11 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  renderMandats() {
+  renderMandates() {
     return (
       <div className={this.styles.classNames.boxContent}>
-        {Object.entries(this.props.tree).map(([mandateKey, mandat], index) =>
-          this.renderMandat(mandateKey, mandat, index)
+        {Object.entries(this.props.tree).map(([mandateKey, mandate], index) =>
+          this.renderMandate(mandateKey, mandate, index)
         )}
       </div>
     );
@@ -187,7 +189,7 @@ export default class ConfiguratorNavigator extends Widget {
       <React.Fragment>
         <div className={this.styles.classNames.box}>
           {this.renderBoxTitle('Mandats', false)}
-          {this.renderMandats()}
+          {this.renderMandates()}
         </div>
         {this.renderArrowDown()}
       </React.Fragment>

@@ -30,15 +30,22 @@ export default class AppIcon extends Widget {
   }
 
   renderDetail() {
-    if (!this.props.showDetail || !this.props.config) {
+    if (this.props.type !== 'session') {
       return null;
     }
 
+    const showed = this.props.showDetail && this.props.config;
+    const style = showed
+      ? this.styles.classNames.detail
+      : this.styles.classNames.detailHidden;
+
     return (
-      <div className={this.styles.classNames.detail}>
-        {Object.entries(this.props.config).map(([label, value], index) =>
-          this.renderDetailRow(index, label, value)
-        )}
+      <div className={style}>
+        {this.props.config
+          ? Object.entries(this.props.config).map(([label, value], index) =>
+              this.renderDetailRow(index, label, value)
+            )
+          : null}
       </div>
     );
   }

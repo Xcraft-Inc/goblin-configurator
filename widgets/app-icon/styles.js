@@ -19,7 +19,7 @@ export default function styles(theme, props) {
     'flexGrow': '1',
     'minWidth': '100px',
     'maxWidth': '300px',
-    'height': showDetail ? '170px' : '70px',
+    'minHeight': '70px',
     'margin': '10px 10px 0px 0px',
     'padding': '0px 10px 0px 20px',
     'borderRadius': '5px',
@@ -54,8 +54,17 @@ export default function styles(theme, props) {
 
   const detail = {
     marginTop: '10px',
+    height: '90px',
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
+    transition: '0.3s ease-out',
+  };
+
+  const detailHidden = {
+    ...detail,
+    marginTop: '0px',
+    height: '0px',
   };
 
   const detailRow = {
@@ -102,6 +111,7 @@ export default function styles(theme, props) {
     glyph,
     text,
     detail,
+    detailHidden,
     detailRow,
     detailRowLabel,
     detailRowValue,
