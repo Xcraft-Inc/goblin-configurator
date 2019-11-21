@@ -30,7 +30,7 @@ export default class AppIcon extends Widget {
   }
 
   renderDetail() {
-    if (!this.props.showDetail) {
+    if (!this.props.showDetail || !this.props.config) {
       return null;
     }
 
