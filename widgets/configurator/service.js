@@ -175,9 +175,6 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest, name) {
 Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
   const state = quest.goblin.getState();
   const username = state.get('form.username');
-  let profile = state.get(`profiles.${name}`, null);
-
-  const locale = profile.get('defaultLocale', 'fr-CH');
   if (name.startsWith('feed-desktop@')) {
     const parts = name.split('@');
     const mandate = parts[1];
@@ -189,7 +186,8 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
       configuration: {mandate},
     });
   } else {
-    profile = profile ? profile.toJS() : {};
+    const profile = state.get(`profiles.${name}`);
+    const locale = profile.get('defaultLocale', 'fr-CH');
     const session =
       number === undefined
         ? state.get('form.username')
@@ -198,7 +196,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
       username,
       session,
       locale,
-      configuration: profile,
+      configuration: profile.toJS(),
     });
   }
 });
