@@ -12,9 +12,10 @@ export default function styles(theme) {
   const boxColor = ColorManipulator.lighten(theme.palette.rootBackground, 0.5);
 
   const header = {
+    zIndex: 1,
+    minHeight: '45px',
     display: 'flex',
     flexDirection: 'row',
-    margin: '0px 0px 30px 0px',
     padding: '15px',
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: '15px 15px 0px 0px',
@@ -23,13 +24,18 @@ export default function styles(theme) {
     fontSize: '300%',
     textTransform: 'uppercase',
     justifyContent: 'center',
-    textAlign: 'center',
+    alignItems: 'center',
   };
 
   const content = {
-    padding: '30px 70px',
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'hidden',
+  };
+
+  const contentScrollable = {
+    padding: '60px 70px 30px 70px',
+    overflowY: 'auto',
   };
 
   /******************************************************************************/
@@ -161,6 +167,7 @@ export default function styles(theme) {
     configuratorNavigator,
     header,
     content,
+    contentScrollable,
 
     box,
     boxHidden,

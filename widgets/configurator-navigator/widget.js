@@ -201,8 +201,10 @@ export default class ConfiguratorNavigator extends Widget {
       <div className={this.styles.classNames.configuratorNavigator}>
         {this.renderHeader()}
         <div className={this.styles.classNames.content}>
-          {this.renderMandatsBox()}
-          {this.renderSessionsBox()}
+          <div className={this.styles.classNames.contentScrollable}>
+            {this.renderMandatsBox()}
+            {this.renderSessionsBox()}
+          </div>
         </div>
       </div>
     );

@@ -22,6 +22,7 @@ export default function styles(theme) {
 
   const content = {
     flexGrow: 1,
+    flexBasis: 0,
     display: 'flex',
     flexDirection: 'column',
   };
