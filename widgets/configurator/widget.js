@@ -5,6 +5,7 @@ import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import ConfiguratorNavigator from '../configurator-navigator/widget';
 import ConfiguratorConfirmPopup from '../configurator-confirm-popup/widget';
+import ConfiguratorBuildPopup from '../configurator-build-popup/widget';
 
 /******************************************************************************/
 
@@ -67,6 +68,7 @@ export default class Configurator extends Form {
 
     this.state = {
       showConformPopup: false,
+      showBuildPopup: false,
     };
 
     this.confirmPopupAction = null;
@@ -74,6 +76,7 @@ export default class Configurator extends Form {
     this.confirmPopupParam = null;
 
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+    this.onBuild = this.onBuild.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
     this.replayActionStore = this.replayActionStore.bind(this);
@@ -87,6 +90,16 @@ export default class Configurator extends Form {
   set showConformPopup(value) {
     this.setState({
       showConformPopup: value,
+    });
+  }
+
+  get showBuildPopup() {
+    return this.state.showBuildPopup;
+  }
+
+  set showBuildPopup(value) {
+    this.setState({
+      showBuildPopup: value,
     });
   }
   //#endregion
@@ -105,6 +118,10 @@ export default class Configurator extends Form {
 
   onToggleAdvanced() {
     this.do('toggle-advanced');
+  }
+
+  onBuild() {
+    this.showBuildPopup = true;
   }
 
   openSession(name, number) {
@@ -258,6 +275,19 @@ export default class Configurator extends Form {
     );
   }
 
+  renderBuildPopup() {
+    return (
+      <ConfiguratorBuildPopup
+        showed={this.showBuildPopup}
+        onAccept={() => {
+          this.showBuildPopup = false;
+          this.confirmPopupAction(this.confirmPopupParam);
+        }}
+        onCancel={() => (this.showBuildPopup = false)}
+      />
+    );
+  }
+
   render() {
     const tree = this.getTree();
 
@@ -268,6 +298,7 @@ export default class Configurator extends Form {
           info={this.getModelValue('.buildInfo')}
           advanced={this.props.advanced}
           onToggleAdvanced={this.onToggleAdvanced}
+          onBuild={this.onBuild}
         >
           <div className={this.styles.classNames.configurator}>
             <ConfiguratorNavigator
@@ -279,6 +310,7 @@ export default class Configurator extends Form {
           </div>
         </MainLayout>
         {this.renderConfirmPopup()}
+        {this.renderBuildPopup()}
       </React.Fragment>
     );
   }

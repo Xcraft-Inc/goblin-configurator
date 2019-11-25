@@ -35,11 +35,22 @@ class MainLayout extends Widget {
           <Button
             width="50px"
             height="50px"
+            horizontalSpacing="tiny"
             border="none"
             active={this.props.advanced}
             glyph="solid/bug"
             glyphSize="150%"
             onClick={this.props.onToggleAdvanced}
+          />
+        ) : null}
+        {this.isDeveloper ? (
+          <Button
+            width="50px"
+            height="50px"
+            border="none"
+            glyph="solid/industry"
+            glyphSize="150%"
+            onClick={this.props.onBuild}
           />
         ) : null}
       </div>
