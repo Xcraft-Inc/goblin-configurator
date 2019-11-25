@@ -279,10 +279,7 @@ export default class Configurator extends Form {
     return (
       <ConfiguratorBuildPopup
         showed={this.showBuildPopup}
-        onAccept={() => {
-          this.showBuildPopup = false;
-          this.confirmPopupAction(this.confirmPopupParam);
-        }}
+        onAccept={() => (this.showBuildPopup = false)}
         onCancel={() => (this.showBuildPopup = false)}
       />
     );
