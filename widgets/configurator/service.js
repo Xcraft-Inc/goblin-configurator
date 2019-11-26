@@ -207,6 +207,16 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
   yield deskAPI.close({closeIn: 10});
 });
 
+Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
+  quest,
+  entityType
+) {
+  const workshopAPI = quest.getAPI('workshop');
+  const mainGoblin = quest.goblin.getState().get('mainGoblin');
+  const goblinLib = `goblin-${mainGoblin}`;
+  yield workshopAPI.generateWorkitemsTemplates({goblinLib, entityType});
+});
+
 Goblin.registerQuest(goblinName, 'delete', function(quest) {});
 
 /******************************************************************************/

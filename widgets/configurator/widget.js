@@ -77,6 +77,7 @@ export default class Configurator extends Form {
 
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.onBuild = this.onBuild.bind(this);
+    this.generate = this.generate.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
     this.replayActionStore = this.replayActionStore.bind(this);
@@ -122,6 +123,11 @@ export default class Configurator extends Form {
 
   onBuild() {
     this.showBuildPopup = true;
+  }
+
+  generate() {
+    this.do('generate-workitems-templates', {entityType: 'epsitecEvent'});
+    this.showBuildPopup = false;
   }
 
   openSession(name, number) {
@@ -279,7 +285,7 @@ export default class Configurator extends Form {
     return (
       <ConfiguratorBuildPopup
         showed={this.showBuildPopup}
-        onAccept={() => (this.showBuildPopup = false)}
+        onAccept={this.generate}
         onCancel={() => (this.showBuildPopup = false)}
       />
     );
