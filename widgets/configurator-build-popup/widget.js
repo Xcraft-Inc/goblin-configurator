@@ -31,7 +31,16 @@ export default class ConfiguratorBuildPopup extends Widget {
   renderBuild() {
     return (
       <div className={this.styles.classNames.build}>
-        <Label text="TODO..." />
+        <Label text="Construction automatique du workitem.ui d'une entité." />
+        <Label text="TODO, by Sam..." />
+        <Label height="20px" />
+        <Label
+          height="100px"
+          justify="center"
+          glyphPosition="center"
+          glyph="light/smile"
+          glyphSize="600%"
+        />
       </div>
     );
   }
@@ -54,7 +63,7 @@ export default class ConfiguratorBuildPopup extends Widget {
         animationOut="zoomOut"
         showed={this.props.showed}
         topGlyph="solid/industry"
-        topTitle="Construction automatique"
+        topTitle="Build"
         width="600px"
         height="400px"
         outsideClose={true}
