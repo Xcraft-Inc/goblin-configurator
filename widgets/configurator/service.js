@@ -23,6 +23,7 @@ const logicHandlers = {
   'create': (state, action) => {
     return state
       .set('id', action.get('id'))
+      .set('sessionId', action.get('clientSessionId'))
       .set('form', action.get('form'))
       .set('current', action.get('current'))
       .set('feeds', action.get('feeds'))
@@ -67,7 +68,11 @@ const logicHandlers = {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
+Goblin.registerQuest(goblinName, 'create', function*(
+  quest,
+  clientSessionId,
+  username
+) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
   const mainGoblin = clientConfig.mainGoblin;
   const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
@@ -112,6 +117,7 @@ Goblin.registerQuest(goblinName, 'create', function*(quest, userId, username) {
     id: quest.goblin.id,
     form,
     feeds,
+    clientSessionId,
     current: currentProfile,
     available: availableProfiles,
     profiles: available,
