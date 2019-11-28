@@ -110,6 +110,8 @@ export default class Configurator extends Form {
       id: 'id',
       feeds: 'feeds',
       advanced: 'advanced',
+      workshopAvailable: 'workshopAvailable',
+      availableEntities: 'availableEntities',
     };
   }
 
@@ -126,7 +128,7 @@ export default class Configurator extends Form {
   }
 
   generate() {
-    this.do('generate-workitems-templates', {entityType: 'epsitecEvent'});
+    this.do('generate-workitems-templates');
     this.showBuildPopup = false;
   }
 
@@ -282,11 +284,16 @@ export default class Configurator extends Form {
   }
 
   renderBuildPopup() {
+    if (!this.props.workshopAvailable) {
+      return null;
+    }
     return (
       <ConfiguratorBuildPopup
+        id={this.props.id}
         showed={this.showBuildPopup}
         onAccept={this.generate}
         onCancel={() => (this.showBuildPopup = false)}
+        entities={this.props.availableEntities}
       />
     );
   }

@@ -30,11 +30,17 @@ const logicHandlers = {
       .set('available', action.get('available'))
       .set('profiles', action.get('profiles'))
       .set('mainGoblin', action.get('mainGoblin'))
-      .set('buildInfo', action.get('buildInfo'));
+      .set('buildInfo', action.get('buildInfo'))
+      .set('workshopAvailable', action.get('workshopAvailable'))
+      .set('availableEntities', action.get('availableEntities'));
   },
 
   'update-feeds': (state, action) => {
     return state.set('feeds', action.get('feeds'));
+  },
+
+  'change': (state, action) => {
+    return state.set(action.get('path'), action.get('newValue'));
   },
 
   'change-form.profile': (state, action) => {
@@ -113,6 +119,14 @@ Goblin.registerQuest(goblinName, 'create', function*(
     locale: 'fr-CH',
   };
 
+  //WORKSHOP BUILDER TOOLS INFOS
+  let workshopAvailable = false;
+  let availableEntities = [];
+  if (quest.hasAPI('workshop')) {
+    workshopAvailable = true;
+    const wAPI = quest.getAPI('workshop');
+    availableEntities = yield wAPI.getAvailableEntities();
+  }
   quest.do({
     id: quest.goblin.id,
     form,
@@ -123,6 +137,8 @@ Goblin.registerQuest(goblinName, 'create', function*(
     profiles: available,
     mainGoblin,
     buildInfo,
+    workshopAvailable,
+    availableEntities,
   });
   return quest.goblin.id;
 });
@@ -131,6 +147,10 @@ Goblin.registerQuest(goblinName, 'update-feeds', function*(quest) {
   const warehouse = quest.getAPI('warehouse');
   const feeds = yield warehouse.listFeeds();
   quest.do({feeds});
+});
+
+Goblin.registerQuest(goblinName, 'change', function(quest, path, newValue) {
+  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
@@ -218,9 +238,13 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
 });
 
 Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
-  quest,
-  entityType
+  quest
 ) {
+  const state = quest.goblin.getState();
+  const entityType = state.get('selectedEntity');
+  if (!entityType) {
+    return;
+  }
   const workshopAPI = quest.getAPI('workshop');
   const mainGoblin = quest.goblin.getState().get('mainGoblin');
   const goblinLib = `goblin-${mainGoblin}`;

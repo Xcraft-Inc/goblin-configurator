@@ -1,7 +1,10 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+import WithModel from 'goblin-laboratory/widgets/with-model/widget';
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 import Label from 'gadgets/label/widget';
+import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
 import ConfiguratorPopup from '../configurator-popup/widget';
 
 /******************************************************************************/
@@ -33,14 +36,16 @@ export default class ConfiguratorBuildPopup extends Widget {
       <div className={this.styles.classNames.build}>
         <Label text="Construction automatique du workitem.ui d'une entité." />
         <Label text="TODO, by Sam..." />
-        <Label height="20px" />
-        <Label
-          height="100px"
-          justify="center"
-          glyphPosition="center"
-          glyph="light/smile"
-          glyphSize="600%"
-        />
+        <WithModel model={`backend.${this.props.id}`}>
+          <TextFieldCombo
+            listModel={'.availableEntities'}
+            model={'.selectedEntity'}
+            hintText="Entités"
+            width="300px"
+            menuType="wrap"
+            restrictsToList={true}
+          />
+        </WithModel>
       </div>
     );
   }
@@ -63,7 +68,7 @@ export default class ConfiguratorBuildPopup extends Widget {
         animationOut="zoomOut"
         showed={this.props.showed}
         topGlyph="solid/industry"
-        topTitle="Build"
+        topTitle="Workitems templates generator "
         width="600px"
         height="400px"
         outsideClose={true}
