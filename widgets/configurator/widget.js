@@ -75,6 +75,7 @@ export default class Configurator extends Form {
     this.confirmPopupProps = null;
     this.confirmPopupParam = null;
 
+    this.createNewEntity = this.createNewEntity.bind(this);
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.onBuild = this.onBuild.bind(this);
     this.generate = this.generate.bind(this);
@@ -126,6 +127,10 @@ export default class Configurator extends Form {
 
   onBuild() {
     this.showBuildPopup = true;
+  }
+
+  createNewEntity() {
+    this.do('create-new-entity');
   }
 
   generate() {
@@ -296,7 +301,7 @@ export default class Configurator extends Form {
     return (
       <ConfiguratorBuildPopup
         id={this.props.id}
-        do={this.do}
+        createNewEntity={this.createNewEntity}
         showed={this.showBuildPopup}
         onAccept={this.generate}
         onCancel={this.clearGenerate}

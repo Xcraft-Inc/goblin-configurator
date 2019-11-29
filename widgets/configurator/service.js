@@ -240,7 +240,7 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
 
 Goblin.registerQuest(goblinName, 'create-new-entity', function*(quest) {
   const state = quest.goblin.getState();
-  const entity = state.get('newEntity');
+  const entity = state.get('newEntity').toJS();
   if (!entity || !entity.type) {
     return;
   }

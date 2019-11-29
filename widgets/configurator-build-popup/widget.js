@@ -29,7 +29,7 @@ class ConfiguratorBuildPopup extends Widget {
   }
 
   createNewEntity() {
-    this.props.do('create-new-entity');
+    this.props.createNewEntity();
     this.closeNewEntityPopup();
   }
 
