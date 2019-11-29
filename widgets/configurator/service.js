@@ -4,7 +4,7 @@
 const Goblin = require('xcraft-core-goblin');
 const fs = require('fs');
 const path = require('path');
-
+const mkdirp = require('mkdirp').sync;
 const goblinName = 'configurator';
 
 // Define initial logic values
@@ -180,7 +180,9 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest, name) {
     'action-stores',
     `${profile.mandate}.db`
   );
-  const dstPath = path.join(appConfigPath, 'var/cryo', `copy.db`);
+  const cryoPath = path.join(appConfigPath, 'var/cryo');
+  mkdirp(cryoPath);
+  const dstPath = path.join(cryoPath, `copy.db`);
 
   if (!fs.existsSync(srcPath)) {
     return;
