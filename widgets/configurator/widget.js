@@ -78,6 +78,7 @@ export default class Configurator extends Form {
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.onBuild = this.onBuild.bind(this);
     this.generate = this.generate.bind(this);
+    this.clearGenerate = this.clearGenerate.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
     this.replayActionStore = this.replayActionStore.bind(this);
@@ -129,6 +130,11 @@ export default class Configurator extends Form {
 
   generate() {
     this.do('generate-workitems-templates');
+    this.showBuildPopup = false;
+  }
+
+  clearGenerate() {
+    this.do('clear-workitems-templates');
     this.showBuildPopup = false;
   }
 
@@ -292,7 +298,7 @@ export default class Configurator extends Form {
         id={this.props.id}
         showed={this.showBuildPopup}
         onAccept={this.generate}
-        onCancel={() => (this.showBuildPopup = false)}
+        onCancel={this.clearGenerate}
         entities={this.props.availableEntities}
       />
     );

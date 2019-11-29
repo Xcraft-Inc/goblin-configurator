@@ -14,6 +14,7 @@ const logicState = {
   available: {},
   profiles: {},
   advanced: false,
+  selectedEntity: null,
 };
 
 /******************************************************************************/
@@ -249,6 +250,11 @@ Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
   const mainGoblin = quest.goblin.getState().get('mainGoblin');
   const goblinLib = `goblin-${mainGoblin}`;
   yield workshopAPI.generateWorkitemsTemplates({goblinLib, entityType});
+  yield quest.me.change({path: 'selectedEntity', newValue: null});
+});
+
+Goblin.registerQuest(goblinName, 'clear-workitems-templates', function*(quest) {
+  yield quest.me.change({path: 'selectedEntity', newValue: null});
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {});
