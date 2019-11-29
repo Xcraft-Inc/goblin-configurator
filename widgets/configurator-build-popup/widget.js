@@ -4,6 +4,8 @@ import WithModel from 'goblin-laboratory/widgets/with-model/widget';
 
 import Label from 'gadgets/label/widget';
 import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
+import Field from 'goblin-gadgets/widgets/field/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
 import ConfiguratorPopup from '../configurator-popup/widget';
 
 /******************************************************************************/
@@ -12,8 +14,28 @@ class ConfiguratorBuildPopup extends Widget {
   constructor() {
     super(...arguments);
 
+    this.createNewEntity = this.createNewEntity.bind(this);
+    this.openNewEntityPopup = this.openNewEntityPopup.bind(this);
+    this.closeNewEntityPopup = this.closeNewEntityPopup.bind(this);
     this.onAccept = this.onAccept.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.state = {
+      showNewEntityPopup: false,
+    };
+  }
+
+  openNewEntityPopup() {
+    this.setState({showNewEntityPopup: true});
+  }
+
+  createNewEntity() {
+    // Quest to create new entity
+    //this.doFor();
+    this.closeNewEntityPopup();
+  }
+
+  closeNewEntityPopup() {
+    this.setState({showNewEntityPopup: false});
   }
 
   onAccept() {
@@ -30,9 +52,45 @@ class ConfiguratorBuildPopup extends Widget {
 
   /******************************************************************************/
 
+  renderNewEntityPopup() {
+    const buttons = [
+      {
+        text: 'Générer',
+        action: this.createNewEntity,
+      },
+      {
+        text: 'Annuler',
+        action: this.closeNewEntityPopup,
+      },
+    ];
+    // Add list of Field to edit properties
+    return (
+      <ConfiguratorPopup
+        animationIn="zoomIn"
+        animationOut="zoomOut"
+        showed={this.state.showNewEntityPopup}
+        topGlyph="solid/industry"
+        topTitle="Nouvelle entité"
+        width="600px"
+        height="400px"
+        outsideClose={true}
+        buttons={buttons}
+        onClose={this.closeNewEntityPopup}
+      >
+        <Field
+          labelText="Nom de l'entité"
+          kind={'field'}
+          model={'.form.entityName'}
+        />
+        <Label text="Liste des propriétés" />
+      </ConfiguratorPopup>
+    );
+  }
+
   renderBuild() {
     return (
       <div className={this.styles.classNames.build}>
+        <Button text={'Nouvelle entité'} onClick={this.openNewEntityPopup} />
         <Label text="Choix de l'entité" height="50px" />
         <WithModel model={`backend.${this.props.id}`}>
           <TextFieldCombo
@@ -49,6 +107,10 @@ class ConfiguratorBuildPopup extends Widget {
   }
 
   render() {
+    if (this.state.showNewEntityPopup) {
+      return this.renderNewEntityPopup();
+    }
+
     const buttons = [
       {
         text: 'Générer',
