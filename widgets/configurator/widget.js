@@ -75,11 +75,7 @@ export default class Configurator extends Form {
     this.confirmPopupProps = null;
     this.confirmPopupParam = null;
 
-    this.createNewEntity = this.createNewEntity.bind(this);
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
-    this.onBuild = this.onBuild.bind(this);
-    this.generate = this.generate.bind(this);
-    this.clearGenerate = this.clearGenerate.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
     this.replayActionStore = this.replayActionStore.bind(this);
@@ -123,24 +119,6 @@ export default class Configurator extends Form {
 
   onToggleAdvanced() {
     this.do('toggle-advanced');
-  }
-
-  onBuild() {
-    this.showBuildPopup = true;
-  }
-
-  createNewEntity() {
-    this.do('create-new-entity');
-  }
-
-  generate() {
-    this.do('generate-workitems-templates');
-    this.showBuildPopup = false;
-  }
-
-  clearGenerate() {
-    this.do('clear-workitems-templates');
-    this.showBuildPopup = false;
   }
 
   openSession(name, number) {
@@ -301,11 +279,9 @@ export default class Configurator extends Form {
     return (
       <ConfiguratorBuildPopup
         id={this.props.id}
-        createNewEntity={this.createNewEntity}
         showed={this.showBuildPopup}
-        onAccept={this.generate}
-        onCancel={this.clearGenerate}
         entities={this.props.availableEntities}
+        onClose={() => (this.showBuildPopup = false)}
       />
     );
   }
@@ -320,7 +296,7 @@ export default class Configurator extends Form {
           info={this.getModelValue('.buildInfo')}
           advanced={this.props.advanced}
           onToggleAdvanced={this.onToggleAdvanced}
-          onBuild={this.onBuild}
+          onBuild={() => (this.showBuildPopup = true)}
         >
           <div className={this.styles.classNames.configurator}>
             <ConfiguratorNavigator

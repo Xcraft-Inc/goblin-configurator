@@ -1,155 +1,153 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import WithModel from 'goblin-laboratory/widgets/with-model/widget';
 
-import Label from 'gadgets/label/widget';
-import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
-import Field from 'goblin-gadgets/widgets/field/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import ConfiguratorPopup from '../configurator-popup/widget';
+import ConfiguratorBuildEntityPopup from '../configurator-build-entity-popup/widget';
+import ConfiguratorBuildWorkitemPopup from '../configurator-build-workitem-popup/widget';
 
 /******************************************************************************/
 
-class ConfiguratorBuildPopup extends Widget {
+export default class ConfiguratorBuildPopup extends Widget {
   constructor() {
     super(...arguments);
 
-    this.createNewEntity = this.createNewEntity.bind(this);
-    this.openNewEntityPopup = this.openNewEntityPopup.bind(this);
-    this.closeNewEntityPopup = this.closeNewEntityPopup.bind(this);
-    this.onAccept = this.onAccept.bind(this);
-    this.onCancel = this.onCancel.bind(this);
     this.state = {
-      showNewEntityPopup: false,
+      showEntityPopup: false,
+      showWorkitemPopup: false,
     };
+
+    this.onClose = this.onClose.bind(this);
   }
 
-  openNewEntityPopup() {
-    this.setState({showNewEntityPopup: true});
+  //#region get/set
+  get showEntityPopup() {
+    return this.state.showEntityPopup;
   }
 
-  createNewEntity() {
-    this.props.createNewEntity();
-    this.closeNewEntityPopup();
+  set showEntityPopup(value) {
+    this.setState({
+      showEntityPopup: value,
+    });
   }
 
-  closeNewEntityPopup() {
-    this.setState({showNewEntityPopup: false});
+  get showWorkitemPopup() {
+    return this.state.showWorkitemPopup;
   }
 
-  onAccept() {
-    if (this.props.onAccept) {
-      this.props.onAccept();
-    }
+  set showWorkitemPopup(value) {
+    this.setState({
+      showWorkitemPopup: value,
+    });
   }
+  //#endregion
 
-  onCancel() {
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    }
+  onClose() {
+    this.props.onClose();
   }
 
   /******************************************************************************/
 
-  renderNewEntityPopup() {
-    const buttons = [
-      {
-        text: 'Générer',
-        action: this.createNewEntity,
-      },
-      {
-        text: 'Annuler',
-        action: this.closeNewEntityPopup,
-      },
-    ];
-    // Add list of Field to edit properties
+  renderEntityPopup() {
     return (
-      <WithModel model={`backend.${this.props.id}.newEntity`}>
-        <ConfiguratorPopup
-          animationIn="zoomIn"
-          animationOut="zoomOut"
-          showed={this.state.showNewEntityPopup}
-          topGlyph="solid/industry"
-          topTitle="Nouvelle entité"
-          width="600px"
-          height="400px"
-          outsideClose={true}
-          buttons={buttons}
-          onClose={this.closeNewEntityPopup}
-        >
-          <Field labelText="Nom de l'entité" kind={'field'} model={'.type'} />
-          <Label text="Liste des propriétés" />
-        </ConfiguratorPopup>
-      </WithModel>
+      <ConfiguratorBuildEntityPopup
+        id={this.props.id}
+        showed={this.showEntityPopup}
+        onClose={() => (this.showEntityPopup = false)}
+      />
     );
   }
 
-  renderBuild() {
+  renderWorkitemPopup() {
     return (
-      <div className={this.styles.classNames.build}>
-        <Button text={'Nouvelle entité'} onClick={this.openNewEntityPopup} />
-        <Label text="Choix de l'entité" height="50px" />
-        <WithModel model={`backend.${this.props.id}`}>
-          <TextFieldCombo
-            listModel={'.availableEntities'}
-            model={'.selectedEntity'}
-            hintText="Entités"
-            width="400px"
-            menuType="wrap"
-            restrictsToList={true}
+      <ConfiguratorBuildWorkitemPopup
+        id={this.props.id}
+        showed={this.showWorkitemPopup}
+        entities={this.props.availableEntities}
+        onClose={() => (this.showWorkitemPopup = false)}
+      />
+    );
+  }
+
+  renderMain() {
+    return (
+      <div className={this.styles.classNames.main}>
+        <div className={this.styles.classNames.button}>
+          <Button
+            width="200px"
+            height="200px"
+            glyph="solid/database"
+            glyphSize="600%"
+            tooltip="Entity generator"
+            horizontalSpacing="large"
+            onClick={() => (this.showEntityPopup = true)}
           />
-        </WithModel>
+          <Label height="40px" text="Entity" justify="center" />
+        </div>
+        <div className={this.styles.classNames.button}>
+          <Button
+            width="200px"
+            height="200px"
+            glyph="solid/square"
+            glyphSize="600%"
+            tooltip="Workitems templates generator"
+            onClick={() => (this.showWorkitemPopup = true)}
+          />
+          <Label height="40px" text="Workitem" justify="center" />
+        </div>
+      </div>
+    );
+  }
+  renderMain_OLD() {
+    return (
+      <div className={this.styles.classNames.main}>
+        <Button
+          kind="task-bar"
+          glyph="solid/database"
+          text="Entity"
+          horizontalSpacing="large"
+          onClick={() => (this.showEntityPopup = true)}
+        />
+        <Button
+          kind="task-bar"
+          glyph="solid/square"
+          text="Workitem"
+          onClick={() => (this.showWorkitemPopup = true)}
+        />
       </div>
     );
   }
 
   render() {
-    if (this.state.showNewEntityPopup) {
-      return this.renderNewEntityPopup();
+    if (this.state.showEntityPopup) {
+      return this.renderEntityPopup();
+    } else if (this.state.showWorkitemPopup) {
+      return this.renderWorkitemPopup();
     }
 
     const buttons = [
       {
-        text: 'Générer',
-        action: this.onAccept,
-        disabled: !this.props.selectedEntity,
-      },
-      {
-        text: 'Annuler',
-        action: this.onCancel,
+        text: 'Fermer',
+        action: this.onClose,
       },
     ];
 
     return (
       <ConfiguratorPopup
-        animationIn="zoomIn"
-        animationOut="zoomOut"
+        animationIn="fadeIn"
+        animationOut="fadeOut"
         showed={this.props.showed}
         topGlyph="solid/industry"
-        topTitle="Workitems templates generator"
-        width="500px"
-        height="200px"
+        topTitle="Builder"
+        width="600px"
+        height="350px"
         outsideClose={true}
         buttons={buttons}
-        onClose={this.onCancel}
+        onClose={this.onClose}
       >
-        {this.renderBuild()}
+        {this.renderMain()}
       </ConfiguratorPopup>
     );
   }
 }
-
-/******************************************************************************/
-
-export default Widget.connect((state, props) => {
-  return {
-    selectedEntity: state
-      .get('backend')
-      .get(props.id)
-      .get('selectedEntity'),
-    newEntity: state
-      .get('backend')
-      .get(props.id)
-      .get('newEntity'),
-  };
-})(ConfiguratorBuildPopup);
