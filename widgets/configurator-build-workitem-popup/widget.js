@@ -17,12 +17,12 @@ class ConfiguratorBuildWorkitemPopup extends Widget {
   }
 
   onAccept() {
-    this.do('generate-workitems-templates');
+    this.doFor(this.props.id, 'generate-workitems-templates');
     this.props.onClose();
   }
 
   onCancel() {
-    this.do('clear-workitems-templates');
+    this.doFor(this.props.id, 'clear-workitems-templates');
     this.props.onClose();
   }
 
