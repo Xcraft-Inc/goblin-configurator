@@ -1,7 +1,6 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
-import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 import Label from 'gadgets/label/widget';
 import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
@@ -9,7 +8,7 @@ import ConfiguratorPopup from '../configurator-popup/widget';
 
 /******************************************************************************/
 
-export default class ConfiguratorBuildPopup extends Widget {
+class ConfiguratorBuildPopup extends Widget {
   constructor() {
     super(...arguments);
 
@@ -34,14 +33,13 @@ export default class ConfiguratorBuildPopup extends Widget {
   renderBuild() {
     return (
       <div className={this.styles.classNames.build}>
-        <Label text="Construction automatique du workitem.ui d'une entité." />
-        <Label text="TODO, by Sam..." />
+        <Label text="Choix de l'entité" height="50px" />
         <WithModel model={`backend.${this.props.id}`}>
           <TextFieldCombo
             listModel={'.availableEntities'}
             model={'.selectedEntity'}
             hintText="Entités"
-            width="300px"
+            width="400px"
             menuType="wrap"
             restrictsToList={true}
           />
@@ -55,6 +53,7 @@ export default class ConfiguratorBuildPopup extends Widget {
       {
         text: 'Générer',
         action: this.onAccept,
+        disabled: !this.props.selectedEntity,
       },
       {
         text: 'Annuler',
@@ -68,9 +67,9 @@ export default class ConfiguratorBuildPopup extends Widget {
         animationOut="zoomOut"
         showed={this.props.showed}
         topGlyph="solid/industry"
-        topTitle="Workitems templates generator "
-        width="600px"
-        height="400px"
+        topTitle="Workitems templates generator"
+        width="500px"
+        height="200px"
         outsideClose={true}
         buttons={buttons}
         onClose={this.onCancel}
@@ -80,3 +79,14 @@ export default class ConfiguratorBuildPopup extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
+export default Widget.connect((state, props) => {
+  return {
+    selectedEntity: state
+      .get('backend')
+      .get(props.id)
+      .get('selectedEntity'),
+  };
+})(ConfiguratorBuildPopup);
