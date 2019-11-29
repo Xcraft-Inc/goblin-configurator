@@ -296,6 +296,7 @@ export default class Configurator extends Form {
     return (
       <ConfiguratorBuildPopup
         id={this.props.id}
+        do={this.do}
         showed={this.showBuildPopup}
         onAccept={this.generate}
         onCancel={this.clearGenerate}

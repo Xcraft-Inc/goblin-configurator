@@ -238,6 +238,19 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
   yield deskAPI.close({closeIn: 10});
 });
 
+Goblin.registerQuest(goblinName, 'create-new-entity', function*(quest) {
+  const state = quest.goblin.getState();
+  const entity = state.get('newEntity');
+  if (!entity || !entity.type) {
+    return;
+  }
+  const workshopAPI = quest.getAPI('workshop');
+  const mainGoblin = quest.goblin.getState().get('mainGoblin');
+  const goblinLib = `goblin-${mainGoblin}`;
+  yield workshopAPI.createNewEntity({goblinLib, entity});
+  yield quest.me.change({path: 'newEntity', newValue: null});
+});
+
 Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
   quest
 ) {

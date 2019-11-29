@@ -29,8 +29,7 @@ class ConfiguratorBuildPopup extends Widget {
   }
 
   createNewEntity() {
-    // Quest to create new entity
-    //this.doFor();
+    this.props.do('create-new-entity');
     this.closeNewEntityPopup();
   }
 
@@ -65,25 +64,23 @@ class ConfiguratorBuildPopup extends Widget {
     ];
     // Add list of Field to edit properties
     return (
-      <ConfiguratorPopup
-        animationIn="zoomIn"
-        animationOut="zoomOut"
-        showed={this.state.showNewEntityPopup}
-        topGlyph="solid/industry"
-        topTitle="Nouvelle entité"
-        width="600px"
-        height="400px"
-        outsideClose={true}
-        buttons={buttons}
-        onClose={this.closeNewEntityPopup}
-      >
-        <Field
-          labelText="Nom de l'entité"
-          kind={'field'}
-          model={'.form.entityName'}
-        />
-        <Label text="Liste des propriétés" />
-      </ConfiguratorPopup>
+      <WithModel model={`backend.${this.props.id}.newEntity`}>
+        <ConfiguratorPopup
+          animationIn="zoomIn"
+          animationOut="zoomOut"
+          showed={this.state.showNewEntityPopup}
+          topGlyph="solid/industry"
+          topTitle="Nouvelle entité"
+          width="600px"
+          height="400px"
+          outsideClose={true}
+          buttons={buttons}
+          onClose={this.closeNewEntityPopup}
+        >
+          <Field labelText="Nom de l'entité" kind={'field'} model={'.type'} />
+          <Label text="Liste des propriétés" />
+        </ConfiguratorPopup>
+      </WithModel>
     );
   }
 
@@ -150,5 +147,9 @@ export default Widget.connect((state, props) => {
       .get('backend')
       .get(props.id)
       .get('selectedEntity'),
+    newEntity: state
+      .get('backend')
+      .get(props.id)
+      .get('newEntity'),
   };
 })(ConfiguratorBuildPopup);
