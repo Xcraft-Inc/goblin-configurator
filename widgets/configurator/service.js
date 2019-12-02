@@ -64,10 +64,6 @@ const logicHandlers = {
     return state.set('form.username', usr);
   },
 
-  'submit': (state, action) => {
-    return state.applyForm(action.get('value')).set('form.busy', true);
-  },
-
   'toggle-advanced': state => {
     return state.set('advanced', !state.get('advanced'));
   },
