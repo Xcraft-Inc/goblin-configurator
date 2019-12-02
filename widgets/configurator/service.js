@@ -231,9 +231,16 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
 });
 
 Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
-  const desktop = name.replace('feed-', '');
-  const deskAPI = quest.getAPI(desktop);
-  yield deskAPI.close({closeIn: 10});
+  const desktopId = name.replace('feed-', '');
+  const deskAPI = quest.getAPI(desktopId);
+  const labId = yield deskAPI.getLabId();
+  const exist = yield quest.warehouse.get({path: labId});
+  if (exist) {
+    yield deskAPI.close({closeIn: 10});
+  } else {
+    const clientAPI = quest.getAPI('client');
+    yield clientAPI.killSession({session: desktopId});
+  }
 });
 
 Goblin.registerQuest(goblinName, 'create-new-entity', function*(quest) {
