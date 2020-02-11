@@ -118,7 +118,7 @@ let Ripley = class Ripley extends Widget {
             <RipleyTree
               id={this.props.id}
               type="from"
-              description={T('From')}
+              description={'From'}
               hasBranches={true}
               onSelect={this.select}
               db={C(`.db`)}
@@ -137,7 +137,7 @@ let Ripley = class Ripley extends Widget {
             <RipleyTree
               id={this.props.id}
               type="to"
-              description={T('To')}
+              description={'To'}
               hasBranches={false}
               onSelect={this.select}
               db={C(`.db`)}
