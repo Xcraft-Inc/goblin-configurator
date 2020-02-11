@@ -15,6 +15,14 @@ const logicState = {
   profiles: {},
   advanced: false,
   selectedEntity: null,
+  ripley: {
+    profileKey: null,
+    db: {},
+    selected: {
+      from: null,
+      to: null,
+    },
+  },
 };
 
 /******************************************************************************/
@@ -33,7 +41,8 @@ const logicHandlers = {
       .set('mainGoblin', action.get('mainGoblin'))
       .set('buildInfo', action.get('buildInfo'))
       .set('workshopAvailable', action.get('workshopAvailable'))
-      .set('availableEntities', action.get('availableEntities'));
+      .set('availableEntities', action.get('availableEntities'))
+      .set('ripley.db', action.get('db'));
   },
 
   'update-feeds': (state, action) => {
@@ -66,6 +75,14 @@ const logicHandlers = {
 
   'toggle-advanced': state => {
     return state.set('advanced', !state.get('advanced'));
+  },
+  'select': (state, action) => {
+    const type = action.get('type');
+    const selected = state.get(`selected.${type}`);
+    return state.set(
+      `selected.${type}`,
+      selected === action.get('selectedId') ? null : action.get('selectedId')
+    );
   },
 };
 
@@ -106,6 +123,22 @@ Goblin.registerQuest(goblinName, 'create', function*(
     })
   );
 
+  // initialize branches by mandate
+  const branches = yield quest.cmd('cryo.branches');
+  let groupedBranches = {};
+  for (const [key, _] of Object.entries(branches)) {
+    const db = key.split('_');
+    if (db.length === 1) {
+      groupedBranches[db[0]] = {branches: []};
+    } else if (db.length === 2) {
+      if (groupedBranches[db[0]]) {
+        groupedBranches[db[0]].branches.push(key);
+      } else {
+        groupedBranches[db[0]] = {branches: [key]};
+      }
+    }
+  }
+
   const selectedProfile = availableProfiles[0];
   const currentProfile = available[selectedProfile];
 
@@ -136,6 +169,7 @@ Goblin.registerQuest(goblinName, 'create', function*(
     buildInfo,
     workshopAvailable,
     availableEntities,
+    db: groupedBranches,
   });
   return quest.goblin.id;
 });
@@ -162,39 +196,44 @@ Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest, name) {
+Goblin.registerQuest(goblinName, 'select', function(quest, type, selectedId) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest) {
   const state = quest.goblin.getState();
-  let profile = state.get(`profiles.${name}`).toJS();
-  const workshop = quest.getAPI('workshop');
-  const xHost = require('xcraft-core-host');
-  const mainGoblin = state.get('mainGoblin');
-  const {appConfigPath, projectPath} = xHost;
-  const srcPath = path.join(
-    projectPath,
-    'lib',
-    `goblin-${mainGoblin}`,
-    'action-stores',
-    `${profile.mandate}.db`
-  );
-  const cryoPath = path.join(appConfigPath, 'var/cryo');
-  mkdirp(cryoPath);
-  const dstPath = path.join(cryoPath, `copy.db`);
+  const profileName = state.get('ripley.profileKey');
+  let profile = state.get(`profiles.${profileName}`).toJS();
+  const username = state.get('form.username');
+  const src = state.get('ripley.selected.from');
+  const dst = state.get('ripley.selected.to');
+  if (src && dst) {
+    const workshop = quest.getAPI('workshop');
+    const xHost = require('xcraft-core-host');
+    const mainGoblin = state.get('mainGoblin');
+    const {appConfigPath} = xHost;
 
-  if (!fs.existsSync(srcPath)) {
-    return;
+    const cryoPath = path.join(appConfigPath, 'var', 'cryo');
+    const srcPath = path.join(cryoPath, `${src}.db`);
+    mkdirp(cryoPath);
+    const dstPath = path.join(cryoPath, `copy.db`);
+
+    if (!fs.existsSync(srcPath)) {
+      return;
+    }
+
+    fs.copyFileSync(srcPath, dstPath);
+
+    yield workshop.ripleyFor({
+      dbSrc: 'copy',
+      dbDst: dst,
+      timestamp: 9999,
+      rethinkdbHost: profile.rethinkdbHost,
+      elasticsearchUrl: profile.elasticsearchUrl,
+      appId: mainGoblin,
+    });
+    yield quest.me.openSession({name: username});
   }
-
-  fs.copyFileSync(srcPath, dstPath);
-
-  yield workshop.ripleyFor({
-    dbSrc: 'copy',
-    dbDst: profile.mandate,
-    timestamp: 9999,
-    rethinkdbHost: profile.rethinkdbHost,
-    elasticsearchUrl: profile.elasticsearchUrl,
-    appId: mainGoblin,
-  });
-  yield quest.me.openSession({name});
 });
 
 Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {

@@ -6,6 +6,7 @@ import MainLayout from '../main-layout/widget';
 import ConfiguratorNavigator from '../configurator-navigator/widget';
 import ConfiguratorConfirmPopup from '../configurator-confirm-popup/widget';
 import ConfiguratorBuildPopup from '../configurator-build-popup/widget';
+import ConfiguratorActionStorePopup from '../configurator-action-store-popup/widget';
 
 /******************************************************************************/
 
@@ -69,6 +70,7 @@ export default class Configurator extends Form {
     this.state = {
       showConformPopup: false,
       showBuildPopup: false,
+      showActionStorePopup: false,
     };
 
     this.confirmPopupAction = null;
@@ -78,7 +80,8 @@ export default class Configurator extends Form {
     this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
     this.openSession = this.openSession.bind(this);
     this.closeSession = this.closeSession.bind(this);
-    this.replayActionStore = this.replayActionStore.bind(this);
+    this.openActionStorePopup = this.openActionStorePopup.bind(this);
+    this.closeActionStorePopup = this.closeActionStorePopup.bind(this);
   }
 
   //#region get/set
@@ -126,8 +129,15 @@ export default class Configurator extends Form {
     this.do('open-session', {name, number});
   }
 
-  replayActionStore(name) {
-    this.do('replay-action-store', {name});
+  openActionStorePopup(profileKey) {
+    this.do('change', {path: 'ripley.profileKey', newValue: profileKey});
+    this.setState({showActionStorePopup: true});
+    this.forceUpdate();
+  }
+
+  closeActionStorePopup() {
+    this.do('change', {path: 'popup.ripley', newValue: false});
+    this.setState({showActionStorePopup: false});
   }
 
   closeSession(name) {
@@ -141,14 +151,10 @@ export default class Configurator extends Form {
     this.confirmPopupProps = {
       topGlyph: glyph,
       topTitle: name,
-      question:
-        action === 'reset'
-          ? 'Voulez-vous effacer complètement le mandat ?'
-          : 'Voulez-vous restaurer le mandant selon le point de sauvegarde ?',
+      question: 'Voulez-vous effacer complètement le mandat ?',
     };
 
-    this.confirmPopupAction =
-      action === 'reset' ? this.openSession : this.replayActionStore;
+    this.confirmPopupAction = this.openSession;
     this.confirmPopupParam = profileKey;
   }
 
@@ -231,15 +237,27 @@ export default class Configurator extends Form {
       };
 
       if (action) {
-        const glyph = action === 'reset' ? 'solid/trash' : 'solid/undo';
-        tree[mandate][profileKey] = {
-          leaf: true,
-          name: name,
-          config: config,
-          glyph: glyph,
-          onOpen: () =>
-            this.defineConfirmAction(glyph, name, action, profileKey),
-        };
+        const isReset = action === 'reset';
+        if (isReset) {
+          const glyph = 'solid/trash';
+          tree[mandate][profileKey] = {
+            leaf: true,
+            name: name,
+            config: config,
+            glyph: glyph,
+            onOpen: () =>
+              this.defineConfirmAction(glyph, name, action, profileKey),
+          };
+        } else {
+          const glyph = 'solid/undo';
+          tree[mandate][profileKey] = {
+            leaf: true,
+            name: name,
+            config: config,
+            glyph: glyph,
+            onOpen: () => this.openActionStorePopup(profileKey),
+          };
+        }
       } else {
         const sessionNumber = (maxSessionNumbers[mandate] || 0) + 1;
         const key = `${profileKey}-${sessionNumber}`;
@@ -286,6 +304,19 @@ export default class Configurator extends Form {
     );
   }
 
+  renderActionStorePopup() {
+    if (!this.props.workshopAvailable) {
+      return null;
+    }
+    return (
+      <ConfiguratorActionStorePopup
+        id={this.props.id}
+        onClose={this.closeActionStorePopup}
+        showed={this.state.showActionStorePopup}
+      />
+    );
+  }
+
   render() {
     const tree = this.getTree();
 
@@ -309,6 +340,7 @@ export default class Configurator extends Form {
         </MainLayout>
         {this.renderConfirmPopup()}
         {this.renderBuildPopup()}
+        {this.renderActionStorePopup()}
       </React.Fragment>
     );
   }
