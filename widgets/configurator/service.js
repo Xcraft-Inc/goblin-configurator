@@ -124,17 +124,19 @@ Goblin.registerQuest(goblinName, 'create', function*(
   );
 
   // initialize branches by mandate
-  const branches = yield quest.cmd('cryo.branches');
   let groupedBranches = {};
-  for (const [key, _] of Object.entries(branches)) {
-    const db = key.split('_');
-    if (db.length === 1) {
-      groupedBranches[db[0]] = {branches: []};
-    } else if (db.length === 2) {
-      if (groupedBranches[db[0]]) {
-        groupedBranches[db[0]].branches.push(key);
-      } else {
-        groupedBranches[db[0]] = {branches: [key]};
+  const branches = yield quest.cmd('cryo.branches');
+  if (branches) {
+    for (const key of Object.keys(branches)) {
+      const db = key.split('_');
+      if (db.length === 1) {
+        groupedBranches[db[0]] = {branches: []};
+      } else if (db.length === 2) {
+        if (groupedBranches[db[0]]) {
+          groupedBranches[db[0]].branches.push(key);
+        } else {
+          groupedBranches[db[0]] = {branches: [key]};
+        }
       }
     }
   }
