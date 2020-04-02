@@ -2,7 +2,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import KeyTrap from 'goblin-gadgets/widgets/key-trap.js';
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 
