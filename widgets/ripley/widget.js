@@ -78,7 +78,7 @@ let RipleyTree = class RipleyTree extends Widget {
         selectionMode="single"
         selection={true}
         selectedIds={[this.props.selected]}
-        selectionChanged={selectedId => {
+        selectionChanged={(selectedId) => {
           if (this.props.onSelect) {
             this.props.onSelect(this.props.type, selectedId);
           }

@@ -169,16 +169,16 @@ export default class Configurator extends Form {
 
     // Add all opened sessions.
     const sessionList = this.props.feeds
-      .filter(f => f.startsWith('feed-desktop@'))
+      .filter((f) => f.startsWith('feed-desktop@'))
       .sort((f1, f2) => compareStrings(f1, f2))
-      .map(feed => ({
+      .map((feed) => ({
         id: feed,
         text: feed,
         mandate: feed.split('@')[1],
       }))
       .toArray();
 
-    sessionList.forEach(s => {
+    sessionList.forEach((s) => {
       const mandate = s.mandate;
 
       if (!tree[mandate]) {

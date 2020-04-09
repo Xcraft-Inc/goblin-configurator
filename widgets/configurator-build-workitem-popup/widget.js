@@ -82,9 +82,6 @@ class ConfiguratorBuildWorkitemPopup extends Widget {
 
 export default Widget.connect((state, props) => {
   return {
-    selectedEntity: state
-      .get('backend')
-      .get(props.id)
-      .get('selectedEntity'),
+    selectedEntity: state.get('backend').get(props.id).get('selectedEntity'),
   };
 })(ConfiguratorBuildWorkitemPopup);

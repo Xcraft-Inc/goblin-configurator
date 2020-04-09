@@ -95,7 +95,7 @@ class MainLayout extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connectBackend(state => {
+export default Widget.connectBackend((state) => {
   const username = state.get('form.username');
   return {username};
 })(MainLayout);

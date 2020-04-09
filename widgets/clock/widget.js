@@ -25,7 +25,7 @@ class Clock extends Widget {
       return <Label text="..." />;
     }
 
-    const pretty = v => `0${v}`.slice(-2);
+    const pretty = (v) => `0${v}`.slice(-2);
     const hh = pretty(time.getHours());
     const mm = pretty(time.getMinutes());
     const ss = pretty(time.getSeconds());
@@ -36,7 +36,7 @@ class Clock extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connectWidget(state => {
+export default Widget.connectWidget((state) => {
   if (!state) {
     return {time: null};
   }

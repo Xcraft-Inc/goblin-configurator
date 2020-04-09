@@ -106,7 +106,7 @@ export default class ConfiguratorNavigator extends Widget {
   renderSession(sessionKey, session, index) {
     let closeProps = null;
     if (session.closable) {
-      const onClose = e => {
+      const onClose = (e) => {
         e.stopPropagation();
         session.onClose(sessionKey);
       };

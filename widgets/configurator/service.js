@@ -73,7 +73,7 @@ const logicHandlers = {
     return state.set('form.username', usr);
   },
 
-  'toggle-advanced': state => {
+  'toggle-advanced': (state) => {
     return state.set('advanced', !state.get('advanced'));
   },
   'select': (state, action) => {
@@ -88,7 +88,7 @@ const logicHandlers = {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'create', function*(
+Goblin.registerQuest(goblinName, 'create', function* (
   quest,
   clientSessionId,
   username
@@ -113,7 +113,7 @@ Goblin.registerQuest(goblinName, 'create', function*(
   }
 
   quest.goblin.defer(
-    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function*(
+    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function* (
       err,
       {msg, resp}
     ) {
@@ -176,33 +176,33 @@ Goblin.registerQuest(goblinName, 'create', function*(
   return quest.goblin.id;
 });
 
-Goblin.registerQuest(goblinName, 'update-feeds', function*(quest) {
+Goblin.registerQuest(goblinName, 'update-feeds', function* (quest) {
   const warehouse = quest.getAPI('warehouse');
   const feeds = yield warehouse.listFeeds();
   quest.do({feeds});
 });
 
-Goblin.registerQuest(goblinName, 'change', function(quest, path, newValue) {
+Goblin.registerQuest(goblinName, 'change', function (quest, path, newValue) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'change-form.profile', function(quest) {
+Goblin.registerQuest(goblinName, 'change-form.profile', function (quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'change-form.username', function(quest) {
+Goblin.registerQuest(goblinName, 'change-form.username', function (quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'toggle-advanced', function(quest) {
+Goblin.registerQuest(goblinName, 'toggle-advanced', function (quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'select', function(quest, type, selectedId) {
+Goblin.registerQuest(goblinName, 'select', function (quest, type, selectedId) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest) {
+Goblin.registerQuest(goblinName, 'replay-action-store', function* (quest) {
   const state = quest.goblin.getState();
   const profileName = state.get('ripley.profileKey');
   let profile = state.get(`profiles.${profileName}`).toJS();
@@ -238,7 +238,11 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function*(quest) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
+Goblin.registerQuest(goblinName, 'open-session', function (
+  quest,
+  name,
+  number
+) {
   const state = quest.goblin.getState();
   const username = state.get('form.username');
   if (name.startsWith('feed-desktop@')) {
@@ -271,7 +275,7 @@ Goblin.registerQuest(goblinName, 'open-session', function(quest, name, number) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
+Goblin.registerQuest(goblinName, 'close-session', function* (quest, name) {
   const desktopId = name.replace('feed-', '');
   const deskAPI = quest.getAPI(desktopId);
   const labId = yield deskAPI.getLabId();
@@ -284,7 +288,7 @@ Goblin.registerQuest(goblinName, 'close-session', function*(quest, name) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'create-new-entity', function*(quest) {
+Goblin.registerQuest(goblinName, 'create-new-entity', function* (quest) {
   const state = quest.goblin.getState();
   const entity = state.get('newEntity').toJS();
   if (!entity || !entity.type) {
@@ -297,7 +301,7 @@ Goblin.registerQuest(goblinName, 'create-new-entity', function*(quest) {
   yield quest.me.change({path: 'newEntity', newValue: null});
 });
 
-Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
+Goblin.registerQuest(goblinName, 'generate-workitems-templates', function* (
   quest
 ) {
   const state = quest.goblin.getState();
@@ -312,11 +316,13 @@ Goblin.registerQuest(goblinName, 'generate-workitems-templates', function*(
   yield quest.me.change({path: 'selectedEntity', newValue: null});
 });
 
-Goblin.registerQuest(goblinName, 'clear-workitems-templates', function*(quest) {
+Goblin.registerQuest(goblinName, 'clear-workitems-templates', function* (
+  quest
+) {
   yield quest.me.change({path: 'selectedEntity', newValue: null});
 });
 
-Goblin.registerQuest(goblinName, 'delete', function(quest) {});
+Goblin.registerQuest(goblinName, 'delete', function (quest) {});
 
 /******************************************************************************/
 
