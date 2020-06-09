@@ -99,25 +99,6 @@ export default class ConfiguratorBuildPopup extends Widget {
       </div>
     );
   }
-  renderMain_OLD() {
-    return (
-      <div className={this.styles.classNames.main}>
-        <Button
-          kind="task-bar"
-          glyph="solid/database"
-          text="Entity"
-          horizontalSpacing="large"
-          onClick={() => (this.showEntityPopup = true)}
-        />
-        <Button
-          kind="task-bar"
-          glyph="solid/square"
-          text="Workitem"
-          onClick={() => (this.showWorkitemPopup = true)}
-        />
-      </div>
-    );
-  }
 
   render() {
     if (this.state.showEntityPopup) {
