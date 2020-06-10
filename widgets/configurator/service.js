@@ -264,11 +264,12 @@ Goblin.registerQuest(goblinName, 'open-session', function (
       .toLowerCase()
       .replace(/\.|\[|\//g, '-');
 
-    const session =
-      number === undefined ? userSession : `${userSession}-${number}`;
+    //FIXME: number provided is bad, need to be fixed in widget
+    /*const session =
+      number === undefined ? userSession : `${userSession}-${number}`;*/
     quest.evt(`configured`, {
       username,
-      session,
+      session: userSession, //limit the number of session to one by userName
       locale,
       configuration: profile.toJS(),
     });
