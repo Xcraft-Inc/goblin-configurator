@@ -7,6 +7,7 @@ import ConfiguratorNavigator from '../configurator-navigator/widget';
 import ConfiguratorConfirmPopup from '../configurator-confirm-popup/widget';
 import ConfiguratorBuildPopup from '../configurator-build-popup/widget';
 import ConfiguratorActionStorePopup from '../configurator-action-store-popup/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 
 /******************************************************************************/
 
@@ -63,7 +64,7 @@ function compareStrings(s1, s2) {
 
 /******************************************************************************/
 
-export default class Configurator extends Form {
+class Configurator extends Form {
   constructor() {
     super(...arguments);
 
@@ -345,3 +346,5 @@ export default class Configurator extends Form {
     );
   }
 }
+
+export default Widget.Wired(Configurator)();
