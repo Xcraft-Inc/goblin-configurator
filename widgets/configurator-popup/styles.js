@@ -1,4 +1,4 @@
-import {Unit} from 'electrum-theme';
+import {Unit} from 'goblin-theme';
 import getAnimation from 'goblin-gadgets/widgets/animated-container/animations';
 
 /******************************************************************************/
