@@ -319,6 +319,9 @@ class Configurator extends Form {
   }
 
   render() {
+    if (!this.props.id) {
+      return null;
+    }
     const tree = this.getTree();
 
     return (
