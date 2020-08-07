@@ -1,6 +1,6 @@
 //T:2019-02-27
 import React from 'react';
-import Form from 'laboratory/form';
+import Form from 'goblin-laboratory/widgets/form';
 import MouseTrap from 'mousetrap';
 import MainLayout from '../main-layout/widget';
 import ConfiguratorNavigator from '../configurator-navigator/widget';
