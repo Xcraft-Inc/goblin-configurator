@@ -1,7 +1,7 @@
 import React from 'react';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
 
-import Label from 'gadgets/label/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import Field from 'goblin-gadgets/widgets/field/widget';
 import ConfiguratorPopup from '../configurator-popup/widget';
 import Widget from 'goblin-laboratory/widgets/widget';

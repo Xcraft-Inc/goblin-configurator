@@ -2,7 +2,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
 
-import Label from 'gadgets/label/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import TextFieldCombo from 'goblin-gadgets/widgets/text-field-combo/widget';
 import ConfiguratorPopup from '../configurator-popup/widget';
 
