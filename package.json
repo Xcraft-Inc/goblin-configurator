@@ -13,6 +13,8 @@
     }
   },
   "dependencies": {
+    "xcraft-core-etc": "^2.0.4",
+    "xcraft-core-fs": "^2.1.0",
     "xcraft-core-goblin": "^4.0.1"
   },
   "devDependencies": {
