@@ -240,28 +240,30 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function* (quest) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'open-session', function (
+Goblin.registerQuest(goblinName, 'open-session', function* (
   quest,
-  name,
-  number
+  profileKey,
+  feed
 ) {
+  let session;
+  let locale;
   const state = quest.goblin.getState();
   const username = state.get('form.username');
-  if (name.startsWith('feed-desktop@')) {
-    const parts = name.split('@');
-    const mandate = parts[1];
-    const session = parts[2];
-    quest.evt(`configured`, {
-      username,
-      session,
-      locale: null,
-      configuration: {mandate},
+
+  if (feed) {
+    const desktopId = feed.replace(/^feed-/, '');
+    profileKey = yield quest.warehouse.get({
+      path: `${desktopId}.profileKey`,
     });
+    if (!profileKey) {
+      quest.log.warn(`profileKey missing for desktopid:${desktopId}`);
+      return;
+    }
+    const parts = feed.split('@');
+    session = parts[2];
   } else {
-    const profile = state.get(`profiles.${name}`);
-    const locale = profile.get('defaultLocale', 'fr-CH');
     //sanitize username for making a valid user session id
-    const userSession = state
+    session = state
       .get('form.username')
       .toLowerCase()
       .replace(/\.|\[|\//g, '-');
@@ -269,13 +271,17 @@ Goblin.registerQuest(goblinName, 'open-session', function (
     //FIXME: number provided is bad, need to be fixed in widget
     /*const session =
       number === undefined ? userSession : `${userSession}-${number}`;*/
-    quest.evt(`configured`, {
-      username,
-      session: userSession, //limit the number of session to one by userName
-      locale,
-      configuration: profile.toJS(),
-    });
   }
+
+  const profile = state.get(`profiles.${profileKey}`);
+  locale = profile.get('defaultLocale', 'fr-CH');
+
+  quest.evt(`configured`, {
+    username,
+    session, //limit the number of session to one by userName
+    locale,
+    configuration: profile.toJS(),
+  });
 });
 
 Goblin.registerQuest(goblinName, 'close-session', function* (quest, name) {

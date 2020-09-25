@@ -125,9 +125,9 @@ class Configurator extends Form {
     this.do('toggle-advanced');
   }
 
-  openSession(name, number) {
-    console.log('OPEN SESSION', name, number);
-    this.do('open-session', {name, number});
+  openSession(profileKey, feed) {
+    console.log('OPEN SESSION', profileKey, feed);
+    this.do('open-session', {profileKey, feed});
   }
 
   openActionStorePopup(profileKey) {
@@ -199,7 +199,7 @@ class Configurator extends Form {
         name: session,
         glyph: 'solid/tv',
         closable: true,
-        onOpen: () => this.openSession(s.id),
+        onOpen: () => this.openSession(null, s.id),
         onClose: () => this.closeSession(s.id),
       };
     });
@@ -267,7 +267,7 @@ class Configurator extends Form {
           name: key,
           config: config,
           glyph: 'solid/plus',
-          onOpen: () => this.openSession(profileKey, sessionNumber),
+          onOpen: () => this.openSession(profileKey, null),
         };
       }
     }
