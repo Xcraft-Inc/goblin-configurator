@@ -267,6 +267,7 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
       .get('form.username')
       .toLowerCase()
       .replace(/\.|\[|\//g, '-');
+    session += '-' + quest.uuidV4();
 
     //FIXME: number provided is bad, need to be fixed in widget
     /*const session =
