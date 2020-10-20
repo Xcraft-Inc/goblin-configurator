@@ -50,6 +50,7 @@ export default function styles(theme, props) {
 
   const text = {
     marginLeft: '20px',
+    marginRight: '10px',
     fontSize: '120%',
     textTransform: 'uppercase',
   };
