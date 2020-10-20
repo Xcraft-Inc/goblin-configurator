@@ -10,7 +10,6 @@ const goblinName = 'configurator';
 // Define initial logic values
 const logicState = {
   form: {},
-  current: {},
   available: {},
   profiles: {},
   advanced: false,
@@ -34,7 +33,6 @@ const logicHandlers = {
       .set('id', action.get('id'))
       .set('sessionId', action.get('clientSessionId'))
       .set('form', action.get('form'))
-      .set('current', action.get('current'))
       .set('feeds', action.get('feeds'))
       .set('available', action.get('available'))
       .set('profiles', action.get('profiles'))
@@ -51,16 +49,6 @@ const logicHandlers = {
 
   'change': (state, action) => {
     return state.set(action.get('path'), action.get('newValue'));
-  },
-
-  'change-form.profile': (state, action) => {
-    const profileName = action.get('newValue');
-    const profile = state.get(`profiles.${profileName}`, null);
-    state = state.set('form.profile', profileName);
-    if (profile) {
-      return state.set('current', profile.toJS());
-    }
-    return state;
   },
 
   'change-form.locale': (state, action) => {
@@ -144,7 +132,6 @@ Goblin.registerQuest(goblinName, 'create', function* (
   }
 
   const selectedProfile = availableProfiles[0];
-  const currentProfile = available[selectedProfile];
 
   const form = {
     busy: false,
@@ -166,7 +153,6 @@ Goblin.registerQuest(goblinName, 'create', function* (
     form,
     feeds,
     clientSessionId,
-    current: currentProfile,
     available: availableProfiles,
     profiles: available,
     mainGoblin,
