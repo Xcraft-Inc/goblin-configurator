@@ -10,22 +10,11 @@ export default class ConfiguratorNavigator extends Widget {
     super(...arguments);
 
     this.state = {
-      selectedMandat: null,
       showDetail: false,
     };
   }
 
   //#region get/set
-  get selectedMandat() {
-    return this.state.selectedMandat;
-  }
-
-  set selectedMandat(value) {
-    this.setState({
-      selectedMandat: value,
-    });
-  }
-
   get showDetail() {
     return this.state.showDetail;
   }
@@ -43,33 +32,6 @@ export default class ConfiguratorNavigator extends Widget {
     return (
       <div className={this.styles.classNames.header}>
         {this.props.application}
-      </div>
-    );
-  }
-
-  renderArrowDown() {
-    const style = this.selectedMandat
-      ? this.styles.classNames.arrowDown
-      : this.styles.classNames.arrowDownHidden;
-
-    return (
-      <div className={style}>
-        <div className={this.styles.classNames.triangle} />
-      </div>
-    );
-  }
-
-  renderBackButton(hasBackButton) {
-    if (!hasBackButton) {
-      return null;
-    }
-
-    return (
-      <div
-        className={this.styles.classNames.backButton}
-        onClick={() => (this.selectedMandat = null)}
-      >
-        <FontAwesomeIcon icon={[`fas`, 'chevron-up']} />
       </div>
     );
   }
@@ -96,7 +58,6 @@ export default class ConfiguratorNavigator extends Widget {
   renderBoxTitle(title, isSessions) {
     return (
       <div className={this.styles.classNames.boxTitle}>
-        {this.renderBackButton(isSessions)}
         {this.renderDetailButton(isSessions)}
         {title}
       </div>
@@ -140,7 +101,7 @@ export default class ConfiguratorNavigator extends Widget {
   }
 
   renderSessionsBox() {
-    const sessions = this.props.tree[this.selectedMandat];
+    const sessions = this.props.tree;
     const style = sessions
       ? this.styles.classNames.box
       : this.styles.classNames.boxHidden;
@@ -153,56 +114,12 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  renderMandate(mandateKey, mandate, index) {
-    const active = mandateKey === this.selectedMandat;
-
-    return (
-      <AppIcon
-        key={index}
-        type="mandate"
-        text={mandateKey}
-        glyph="solid/database"
-        active={active}
-        onClick={() => {
-          if (this.selectedMandat === mandateKey) {
-            this.selectedMandat = null;
-          } else {
-            this.selectedMandat = mandateKey;
-          }
-        }}
-      />
-    );
-  }
-
-  renderMandates() {
-    return (
-      <div className={this.styles.classNames.boxContent}>
-        {Object.entries(this.props.tree).map(([mandateKey, mandate], index) =>
-          this.renderMandate(mandateKey, mandate, index)
-        )}
-      </div>
-    );
-  }
-
-  renderMandatsBox() {
-    return (
-      <React.Fragment>
-        <div className={this.styles.classNames.box}>
-          {this.renderBoxTitle('Mandats', false)}
-          {this.renderMandates()}
-        </div>
-        {this.renderArrowDown()}
-      </React.Fragment>
-    );
-  }
-
   render() {
     return (
       <div className={this.styles.classNames.configuratorNavigator}>
         {this.renderHeader()}
         <div className={this.styles.classNames.content}>
           <div className={this.styles.classNames.contentScrollable}>
-            {this.renderMandatsBox()}
             {this.renderSessionsBox()}
           </div>
         </div>

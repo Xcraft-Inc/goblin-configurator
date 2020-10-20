@@ -22,15 +22,6 @@ function getSessionNumber(session) {
 }
 
 function compareProfiles(p1, p2) {
-  const m1 = p1.get('mandate');
-  const m2 = p2.get('mandate');
-  if (m1 < m2) {
-    return -1;
-  }
-  if (m1 > m2) {
-    return 1;
-  }
-
   const a1 = p1.get('action') || 'aaa';
   const a2 = p2.get('action') || 'aaa';
   if (a1 < a2) {
@@ -166,7 +157,7 @@ class Configurator extends Form {
     }
 
     const tree = {};
-    const maxSessionNumbers = {};
+    let maxSessionNumbers = 0;
 
     // Add all opened sessions.
     const sessionList = this.props.feeds
@@ -180,21 +171,16 @@ class Configurator extends Form {
       .toArray();
 
     sessionList.forEach((s) => {
-      const mandate = s.mandate;
-
-      if (!tree[mandate]) {
-        tree[mandate] = {};
-      }
-      if (!maxSessionNumbers[mandate]) {
-        maxSessionNumbers[mandate] = 0;
+      if (!maxSessionNumbers) {
+        maxSessionNumbers = 0;
       }
 
       const session = s.id.split('@')[2];
 
       const n = getSessionNumber(session);
-      maxSessionNumbers[mandate] = Math.max(maxSessionNumbers[mandate], n);
+      maxSessionNumbers = Math.max(maxSessionNumbers, n);
 
-      tree[mandate][session] = {
+      tree[session] = {
         leaf: true,
         name: session,
         glyph: 'solid/tv',
@@ -213,35 +199,23 @@ class Configurator extends Form {
       const profile = p[1];
 
       const name = profile.get('name');
-      const topology = profile.get('topology', null);
-      let mandate = profile.get('mandate');
+      const mainGoblin = profile.get('mainGoblin');
+
       const action = profile.get('action');
 
       if (!this.props.advanced && action) {
         continue;
       }
 
-      if (topology) {
-        mandate = `${mandate}@${topology}`;
-      }
-
-      if (!tree[mandate]) {
-        tree[mandate] = {};
-      }
-
       const config = {
-        mandate: profile.get('mandate'),
         action: action,
-        elasticsearchUrl: profile.get('elasticsearchUrl'),
-        rethinkdbHost: profile.get('rethinkdbHost'),
-        topology: topology,
       };
 
       if (action) {
         const isReset = action === 'reset';
         if (isReset) {
           const glyph = 'solid/trash';
-          tree[mandate][profileKey] = {
+          tree[profileKey] = {
             leaf: true,
             name: name,
             config: config,
@@ -251,7 +225,7 @@ class Configurator extends Form {
           };
         } else {
           const glyph = 'solid/undo';
-          tree[mandate][profileKey] = {
+          tree[profileKey] = {
             leaf: true,
             name: name,
             config: config,
@@ -260,11 +234,11 @@ class Configurator extends Form {
           };
         }
       } else {
-        const sessionNumber = (maxSessionNumbers[mandate] || 0) + 1;
+        const sessionNumber = (maxSessionNumbers || 0) + 1;
         const key = `${profileKey}-${sessionNumber}`;
-        tree[mandate][key] = {
+        tree[key] = {
           leaf: true,
-          name: key,
+          name: mainGoblin,
           config: config,
           glyph: 'solid/plus',
           onOpen: () => this.openSession(profileKey, null),
