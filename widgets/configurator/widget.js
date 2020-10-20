@@ -117,7 +117,6 @@ class Configurator extends Form {
   }
 
   openSession(profileKey, feed) {
-    console.log('OPEN SESSION', profileKey, feed);
     this.do('open-session', {profileKey, feed});
   }
 
@@ -133,7 +132,6 @@ class Configurator extends Form {
   }
 
   closeSession(name) {
-    console.log('CLOSE SESSION', name);
     this.do('close-session', {name});
   }
 
