@@ -273,10 +273,8 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
 
 Goblin.registerQuest(goblinName, 'close-session', function* (quest, name) {
   const desktopId = name.replace('feed-', '');
-  const deskAPI = quest.getAPI(desktopId);
-  yield quest.sub.callAndWait(function* () {
-    yield deskAPI.close();
-  }, `*::*.${desktopId}.closed`);
+  const deskManager = quest.getAPI('desktop-manager');
+  yield deskManager.close({sessionDesktopId: desktopId});
 });
 
 Goblin.registerQuest(goblinName, 'create-new-entity', function* (quest) {
