@@ -2,6 +2,8 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import AppIcon from '../app-icon/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Launcher from 'goblin-gadgets/widgets/launcher/widget';
 
 /******************************************************************************/
 
@@ -11,6 +13,7 @@ export default class ConfiguratorNavigator extends Widget {
 
     this.state = {
       showDetail: false,
+      useLauncher: true,
     };
   }
 
@@ -18,10 +21,18 @@ export default class ConfiguratorNavigator extends Widget {
   get showDetail() {
     return this.state.showDetail;
   }
-
   set showDetail(value) {
     this.setState({
       showDetail: value,
+    });
+  }
+
+  get useLauncher() {
+    return this.state.useLauncher;
+  }
+  set useLauncher(value) {
+    this.setState({
+      useLauncher: value,
     });
   }
   //#endregion
@@ -32,6 +43,16 @@ export default class ConfiguratorNavigator extends Widget {
     return (
       <div className={this.styles.classNames.header}>
         {this.props.application}
+        <div className={this.styles.classNames.headerButton}>
+          <Button
+            border="none"
+            shape="rounded"
+            width="60px"
+            height="60px"
+            glyph="solid/rocket"
+            onClick={() => (this.useLauncher = !this.useLauncher)}
+          />
+        </div>
       </div>
     );
   }
@@ -114,7 +135,36 @@ export default class ConfiguratorNavigator extends Widget {
     );
   }
 
-  render() {
+  renderLauncher() {
+    const sessions = this.props.tree;
+    const rockets = sessions
+      ? Object.entries(sessions).map(([sessionKey, session], index) => {
+          return {
+            id: sessionKey,
+            title: session.name,
+            glyph: session.glyph,
+            textColor: '#eee',
+            background: 'linear-gradient(125deg, #e6316e, #fe8506)',
+            backgroundHover: 'linear-gradient(90deg, #e6316e, #fe8506)',
+            shadow: 'light',
+            iconShadow: 'none',
+            onClick: session.onOpen,
+          };
+        })
+      : null;
+
+    return (
+      <Launcher
+        blobKind="wave"
+        blobColor="rgba(0,0,0,0.1)"
+        background="linear-gradient(150deg, #011526 30%, #c853ff)"
+        rocketSize="200px"
+        rockets={rockets}
+      />
+    );
+  }
+
+  render1() {
     return (
       <div className={this.styles.classNames.configuratorNavigator}>
         {this.renderHeader()}
@@ -125,6 +175,25 @@ export default class ConfiguratorNavigator extends Widget {
         </div>
       </div>
     );
+  }
+
+  render2() {
+    return (
+      <div className={this.styles.classNames.configuratorNavigator}>
+        {this.renderHeader()}
+        <div className={this.styles.classNames.launcher}>
+          {this.renderLauncher()}
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    if (this.useLauncher) {
+      return this.render2();
+    } else {
+      return this.render1();
+    }
   }
 }
 

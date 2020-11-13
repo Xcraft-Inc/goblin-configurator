@@ -13,6 +13,7 @@ export default function styles(theme) {
 
   const header = {
     zIndex: 1,
+    position: 'relative',
     minHeight: '45px',
     display: 'flex',
     flexDirection: 'row',
@@ -27,6 +28,11 @@ export default function styles(theme) {
     alignItems: 'center',
   };
 
+  const headerButton = {
+    position: 'absolute',
+    right: '20px',
+  };
+
   const content = {
     display: 'flex',
     flexDirection: 'column',
@@ -36,6 +42,15 @@ export default function styles(theme) {
   const contentScrollable = {
     padding: '60px 70px 30px 70px',
     overflowY: 'auto',
+  };
+
+  const launcher = {
+    position: 'relative',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    borderRadius: '0px 0px 20px 20px',
   };
 
   /******************************************************************************/
@@ -166,8 +181,10 @@ export default function styles(theme) {
   return {
     configuratorNavigator,
     header,
+    headerButton,
     content,
     contentScrollable,
+    launcher,
 
     box,
     boxHidden,
