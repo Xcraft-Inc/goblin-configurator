@@ -2,7 +2,6 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import AppIcon from '../app-icon/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import Button from 'goblin-gadgets/widgets/button/widget';
 import Launcher from 'goblin-gadgets/widgets/launcher/widget';
 
 /******************************************************************************/
@@ -123,11 +122,8 @@ export default class ConfiguratorNavigator extends Widget {
             id: sessionKey,
             title: session.name,
             glyph: session.glyph,
-            textColor: '#eee',
             background: 'linear-gradient(125deg, #ff1461, #fe8506)',
             backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
-            shadow: 'light',
-            iconShadow: 'none',
             onClick: session.onOpen,
           };
         })
@@ -139,7 +135,10 @@ export default class ConfiguratorNavigator extends Widget {
         blobKind="wave"
         blobColor="rgba(0,0,0,0.1)"
         background="linear-gradient(150deg, #011526 30%, #c853ff)"
-        rocketSize="200px"
+        rocketSize="250px"
+        rocketTextColor="#eee"
+        rocketShadow="deep"
+        rocketIconShadow="none"
         rockets={rockets}
       />
     );
@@ -162,17 +161,6 @@ export default class ConfiguratorNavigator extends Widget {
     return (
       <div className={this.styles.classNames.configuratorNavigator}>
         {this.renderLauncher()}
-      </div>
-    );
-  }
-
-  render2_OLD() {
-    return (
-      <div className={this.styles.classNames.configuratorNavigator}>
-        {this.renderHeader()}
-        <div className={this.styles.classNames.launcher}>
-          {this.renderLauncher()}
-        </div>
       </div>
     );
   }
