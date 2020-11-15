@@ -13,7 +13,6 @@ export default class ConfiguratorNavigator extends Widget {
 
     this.state = {
       showDetail: false,
-      useLauncher: true,
     };
   }
 
@@ -26,15 +25,6 @@ export default class ConfiguratorNavigator extends Widget {
       showDetail: value,
     });
   }
-
-  get useLauncher() {
-    return this.state.useLauncher;
-  }
-  set useLauncher(value) {
-    this.setState({
-      useLauncher: value,
-    });
-  }
   //#endregion
 
   /******************************************************************************/
@@ -43,16 +33,6 @@ export default class ConfiguratorNavigator extends Widget {
     return (
       <div className={this.styles.classNames.header}>
         {this.props.application}
-        <div className={this.styles.classNames.headerButton}>
-          <Button
-            border="none"
-            shape="rounded"
-            width="60px"
-            height="60px"
-            glyph="solid/rocket"
-            onClick={() => (this.useLauncher = !this.useLauncher)}
-          />
-        </div>
       </div>
     );
   }
@@ -138,14 +118,14 @@ export default class ConfiguratorNavigator extends Widget {
   renderLauncher() {
     const sessions = this.props.tree;
     const rockets = sessions
-      ? Object.entries(sessions).map(([sessionKey, session], index) => {
+      ? Object.entries(sessions).map(([sessionKey, session]) => {
           return {
             id: sessionKey,
             title: session.name,
             glyph: session.glyph,
             textColor: '#eee',
-            background: 'linear-gradient(125deg, #e6316e, #fe8506)',
-            backgroundHover: 'linear-gradient(90deg, #e6316e, #fe8506)',
+            background: 'linear-gradient(125deg, #ff1461, #fe8506)',
+            backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
             shadow: 'light',
             iconShadow: 'none',
             onClick: session.onOpen,
@@ -155,6 +135,7 @@ export default class ConfiguratorNavigator extends Widget {
 
     return (
       <Launcher
+        title={this.props.application}
         blobKind="wave"
         blobColor="rgba(0,0,0,0.1)"
         background="linear-gradient(150deg, #011526 30%, #c853ff)"
@@ -180,6 +161,14 @@ export default class ConfiguratorNavigator extends Widget {
   render2() {
     return (
       <div className={this.styles.classNames.configuratorNavigator}>
+        {this.renderLauncher()}
+      </div>
+    );
+  }
+
+  render2_OLD() {
+    return (
+      <div className={this.styles.classNames.configuratorNavigator}>
         {this.renderHeader()}
         <div className={this.styles.classNames.launcher}>
           {this.renderLauncher()}
@@ -189,7 +178,7 @@ export default class ConfiguratorNavigator extends Widget {
   }
 
   render() {
-    if (this.useLauncher) {
+    if (this.props.useLauncher) {
       return this.render2();
     } else {
       return this.render1();

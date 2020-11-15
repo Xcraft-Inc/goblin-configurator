@@ -4,6 +4,7 @@ import {ColorManipulator} from 'goblin-theme';
 
 export default function styles(theme) {
   const configuratorNavigator = {
+    position: 'relative',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -26,11 +27,6 @@ export default function styles(theme) {
     textTransform: 'uppercase',
     justifyContent: 'center',
     alignItems: 'center',
-  };
-
-  const headerButton = {
-    position: 'absolute',
-    right: '20px',
   };
 
   const content = {
@@ -181,7 +177,6 @@ export default function styles(theme) {
   return {
     configuratorNavigator,
     header,
-    headerButton,
     content,
     contentScrollable,
     launcher,

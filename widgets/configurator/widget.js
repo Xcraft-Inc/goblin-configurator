@@ -63,6 +63,7 @@ class Configurator extends Form {
       showConformPopup: false,
       showBuildPopup: false,
       showActionStorePopup: false,
+      useLauncher: true,
     };
 
     this.confirmPopupAction = null;
@@ -80,7 +81,6 @@ class Configurator extends Form {
   get showConformPopup() {
     return this.state.showConformPopup;
   }
-
   set showConformPopup(value) {
     this.setState({
       showConformPopup: value,
@@ -90,10 +90,18 @@ class Configurator extends Form {
   get showBuildPopup() {
     return this.state.showBuildPopup;
   }
-
   set showBuildPopup(value) {
     this.setState({
       showBuildPopup: value,
+    });
+  }
+
+  get useLauncher() {
+    return this.state.useLauncher;
+  }
+  set useLauncher(value) {
+    this.setState({
+      useLauncher: value,
     });
   }
   //#endregion
@@ -296,21 +304,28 @@ class Configurator extends Form {
     }
     const tree = this.getTree();
 
+    const style = this.useLauncher
+      ? this.styles.classNames.configuratorLauncher
+      : this.styles.classNames.configurator;
+
     return (
       <React.Fragment>
         <MainLayout
           id={this.props.id}
           info={this.getModelValue('.buildInfo')}
           advanced={this.props.advanced}
+          useLauncher={this.useLauncher}
           onToggleAdvanced={this.onToggleAdvanced}
+          onToggleLauncher={() => (this.useLauncher = !this.useLauncher)}
           onBuild={() => (this.showBuildPopup = true)}
         >
-          <div className={this.styles.classNames.configurator}>
+          <div className={style}>
             <ConfiguratorNavigator
               configuratorId={this.props.id}
               widgetId={`${this.props.id}$icon-navigator`}
               application={this.getModelValue('.mainGoblin')}
               tree={tree}
+              useLauncher={this.useLauncher}
             ></ConfiguratorNavigator>
           </div>
         </MainLayout>

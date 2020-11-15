@@ -11,7 +11,16 @@ export default function styles() {
     justifyContent: 'flex-start',
   };
 
-  return {configurator};
+  const configuratorLauncher = {
+    flexGrow: 1,
+    borderRadius: '20px',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    boxShadow: '0px 10px 100px black',
+    display: 'flex',
+    justifyContent: 'flex-start',
+  };
+
+  return {configurator, configuratorLauncher};
 }
 
 /******************************************************************************/
