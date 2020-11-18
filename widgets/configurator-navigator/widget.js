@@ -6,6 +6,29 @@ import Launcher from 'goblin-gadgets/widgets/launcher/widget';
 
 /******************************************************************************/
 
+function sessionToRocket(sessionKey, session) {
+  let closeProps = null;
+  if (session.closable) {
+    const onClose = (e) => {
+      e.stopPropagation();
+      session.onClose(sessionKey);
+    };
+    closeProps = {onAdditional: onClose, additionalAnimation: 'parkinson'};
+  }
+
+  return {
+    id: sessionKey,
+    title: session.name,
+    glyph: session.glyph,
+    background: 'linear-gradient(125deg, #ff1461, #fe8506)',
+    backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
+    onClick: session.onOpen,
+    ...closeProps,
+  };
+}
+
+/******************************************************************************/
+
 export default class ConfiguratorNavigator extends Widget {
   constructor() {
     super(...arguments);
@@ -117,16 +140,9 @@ export default class ConfiguratorNavigator extends Widget {
   renderLauncher() {
     const sessions = this.props.tree;
     const rockets = sessions
-      ? Object.entries(sessions).map(([sessionKey, session]) => {
-          return {
-            id: sessionKey,
-            title: session.name,
-            glyph: session.glyph,
-            background: 'linear-gradient(125deg, #ff1461, #fe8506)',
-            backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
-            onClick: session.onOpen,
-          };
-        })
+      ? Object.entries(sessions).map(([sessionKey, session]) =>
+          sessionToRocket(sessionKey, session)
+        )
       : null;
 
     return (
