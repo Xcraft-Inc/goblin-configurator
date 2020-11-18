@@ -235,6 +235,7 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
   let locale;
   const state = quest.goblin.getState();
   const username = state.get('form.username');
+  const profile = state.get(`profiles.${profileKey}`);
 
   if (feed) {
     const desktopId = feed.replace(/^feed-/, '');
@@ -253,14 +254,19 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
       .get('form.username')
       .toLowerCase()
       .replace(/\.|\[|\//g, '-');
-    session += '-' + quest.uuidV4();
+    // Generate uuid for multi-instance
+    if (!profile.get('singleInstance')) {
+      session += '-' + quest.uuidV4();
+    } else {
+      // Use unique id for each app !
+      session += '-' + profileKey;
+    }
 
     //FIXME: number provided is bad, need to be fixed in widget
     /*const session =
       number === undefined ? userSession : `${userSession}-${number}`;*/
   }
 
-  const profile = state.get(`profiles.${profileKey}`);
   locale = profile.get('defaultLocale', 'fr-CH');
 
   quest.evt(`configured`, {
