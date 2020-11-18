@@ -235,7 +235,6 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
   let locale;
   const state = quest.goblin.getState();
   const username = state.get('form.username');
-  const profile = state.get(`profiles.${profileKey}`);
 
   if (feed) {
     const desktopId = feed.replace(/^feed-/, '');
@@ -248,7 +247,11 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
     }
     const parts = feed.split('@');
     session = parts[2];
-  } else {
+  }
+
+  const profile = state.get(`profiles.${profileKey}`);
+
+  if (!feed) {
     //sanitize username for making a valid user session id
     session = state
       .get('form.username')
