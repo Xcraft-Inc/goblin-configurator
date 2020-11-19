@@ -13,7 +13,7 @@ function sessionToRocket(sessionKey, session) {
       e.stopPropagation();
       session.onClose(sessionKey);
     };
-    closeProps = {onAdditional: onClose, additionalAnimation: 'parkinson'};
+    closeProps = {onAdditional: onClose, additionalAnimation: 'dancing'};
   }
 
   return {
