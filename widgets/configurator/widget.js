@@ -174,6 +174,7 @@ class Configurator extends Form {
         text: feed,
         mandate: feed.split('@')[1],
       }))
+      .valueSeq()
       .toArray();
 
     sessionList.forEach((s) => {
