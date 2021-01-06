@@ -75,6 +75,8 @@ class Configurator extends Form {
     this.closeSession = this.closeSession.bind(this);
     this.openActionStorePopup = this.openActionStorePopup.bind(this);
     this.closeActionStorePopup = this.closeActionStorePopup.bind(this);
+
+    this.logout = this.logout.bind(this);
   }
 
   //#region get/set
@@ -113,6 +115,7 @@ class Configurator extends Form {
       advanced: 'advanced',
       workshopAvailable: 'workshopAvailable',
       availableEntities: 'availableEntities',
+      useLogin: 'useLogin',
     };
   }
 
@@ -141,6 +144,10 @@ class Configurator extends Form {
 
   closeSession(name) {
     this.do('close-session', {name});
+  }
+
+  logout() {
+    this.do('logout', {});
   }
 
   defineConfirmAction(glyph, name, action, profileKey) {
@@ -316,9 +323,11 @@ class Configurator extends Form {
           info={this.getModelValue('.buildInfo')}
           advanced={this.props.advanced}
           useLauncher={this.useLauncher}
+          useLogin={this.props.useLogin}
           onToggleAdvanced={this.onToggleAdvanced}
           onToggleLauncher={() => (this.useLauncher = !this.useLauncher)}
           onBuild={() => (this.showBuildPopup = true)}
+          onLogout={this.logout}
         >
           <div className={style}>
             <ConfiguratorNavigator

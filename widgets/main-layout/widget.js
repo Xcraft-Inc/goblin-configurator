@@ -23,12 +23,20 @@ class MainLayout extends Widget {
     return (
       <div className={this.styles.classNames.header}>
         <Label
-          width="200px"
+          width="500px"
           text={this.props.username}
           glyph="solid/user"
           glyphPosition="center"
           glyphSize="150%"
         />
+        {this.props.useLogin ? (
+          <Button
+            border="none"
+            text="logout"
+            glyphSize="150%"
+            onClick={this.props.onLogout}
+          />
+        ) : null}
         <Label grow="1" />
         <Label text={this.props.info} />
         {this.isDeveloper ? (

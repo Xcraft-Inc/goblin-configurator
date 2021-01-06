@@ -38,6 +38,7 @@ const logicHandlers = {
       .set('profiles', action.get('profiles'))
       .set('mainGoblin', action.get('mainGoblin'))
       .set('buildInfo', action.get('buildInfo'))
+      .set('useLogin', action.get('useLogin'))
       .set('workshopAvailable', action.get('workshopAvailable'))
       .set('availableEntities', action.get('availableEntities'))
       .set('ripley.db', action.get('db'));
@@ -79,7 +80,8 @@ const logicHandlers = {
 Goblin.registerQuest(goblinName, 'create', function* (
   quest,
   clientSessionId,
-  username
+  username,
+  useLogin = false
 ) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
   const mainGoblin = clientConfig.mainGoblin;
@@ -160,6 +162,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
     workshopAvailable,
     availableEntities,
     db: groupedBranches,
+    useLogin,
   });
   return quest.goblin.id;
 });
@@ -318,6 +321,12 @@ Goblin.registerQuest(goblinName, 'clear-workitems-templates', function* (
   quest
 ) {
   yield quest.me.change({path: 'selectedEntity', newValue: null});
+});
+
+Goblin.registerQuest(goblinName, 'logout', function* (quest) {
+  const clientAPI = quest.getAPI('client');
+  yield clientAPI.logout();
+  yield clientAPI.startUX();
 });
 
 Goblin.registerQuest(goblinName, 'delete', function (quest) {});
