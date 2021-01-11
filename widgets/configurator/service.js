@@ -40,6 +40,7 @@ const logicHandlers = {
       .set('buildInfo', action.get('buildInfo'))
       .set('useLogin', action.get('useLogin'))
       .set('workshopAvailable', action.get('workshopAvailable'))
+      .set('isCresusLauncher', action.get('isCresusLauncher'))
       .set('availableEntities', action.get('availableEntities'))
       .set('ripley.db', action.get('db'));
   },
@@ -150,6 +151,13 @@ Goblin.registerQuest(goblinName, 'create', function* (
     const wAPI = quest.getAPI('workshop');
     availableEntities = yield wAPI.getAvailableEntities();
   }
+
+  const isCresusLauncher = quest.hasAPI('cresus-launcher');
+  if (isCresusLauncher) {
+    const cresusLauncherAPI = quest.getAPI('cresus-launcher');
+    yield cresusLauncherAPI.init({desktopId: quest.getDesktop()});
+  }
+
   quest.do({
     id: quest.goblin.id,
     form,
@@ -161,6 +169,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
     buildInfo,
     workshopAvailable,
     availableEntities,
+    isCresusLauncher,
     db: groupedBranches,
     useLogin,
   });
