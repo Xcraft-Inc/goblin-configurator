@@ -5,6 +5,12 @@
  */
 module.exports = [
   {
+    type: 'input',
+    name: 'mainWidget',
+    message: 'mainWidget to mount',
+    default: 'configurator',
+  },
+  {
     type: 'checkbox',
     name: 'profiles',
     message: 'list of available profiles',
