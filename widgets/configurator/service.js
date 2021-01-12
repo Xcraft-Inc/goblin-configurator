@@ -80,6 +80,7 @@ const logicHandlers = {
 
 Goblin.registerQuest(goblinName, 'create', function* (
   quest,
+  labId,
   clientSessionId,
   username,
   useLogin = false
@@ -155,7 +156,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   const isCresusLauncher = quest.hasAPI('cresus-launcher');
   if (isCresusLauncher) {
     const cresusLauncherAPI = quest.getAPI('cresus-launcher');
-    yield cresusLauncherAPI.init({desktopId: quest.getDesktop()});
+    yield cresusLauncherAPI.init({labId, desktopId: quest.getDesktop()});
   }
 
   quest.do({
