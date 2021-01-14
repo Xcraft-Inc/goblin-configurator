@@ -317,7 +317,7 @@ class Configurator extends Form {
       : this.styles.classNames.configurator;
 
     return (
-      <React.Fragment>
+      <>
         <MainLayout
           id={this.props.id}
           info={this.getModelValue('.buildInfo')}
@@ -342,7 +342,7 @@ class Configurator extends Form {
         {this.renderConfirmPopup()}
         {this.renderBuildPopup()}
         {this.renderActionStorePopup()}
-      </React.Fragment>
+      </>
     );
   }
 }
