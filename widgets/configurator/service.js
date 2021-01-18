@@ -42,7 +42,9 @@ const logicHandlers = {
       .set('workshopAvailable', action.get('workshopAvailable'))
       .set('isCresusLauncher', action.get('isCresusLauncher'))
       .set('availableEntities', action.get('availableEntities'))
-      .set('ripley.db', action.get('db'));
+      .set('ripley.db', action.get('db'))
+      .set('relaunch.reason', action.get('relaunchReason'))
+      .set('relaunch.desktops', action.get('relaunchDesktops'));
   },
 
   'update-feeds': (state, action) => {
@@ -83,6 +85,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   labId,
   clientSessionId,
   username,
+  appArgs,
   useLogin = false
 ) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
@@ -159,6 +162,9 @@ Goblin.registerQuest(goblinName, 'create', function* (
     yield cresusLauncherAPI.init({labId, desktopId: quest.getDesktop()});
   }
 
+  const relaunchReason = appArgs && appArgs['relaunch-reason'];
+  const relaunchDesktops = appArgs && appArgs['relaunch-desktops'];
+
   quest.do({
     id: quest.goblin.id,
     form,
@@ -173,6 +179,8 @@ Goblin.registerQuest(goblinName, 'create', function* (
     isCresusLauncher,
     db: groupedBranches,
     useLogin,
+    relaunchReason,
+    relaunchDesktops,
   });
   return quest.goblin.id;
 });
