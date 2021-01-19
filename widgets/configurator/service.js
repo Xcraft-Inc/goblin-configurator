@@ -47,6 +47,10 @@ const logicHandlers = {
       .set('relaunch.desktops', action.get('relaunchDesktops'));
   },
 
+  'resetRelaunchDesktops': (state) => {
+    return state.set('relaunch.desktops', []);
+  },
+
   'update-feeds': (state, action) => {
     return state.set('feeds', action.get('feeds'));
   },
@@ -184,14 +188,20 @@ Goblin.registerQuest(goblinName, 'create', function* (
     relaunchDesktops,
   });
 
-  if (relaunchDesktops && relaunchDesktops.length > 0) {
-    for (const desktopId of relaunchDesktops) {
-      quest.me.openSession({feed: `feed-${desktopId}`}, next.parallel());
-    }
-    yield next.sync();
-  }
-
   return quest.goblin.id;
+});
+
+Goblin.registerQuest(goblinName, 'getRelaunchDesktops', function (quest) {
+  const state = quest.goblin.getState();
+  const relaunch = state.get('relaunch').toJS();
+  if (relaunch.desktops && relaunch.desktops.length > 0) {
+    return relaunch.desktops;
+  }
+  return null;
+});
+
+Goblin.registerQuest(goblinName, 'resetRelaunchDesktops', function (quest) {
+  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'update-feeds', function* (quest) {
