@@ -86,7 +86,8 @@ Goblin.registerQuest(goblinName, 'create', function* (
   clientSessionId,
   username,
   appArgs,
-  useLogin = false
+  useLogin = false,
+  next
 ) {
   const clientConfig = require('xcraft-core-etc')().load('goblin-client');
   const mainGoblin = clientConfig.mainGoblin;
@@ -182,6 +183,14 @@ Goblin.registerQuest(goblinName, 'create', function* (
     relaunchReason,
     relaunchDesktops,
   });
+
+  if (relaunchDesktops && relaunchDesktops.length > 0) {
+    for (const desktopId of relaunchDesktops) {
+      quest.me.openSession({feed: `feed-${desktopId}`}, next.parallel());
+    }
+    yield next.sync();
+  }
+
   return quest.goblin.id;
 });
 
