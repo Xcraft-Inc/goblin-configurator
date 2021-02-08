@@ -164,7 +164,11 @@ Goblin.registerQuest(goblinName, 'create', function* (
   const isCresusLauncher = quest.hasAPI('cresus-launcher');
   if (isCresusLauncher) {
     const cresusLauncherAPI = quest.getAPI('cresus-launcher');
-    yield cresusLauncherAPI.init({labId, desktopId: quest.getDesktop()});
+    yield cresusLauncherAPI.init({
+      labId,
+      clientSessionId,
+      desktopId: quest.getDesktop(),
+    });
   }
 
   const relaunchReason = appArgs && appArgs['relaunch-reason'];
