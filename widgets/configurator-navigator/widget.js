@@ -3,6 +3,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import AppIcon from '../app-icon/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Launcher from 'goblin-gadgets/widgets/launcher/widget';
+import {debounce} from 'lodash';
 
 /******************************************************************************/
 
@@ -32,9 +33,12 @@ function sessionToRocket(sessionKey, session) {
 export default class ConfiguratorNavigator extends Widget {
   constructor() {
     super(...arguments);
-
+    this.launcherContainer = React.createRef();
+    this.handleResize = debounce(this._handleResize, 250);
+    this.handleResize = this.handleResize.bind(this);
     this.state = {
       showDetail: false,
+      width: window.innerWidth,
     };
   }
 
@@ -57,6 +61,18 @@ export default class ConfiguratorNavigator extends Widget {
         {this.props.application}
       </div>
     );
+  }
+
+  _handleResize(e) {
+    this.setState({width: e.currentTarget.innerWidth});
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   }
 
   renderDetailButton(hasDetailButton) {
@@ -139,19 +155,35 @@ export default class ConfiguratorNavigator extends Widget {
 
   renderLauncher() {
     const sessions = this.props.tree;
+    const passengerRocket = {
+      id: 'passengersCount',
+      title: this.props.passengers || '0',
+      glyph: 'solid/plane',
+      background: 'linear-gradient(125deg, #ff1461, #fe8506)',
+      backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
+      onClick: null,
+    };
     const rockets = sessions
       ? Object.entries(sessions).map(([sessionKey, session]) =>
           sessionToRocket(sessionKey, session)
         )
-      : null;
+      : [];
 
+    if (this.props.passengers > 0) {
+      rockets.push(passengerRocket);
+    }
+
+    let size = (this.state.width - 200) / rockets.length;
+    if (size > 250) {
+      size = 250;
+    }
     return (
       <Launcher
         title={this.props.application}
         blobKind="wave"
         blobColor="rgba(0,0,0,0.1)"
         background="linear-gradient(150deg, #011526 30%, #c853ff)"
-        rocketSize="250px"
+        rocketSize={`${size}px`}
         rocketTextColor="#eee"
         rocketShadow="deep"
         rocketIconShadow="none"
