@@ -8,18 +8,17 @@ class Clock extends Widget {
   constructor() {
     super(...arguments);
     this.onTick = this.onTick.bind(this);
+    this.state = {time: new Date()};
   }
 
   onTick() {
-    this.dispatchTo(this.widgetId, {
-      type: 'TICK',
-    });
+    this.setState({time: new Date()});
   }
 
   /******************************************************************************/
 
   render() {
-    const {time} = this.props;
+    const time = this.state.time;
     setTimeout(this.onTick, 1000);
     if (!time) {
       return <Label text="..." />;
@@ -36,10 +35,4 @@ class Clock extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connectWidget((state) => {
-  if (!state) {
-    return {time: null};
-  }
-  const time = state.get('time');
-  return {time};
-})(Clock);
+export default Clock;
