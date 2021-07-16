@@ -17,9 +17,14 @@ function sessionToRocket(sessionKey, session) {
     closeProps = {onAdditional: onClose, additionalAnimation: 'dancing'};
   }
 
+  const matches = session.name.match(
+    /(.*)-([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})$/
+  );
+
   return {
     id: sessionKey,
-    title: session.name,
+    title: matches ? matches[1] : session.name,
+    subtitle: matches && matches[2],
     glyph: session.glyph,
     background: 'linear-gradient(125deg, #ff1461, #fe8506)',
     backgroundHover: 'linear-gradient(100deg, #ff1461, #fe8506)',
