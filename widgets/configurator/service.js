@@ -300,7 +300,7 @@ Goblin.registerQuest(goblinName, 'open-session', function* (
     session = state
       .get('form.username')
       .toLowerCase()
-      .replace(/\.|\[|\//g, '-');
+      .replace(/[.[/@]/g, '-');
     // Generate uuid for multi-instance
     if (!profile.get('singleInstance')) {
       session += '-' + quest.uuidV4();
