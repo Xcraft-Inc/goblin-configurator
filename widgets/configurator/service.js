@@ -55,6 +55,10 @@ const logicHandlers = {
     return state.set('feeds', action.get('feeds'));
   },
 
+  'updateCurrentUser': (state, action) => {
+    return state.set('form.username', action.get('username'));
+  },
+
   'change': (state, action) => {
     return state.set(action.get('path'), action.get('newValue'));
   },
@@ -368,6 +372,13 @@ Goblin.registerQuest(goblinName, 'logout', function* (quest) {
   const clientAPI = quest.getAPI('client');
   yield clientAPI.logout();
   yield clientAPI.startUX();
+});
+
+Goblin.registerQuest(goblinName, 'updateCurrentUser', function (
+  quest,
+  username
+) {
+  quest.do({username});
 });
 
 Goblin.registerQuest(goblinName, 'delete', function (quest) {});
