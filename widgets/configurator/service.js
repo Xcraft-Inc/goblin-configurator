@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const {mkdir} = require('xcraft-core-fs');
 const goblinName = 'configurator';
-
+const {OPEN_DESKTOP, CLOSE_DESKTOP} = Goblin.skills;
 // Define initial logic values
 const logicState = {
   form: {},
@@ -274,65 +274,71 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function* (quest) {
   }
 });
 
-Goblin.registerQuest(goblinName, 'open-session', function* (
-  quest,
-  profileKey,
-  feed
-) {
-  let session;
-  let locale;
-  const state = quest.goblin.getState();
-  const username = state.get('form.username');
+Goblin.registerQuest(
+  goblinName,
+  'open-session',
+  function* (quest, profileKey, feed) {
+    let session;
+    let locale;
+    const state = quest.goblin.getState();
+    const username = state.get('form.username');
 
-  if (feed) {
-    const desktopId = feed.replace(/^feed-/, '');
-    profileKey = yield quest.warehouse.get({
-      path: `${desktopId}.profileKey`,
-    });
-    if (!profileKey) {
-      quest.log.warn(`profileKey missing for desktopid:${desktopId}`);
-      return;
-    }
-    const parts = feed.split('@');
-    session = parts[2];
-  }
-
-  const profile = state.get(`profiles.${profileKey}`);
-
-  if (!feed) {
-    //sanitize username for making a valid user session id
-    session = state
-      .get('form.username')
-      .toLowerCase()
-      .replace(/[.[/@]/g, '-');
-    // Generate uuid for multi-instance
-    if (!profile.get('singleInstance')) {
-      session += '-' + quest.uuidV4();
-    } else {
-      // Use unique id for each app !
-      session += '-' + profileKey;
+    if (feed) {
+      const desktopId = feed.replace(/^feed-/, '');
+      profileKey = yield quest.warehouse.get({
+        path: `${desktopId}.profileKey`,
+      });
+      if (!profileKey) {
+        quest.log.warn(`profileKey missing for desktopid:${desktopId}`);
+        return;
+      }
+      const parts = feed.split('@');
+      session = parts[2];
     }
 
-    //FIXME: number provided is bad, need to be fixed in widget
-    /*const session =
+    const profile = state.get(`profiles.${profileKey}`);
+
+    if (!feed) {
+      //sanitize username for making a valid user session id
+      session = state
+        .get('form.username')
+        .toLowerCase()
+        .replace(/[.[/@]/g, '-');
+      // Generate uuid for multi-instance
+      if (!profile.get('singleInstance')) {
+        session += '-' + quest.uuidV4();
+      } else {
+        // Use unique id for each app !
+        session += '-' + profileKey;
+      }
+
+      //FIXME: number provided is bad, need to be fixed in widget
+      /*const session =
       number === undefined ? userSession : `${userSession}-${number}`;*/
-  }
+    }
 
-  locale = profile.get('defaultLocale', 'fr-CH');
+    locale = profile.get('defaultLocale', 'fr-CH');
 
-  quest.evt(`configured`, {
-    username,
-    session, //limit the number of session to one by userName
-    locale,
-    configuration: profile.toJS(),
-  });
-});
+    quest.evt(`configured`, {
+      username,
+      session, //limit the number of session to one by userName
+      locale,
+      configuration: profile.toJS(),
+    });
+  },
+  {skills: [OPEN_DESKTOP]}
+);
 
-Goblin.registerQuest(goblinName, 'close-session', function* (quest, name) {
-  const desktopId = name.replace('feed-', '');
-  const deskManager = quest.getAPI('desktop-manager');
-  yield deskManager.close({sessionDesktopId: desktopId});
-});
+Goblin.registerQuest(
+  goblinName,
+  'close-session',
+  function* (quest, name) {
+    const desktopId = name.replace('feed-', '');
+    const deskManager = quest.getAPI('desktop-manager');
+    yield deskManager.close({sessionDesktopId: desktopId});
+  },
+  {skills: [CLOSE_DESKTOP]}
+);
 
 Goblin.registerQuest(goblinName, 'create-new-entity', function* (quest) {
   const state = quest.goblin.getState();
