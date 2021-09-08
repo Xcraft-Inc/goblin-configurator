@@ -18,7 +18,12 @@
     "xcraft-core-goblin": "^4.0.1"
   },
   "devDependencies": {
+    "@fortawesome/react-fontawesome": "^0.1.9",
+    "goblin-theme": "^1.0.0",
+    "immutable": "4.0.0-rc.14",
+    "mousetrap": "^1.6.1",
     "prettier": "2.0.4",
+    "xcraft-core-shredder": "^4.0.0",
     "xcraft-dev-prettier": "^2.0.0",
     "xcraft-dev-rules": "^2.0.0"
   },
