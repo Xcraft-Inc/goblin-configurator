@@ -13,17 +13,17 @@
     }
   },
   "dependencies": {
-    "xcraft-core-etc": "^2.0.4",
+    "xcraft-core-etc": "^3.0.0",
     "xcraft-core-fs": "^2.1.0",
-    "xcraft-core-goblin": "^4.0.1"
+    "xcraft-core-goblin": "^5.0.0"
   },
   "devDependencies": {
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "goblin-theme": "^1.0.0",
+    "goblin-theme": "^2.0.0",
     "immutable": "4.0.0-rc.14",
     "mousetrap": "^1.6.1",
     "prettier": "2.0.4",
-    "xcraft-core-shredder": "^4.0.0",
+    "xcraft-core-shredder": "^5.0.0",
     "xcraft-dev-prettier": "^2.0.0",
     "xcraft-dev-rules": "^2.0.0"
   },
