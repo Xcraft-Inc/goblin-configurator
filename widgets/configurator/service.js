@@ -116,17 +116,6 @@ Goblin.registerQuest(goblinName, 'create', function* (
     throw new Error(`${errorMsg} No profiles available.`);
   }
 
-  quest.goblin.defer(
-    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function* (
-      err,
-      {msg, resp}
-    ) {
-      yield resp.cmd(`${goblinName}.update-feeds`, {
-        id: quest.goblin.id,
-      });
-    })
-  );
-
   // initialize branches by mandate
   let groupedBranches = {};
   if (quest.resp.hasCommand('cryo.branches')) {
@@ -195,6 +184,17 @@ Goblin.registerQuest(goblinName, 'create', function* (
     relaunchReason,
     relaunchDesktops,
   });
+
+  quest.goblin.defer(
+    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function* (
+      err,
+      {msg, resp}
+    ) {
+      yield resp.cmd(`${goblinName}.update-feeds`, {
+        id: quest.goblin.id,
+      });
+    })
+  );
 
   return quest.goblin.id;
 });
