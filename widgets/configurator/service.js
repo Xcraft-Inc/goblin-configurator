@@ -5,6 +5,7 @@ const Goblin = require('xcraft-core-goblin');
 const fs = require('fs');
 const path = require('path');
 const {mkdir} = require('xcraft-core-fs');
+const xHost = require('xcraft-core-host');
 const goblinName = 'configurator';
 const {OPEN_DESKTOP, CLOSE_DESKTOP} = Goblin.skills;
 // Define initial logic values
@@ -103,7 +104,13 @@ Goblin.registerQuest(goblinName, 'create', function* (
   const errorMsg = `Unable to configure app:`;
   const warehouse = quest.getAPI('warehouse');
   const feeds = yield warehouse.listFeeds();
-  const buildInfo = confConfig.buildInfo;
+
+  const {appDate} = xHost;
+
+  const buildInfo = confConfig.buildInfo.replace(
+    /\$appDate/g,
+    new Date(appDate).toLocaleString() || 'unreleased'
+  );
   const available = confConfig.profiles;
   if (!available) {
     throw new Error(
@@ -247,7 +254,6 @@ Goblin.registerQuest(goblinName, 'replay-action-store', function* (quest) {
   const dst = state.get('ripley.selected.to');
   if (src && dst) {
     const workshop = quest.getAPI('workshop');
-    const xHost = require('xcraft-core-host');
     const mainGoblin = state.get('mainGoblin');
     const {appConfigPath} = xHost;
 
