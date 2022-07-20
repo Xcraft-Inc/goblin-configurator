@@ -109,7 +109,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
 
   const buildInfo = confConfig.buildInfo.replace(
     /\$appDate/g,
-    new Date(appDate).toLocaleString() || 'unreleased'
+    appDate ? new Date(appDate).toLocaleString() : 'unreleased'
   );
   const available = confConfig.profiles;
   if (!available) {
