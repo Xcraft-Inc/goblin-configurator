@@ -193,7 +193,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   });
 
   quest.goblin.defer(
-    quest.sub(`*::warehouse.feed-(sub|unsub)scribed`, function* (
+    quest.sub(`*::warehouse.<feed-subscriptions-changed>`, function* (
       err,
       {msg, resp}
     ) {
