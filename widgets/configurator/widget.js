@@ -174,7 +174,7 @@ class Configurator extends Form {
 
     // Add all opened sessions.
     const sessionList = this.props.feeds
-      .filter((f) => f.startsWith('feed-desktop@') && !f.endsWith('-passenger'))
+      .filter((f) => f.startsWith('desktop@') && !f.endsWith('-passenger'))
       .sort((f1, f2) => compareStrings(f1, f2))
       .map((feed) => ({
         id: feed,

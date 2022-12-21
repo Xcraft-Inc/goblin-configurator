@@ -290,7 +290,7 @@ Goblin.registerQuest(
     const username = state.get('form.username');
 
     if (feed) {
-      const desktopId = feed.replace(/^feed-/, '');
+      const desktopId = feed;
       profileKey = yield quest.warehouse.get({
         path: `${desktopId}.profileKey`,
       });
@@ -339,7 +339,7 @@ Goblin.registerQuest(
   goblinName,
   'close-session',
   function* (quest, name) {
-    const desktopId = name.replace('feed-', '');
+    const desktopId = name;
     const deskManager = quest.getAPI('desktop-manager');
     yield deskManager.close({sessionDesktopId: desktopId});
   },
