@@ -52,7 +52,7 @@ const logicHandlers = {
     return state.set('relaunch.desktops', []);
   },
 
-  'update-feeds': (state, action) => {
+  'updateFeeds': (state, action) => {
     return state.set('feeds', action.get('feeds'));
   },
 
@@ -197,8 +197,10 @@ Goblin.registerQuest(goblinName, 'create', function* (
       err,
       {msg, resp}
     ) {
-      yield resp.cmd(`${goblinName}.update-feeds`, {
+      const {feeds} = msg.data;
+      yield resp.cmd(`${goblinName}.updateFeeds`, {
         id: quest.goblin.id,
+        feeds,
       });
     })
   );
@@ -219,10 +221,8 @@ Goblin.registerQuest(goblinName, 'resetRelaunchDesktops', function (quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'update-feeds', function* (quest) {
-  const warehouse = quest.getAPI('warehouse');
-  const feeds = yield warehouse.listFeeds();
-  quest.do({feeds});
+Goblin.registerQuest(goblinName, 'updateFeeds', function (quest, feeds) {
+  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'change', function (quest, path, newValue) {
