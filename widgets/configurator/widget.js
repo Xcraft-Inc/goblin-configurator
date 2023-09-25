@@ -116,6 +116,9 @@ class Configurator extends Form {
       workshopAvailable: 'workshopAvailable',
       availableEntities: 'availableEntities',
       useLogin: 'useLogin',
+      buildInfo: 'buildInfo',
+      profiles: 'profiles',
+      mainGoblin: 'mainGoblin',
     };
   }
 
@@ -205,7 +208,7 @@ class Configurator extends Form {
     });
 
     // Add all profiles.
-    const profiles = this.getModelValue('.profiles').sort((p1, p2) =>
+    const profiles = this.props.profiles.sort((p1, p2) =>
       compareProfiles(p1, p2)
     );
     for (const p of profiles) {
@@ -320,7 +323,7 @@ class Configurator extends Form {
       <>
         <MainLayout
           id={this.props.id}
-          info={this.getModelValue('.buildInfo')}
+          info={this.props.buildInfo}
           advanced={this.props.advanced}
           useLauncher={this.useLauncher}
           useLogin={this.props.useLogin}
@@ -333,7 +336,7 @@ class Configurator extends Form {
             <ConfiguratorNavigator
               configuratorId={this.props.id}
               widgetId={`${this.props.id}$icon-navigator`}
-              application={this.getModelValue('.mainGoblin')}
+              application={this.props.mainGoblin}
               tree={tree}
               passengers={
                 this.props.feeds.filter((feed) => feed.endsWith('-passenger'))
@@ -351,4 +354,4 @@ class Configurator extends Form {
   }
 }
 
-export default Widget.Wired(Configurator)();
+export default Widget.Wired(Configurator);
