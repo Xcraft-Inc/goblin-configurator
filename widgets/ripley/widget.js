@@ -45,7 +45,7 @@ let RipleyTree = class RipleyTree extends Widget {
           name: 'database',
           description: this.props.description,
           grow: '1',
-          textAlign: 'left',
+          textAlign: 'start',
         },
       ],
       rows: [],
