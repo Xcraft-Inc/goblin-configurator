@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "goblin-laboratory": "^4.0.0",
     "goblin-theme": "^2.0.0",
     "immutable": "4.0.0-rc.14",
     "mousetrap": "^1.6.1",
