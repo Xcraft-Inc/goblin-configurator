@@ -43,6 +43,7 @@ Le système supporte deux modes d'affichage :
 ```javascript
 // Ouverture d'une nouvelle session avec un profil spécifique
 const configurator = await this.quest.create('configurator', {
+  id: 'configurator@myApp',
   labId: 'main-lab',
   clientSessionId: 'client-123',
   username: 'john.doe',
